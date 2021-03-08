@@ -11,7 +11,6 @@
 PRJ_PLATFORMS
 WINSCW ARMV5 GCCE
 
-
 #ifdef SBSV2
 
 PRJ_EXTENSIONS
@@ -22,21 +21,12 @@ PRJ_EXTENSIONS
 	OPTION SOURCEDIR ../gfx
 	OPTION SOURCES -c32 qgn_menu_AquariumControl
 	END
-	
-	// help compiler is not always available; see similar comment in *.pkg file
-	START EXTENSION techview/bldhelp
-	OPTION HELPPROJECTFILE AquariumControl.cshlp
-	OPTION HELPTOOLTARGETNAME aquariumcontrol_0xa291b5a5.hlp
-	END
 
 #else
 
 PRJ_MMPFILES
 
 	gnumakefile icons_scalable_dc.mk
-
-	// help compiler is not always available; see similar comment in *.pkg file
-	gnumakefile ../help/build_help.mk
 
 #endif
 

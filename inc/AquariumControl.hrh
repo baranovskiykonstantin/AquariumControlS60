@@ -15,10 +15,8 @@
 // AquariumControl enumerate command codes
 enum TAquariumControlIds
 	{
-	ECommand1 = 0x6001, // start value must not be 0
-	ECommand2,
-	EHelp,
-	EAbout
+	EAbout = 0x6001, // start value must not be 0
+	ELastCommand
 	};
 
 #endif // __AQUARIUMCONTROL_HRH__

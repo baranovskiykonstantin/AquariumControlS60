@@ -7,8 +7,6 @@
 ============================================================================
 */
 
-MACRO _HELP_AVAILABLE_
-
 TARGET			AquariumControl_0xa291b5a5.exe
 TARGETTYPE		exe
 UID				0x100039CE 0xa291b5a5
@@ -34,7 +32,6 @@ TARGETPATH		\private\10003a3f\apps
 END //RESOURCE
 
 USERINCLUDE		..\inc
-USERINCLUDE		..\help
 
 SYSTEMINCLUDE	/epoc32/include
 
@@ -44,10 +41,7 @@ LIBRARY			cone.lib
 LIBRARY			eikcore.lib
 LIBRARY			avkon.lib
 LIBRARY			commonengine.lib
-LIBRARY			efsrv.lib 
-LIBRARY			estor.lib
 LIBRARY			aknnotify.lib
-LIBRARY			hlplch.lib
 
 LANG SC
 
