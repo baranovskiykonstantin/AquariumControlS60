@@ -1,0 +1,59 @@
+/*
+============================================================================
+ Name        : AquariumControl.mmp
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is the project specification file for AquariumControl.
+============================================================================
+*/
+
+MACRO _HELP_AVAILABLE_
+
+TARGET			AquariumControl_0xa291b5a5.exe
+TARGETTYPE		exe
+UID				0x100039CE 0xa291b5a5
+
+SOURCEPATH		..\src
+SOURCE			AquariumControl.cpp
+SOURCE			AquariumControlApplication.cpp
+SOURCE			AquariumControlAppView.cpp
+SOURCE			AquariumControlAppUi.cpp
+SOURCE			AquariumControlDocument.cpp
+
+SOURCEPATH		..\data
+
+START RESOURCE	AquariumControl.rss
+HEADER
+TARGET			AquariumControl_0xa291b5a5
+TARGETPATH		resource\apps
+END //RESOURCE
+
+START RESOURCE	AquariumControl_reg.rss
+TARGET			AquariumControl_0xa291b5a5_reg
+TARGETPATH		\private\10003a3f\apps
+END //RESOURCE
+
+USERINCLUDE		..\inc
+USERINCLUDE		..\help
+
+SYSTEMINCLUDE	/epoc32/include
+
+LIBRARY			euser.lib
+LIBRARY			apparc.lib
+LIBRARY			cone.lib
+LIBRARY			eikcore.lib
+LIBRARY			avkon.lib
+LIBRARY			commonengine.lib
+LIBRARY			efsrv.lib 
+LIBRARY			estor.lib
+LIBRARY			aknnotify.lib
+LIBRARY			hlplch.lib
+
+LANG SC
+
+VENDORID		0
+SECUREID		0xa291b5a5
+CAPABILITY		ReadUserData
+
+DEBUGGABLE_UDEBONLY
+// End of File

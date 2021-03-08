@@ -1,0 +1,37 @@
+; Installation file for AquariumControl application
+;
+; This is an auto-generated PKG file by Carbide.
+; This file uses variables specific to Carbide builds that will not work
+; on command-line builds. If you want to use this generated PKG file from the
+; command-line tools you will need to modify the variables with the appropriate
+; values: $(EPOCROOT), $(PLATFORM), $(TARGET)
+;
+;Language - standard language definitions
+&EN
+
+; standard SIS file header
+#{"AquariumControl"},(0xa291b5a5),1,0,0
+
+;Localised Vendor name
+%{"Vendor-EN"}
+
+;Unique Vendor name
+:"Vendor"
+
+;Supports Series 60 v 5.0
+[0x101F7961], 0, 0, 0, {"Series60ProductID"}
+
+;Files to install
+;You should change the source paths to match that of your environment
+;<source> <destination>
+"$(EPOCROOT)epoc32\release\$(PLATFORM)\$(TARGET)\AquariumControl_0xa291b5a5.exe"		-"!:\sys\bin\AquariumControl_0xa291b5a5.exe"
+"$(EPOCROOT)epoc32\data\z\resource\apps\aquariumcontrol_0xa291b5a5.rsc"		-"!:\resource\apps\AquariumControl_0xa291b5a5.rsc"
+"$(EPOCROOT)epoc32\data\z\private\10003a3f\apps\aquariumcontrol_0xa291b5a5_reg.rsc"	-"!:\private\10003a3f\import\apps\AquariumControl_0xa291b5a5_reg.rsc"
+"$(EPOCROOT)epoc32\data\z\resource\apps\aquariumcontrol_0xa291b5a5.mif" -"!:\resource\apps\AquariumControl_0xa291b5a5.mif"
+"..\help\aquariumcontrol_0xa291b5a5.hlp"							 -"!:\resource\help\AquariumControl_0xa291b5a5.hlp"
+
+; Add any installation notes if applicable
+;"AquariumControl.txt"		-"!:\private\a291b5a5\AquariumControl.txt"
+
+;required for application to be covered by backup/restore facility 
+"..\sis\backup_registration.xml"		-"!:\private\a291b5a5\backup_registration.xml"
