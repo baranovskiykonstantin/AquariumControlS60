@@ -49,8 +49,7 @@ RESOURCE TBUF r_default_document_name
 //
 RESOURCE EIK_APP_INFO
 	{
-	menubar = r_menubar;
-	cba = R_AVKON_SOFTKEYS_OPTIONS_EXIT;
+	status_pane = r_aquariumcontrol_status_pane;
 	}
 
 
@@ -62,37 +61,21 @@ RESOURCE EIK_APP_INFO
 //
 RESOURCE TBUF32 r_caption_string { buf=qtn_caption_string; }
 RESOURCE TBUF32 r_about_dialog_title { buf=qtn_about_dialog_title; }
+
 RESOURCE TBUF r_about_dialog_text { buf=qtn_about_dialog_text; }
 
 
 // -----------------------------------------------------------------------------
 //
-//   r_menubar
-//   Main menubar
+//   r_common_menu
+//   Common menu items for "Options"
 //
 // -----------------------------------------------------------------------------
 //
-RESOURCE MENU_BAR r_menubar
-	{
-	titles =
-		{
-		MENU_TITLE { menu_pane = r_menu; }
-		};
-	}
-
-
-// -----------------------------------------------------------------------------
-//
-//   r_menu
-//   Menu for "Options"
-//
-// -----------------------------------------------------------------------------
-//
-RESOURCE MENU_PANE r_menu
+RESOURCE MENU_PANE r_common_menu
 	{
 	items =
 		{
-		// added the new Options menu command here
 		MENU_ITEM
 				{
 				command = EAbout;
@@ -157,5 +140,67 @@ RESOURCE LOCALISABLE_APP_INFO r_localisable_app_info
 		icon_file = "\\resource\\apps\\AquariumControl_0xa291b5a5.mif";
 		};
 	}
+
+
+#include "DateTime.rssi"
+
+
+// -----------------------------------------------------------------------------
+//
+// Resources for strings.
+//
+// -----------------------------------------------------------------------------
+//
+RESOURCE TBUF r_datetime_tab_name { buf=qtn_datetime_tab_name; }
+
+
+//----------------------------------------------------
+//
+//    r_aquariumcontrol_status_pane
+//    Here we define the StatusPane to include
+//    Navipane with tabs
+//
+//----------------------------------------------------
+//
+
+RESOURCE STATUS_PANE_APP_MODEL r_aquariumcontrol_status_pane
+	{
+	panes=
+		{
+		SPANE_PANE
+			{
+			id = EEikStatusPaneUidNavi;
+			type = EAknCtNaviPane;
+			resource = r_aquariumcontrol_navi_decorator;
+			}
+		};
+	}
+
+
+//----------------------------------------------------
+//
+//    r_aquariumcontrol_navi_decorator
+//    Here we define the tabs for the NaviPane in StatusPane
+//
+//----------------------------------------------------
+//
+RESOURCE NAVI_DECORATOR r_aquariumcontrol_navi_decorator
+	{
+	type = ENaviDecoratorControlTabGroup;
+	control = TAB_GROUP
+		{
+		tab_width = EAknTabWidthWithFourTabs;
+		active = 0;
+		tabs = {
+			TAB
+				{
+				id = EAquariumControlViewDateTimeTab;
+				txt = qtn_datetime_tab_name;
+				}
+			// more tabs
+			};
+		};
+	}
+
 
 // End of File

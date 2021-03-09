@@ -14,7 +14,7 @@
 #include <akndoc.h>
 
 // FORWARD DECLARATIONS
-class CAquariumControlAppUi;
+class CAquariumControlViewAppUi;
 class CEikApplication;
 
 // CLASS DECLARATION

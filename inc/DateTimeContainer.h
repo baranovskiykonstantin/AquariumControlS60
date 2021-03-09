@@ -1,20 +1,20 @@
 /*
  ============================================================================
- Name        : AquariumControlAppView.h
+ Name        : DateTimeContainer.h
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
- Description : Declares view class for application.
+ Description : Declares the date/time controls class for application.
  ============================================================================
  */
 
-#ifndef __AQUARIUMCONTROLAPPVIEW_h__
-#define __AQUARIUMCONTROLAPPVIEW_h__
+#ifndef __DATETIMECONTAINER_H__
+#define __DATETIMECONTAINER_H__
 
 // INCLUDES
 #include <coecntrl.h>
 
 // CLASS DECLARATION
-class CAquariumControlAppView : public CCoeControl
+class CDateTimeContainer : public CCoeControl
 	{
 public:
 	// New methods
@@ -22,34 +22,34 @@ public:
 	/**
 	 * NewL.
 	 * Two-phased constructor.
-	 * Create a CAquariumControlAppView object, which will draw itself to aRect.
+	 * Create a CDateTimeContainer object, which will draw itself to aRect.
 	 * @param aRect The rectangle this view will be drawn to.
-	 * @return a pointer to the created instance of CAquariumControlAppView.
+	 * @return a pointer to the created instance of CDateTimeContainer.
 	 */
-	static CAquariumControlAppView* NewL(const TRect& aRect);
+	static CDateTimeContainer* NewL(const TRect& aRect);
 
 	/**
 	 * NewLC.
 	 * Two-phased constructor.
-	 * Create a CAquariumControlAppView object, which will draw itself
+	 * Create a CDateTimeContainer object, which will draw itself
 	 * to aRect.
 	 * @param aRect Rectangle this view will be drawn to.
-	 * @return A pointer to the created instance of CAquariumControlAppView.
+	 * @return A pointer to the created instance of CDateTimeContainer.
 	 */
-	static CAquariumControlAppView* NewLC(const TRect& aRect);
+	static CDateTimeContainer* NewLC(const TRect& aRect);
 
 	/**
-	 * ~CAquariumControlAppView
+	 * ~CDateTimeContainer
 	 * Virtual Destructor.
 	 */
-	virtual ~CAquariumControlAppView();
+	virtual ~CDateTimeContainer();
 
 public:
 	// Functions from base classes
 
 	/**
 	 * From CCoeControl, Draw
-	 * Draw this CAquariumControlAppView to the screen.
+	 * Draw this CDateTimeContainer to the screen.
 	 * @param aRect the rectangle of this view that needs updating
 	 */
 	void Draw(const TRect& aRect) const;
@@ -76,18 +76,18 @@ private:
 	 * ConstructL
 	 * 2nd phase constructor.
 	 * Perform the second phase construction of a
-	 * CAquariumControlAppView object.
+	 * CDateTimeContainer object.
 	 * @param aRect The rectangle this view will be drawn to.
 	 */
 	void ConstructL(const TRect& aRect);
 
 	/**
-	 * CAquariumControlAppView.
+	 * CDateTimeContainer.
 	 * C++ default constructor.
 	 */
-	CAquariumControlAppView();
+	CDateTimeContainer();
 
 	};
 
-#endif // __AQUARIUMCONTROLAPPVIEW_h__
+#endif // __DATETIMECONTAINER_H__
 // End of File

@@ -1,0 +1,17 @@
+/*
+============================================================================
+ Name        : DateTime.rls
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for DateTimeView
+               A .rls file is the one and only place where the logical
+               strings to be localised are defined.
+============================================================================
+*/
+
+//  LOCALISATION STRINGS
+
+#define qtn_datetime_tab_name "DateTime"
+#define qtn_command_set_time "Set time"
+
+// End of File

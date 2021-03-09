@@ -1,6 +1,6 @@
 /*
  ============================================================================
- Name        : AquariumControlAppView.cpp
+ Name        : DateTimeContainer.cpp
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
  Description : Application view implementation
@@ -9,41 +9,41 @@
 
 // INCLUDE FILES
 #include <coemain.h>
-#include "AquariumControlAppView.h"
+#include "DateTimeContainer.h"
 
 // ============================ MEMBER FUNCTIONS ===============================
 
 // -----------------------------------------------------------------------------
-// CAquariumControlAppView::NewL()
+// CDateTimeContainer::NewL()
 // Two-phased constructor.
 // -----------------------------------------------------------------------------
 //
-CAquariumControlAppView* CAquariumControlAppView::NewL(const TRect& aRect)
+CDateTimeContainer* CDateTimeContainer::NewL(const TRect& aRect)
 	{
-	CAquariumControlAppView* self = CAquariumControlAppView::NewLC(aRect);
+	CDateTimeContainer* self = CDateTimeContainer::NewLC(aRect);
 	CleanupStack::Pop(self);
 	return self;
 	}
 
 // -----------------------------------------------------------------------------
-// CAquariumControlAppView::NewLC()
+// CDateTimeContainer::NewLC()
 // Two-phased constructor.
 // -----------------------------------------------------------------------------
 //
-CAquariumControlAppView* CAquariumControlAppView::NewLC(const TRect& aRect)
+CDateTimeContainer* CDateTimeContainer::NewLC(const TRect& aRect)
 	{
-	CAquariumControlAppView* self = new (ELeave) CAquariumControlAppView;
+	CDateTimeContainer* self = new (ELeave) CDateTimeContainer;
 	CleanupStack::PushL(self);
 	self->ConstructL(aRect);
 	return self;
 	}
 
 // -----------------------------------------------------------------------------
-// CAquariumControlAppView::ConstructL()
+// CDateTimeContainer::ConstructL()
 // Symbian 2nd phase constructor can leave.
 // -----------------------------------------------------------------------------
 //
-void CAquariumControlAppView::ConstructL(const TRect& aRect)
+void CDateTimeContainer::ConstructL(const TRect& aRect)
 	{
 	// Create a window for this application view
 	CreateWindowL();
@@ -56,31 +56,31 @@ void CAquariumControlAppView::ConstructL(const TRect& aRect)
 	}
 
 // -----------------------------------------------------------------------------
-// CAquariumControlAppView::CAquariumControlAppView()
+// CDateTimeContainer::CDateTimeContainer()
 // C++ default constructor can NOT contain any code, that might leave.
 // -----------------------------------------------------------------------------
 //
-CAquariumControlAppView::CAquariumControlAppView()
+CDateTimeContainer::CDateTimeContainer()
 	{
 	// No implementation required
 	}
 
 // -----------------------------------------------------------------------------
-// CAquariumControlAppView::~CAquariumControlAppView()
+// CDateTimeContainer::~CDateTimeContainer()
 // Destructor.
 // -----------------------------------------------------------------------------
 //
-CAquariumControlAppView::~CAquariumControlAppView()
+CDateTimeContainer::~CDateTimeContainer()
 	{
 	// No implementation required
 	}
 
 // -----------------------------------------------------------------------------
-// CAquariumControlAppView::Draw()
+// CDateTimeContainer::Draw()
 // Draws the display.
 // -----------------------------------------------------------------------------
 //
-void CAquariumControlAppView::Draw(const TRect& /*aRect*/) const
+void CDateTimeContainer::Draw(const TRect& /*aRect*/) const
 	{
 	// Get the standard graphics context
 	CWindowGc& gc = SystemGc();
@@ -94,23 +94,23 @@ void CAquariumControlAppView::Draw(const TRect& /*aRect*/) const
 	}
 
 // -----------------------------------------------------------------------------
-// CAquariumControlAppView::SizeChanged()
+// CDateTimeContainer::SizeChanged()
 // Called by framework when the view size is changed.
 // -----------------------------------------------------------------------------
 //
-void CAquariumControlAppView::SizeChanged()
+void CDateTimeContainer::SizeChanged()
 	{
 	DrawNow();
 	}
 
 // -----------------------------------------------------------------------------
-// CAquariumControlAppView::HandlePointerEventL()
+// CDateTimeContainer::HandlePointerEventL()
 // Called by framework to handle pointer touch events.
 // Note: although this method is compatible with earlier SDKs, 
 // it will not be called in SDKs without Touch support.
 // -----------------------------------------------------------------------------
 //
-void CAquariumControlAppView::HandlePointerEventL(
+void CDateTimeContainer::HandlePointerEventL(
 		const TPointerEvent& aPointerEvent)
 	{
 

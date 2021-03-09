@@ -14,9 +14,10 @@ UID				0x100039CE 0xa291b5a5
 SOURCEPATH		..\src
 SOURCE			AquariumControl.cpp
 SOURCE			AquariumControlApplication.cpp
-SOURCE			AquariumControlAppView.cpp
-SOURCE			AquariumControlAppUi.cpp
 SOURCE			AquariumControlDocument.cpp
+SOURCE			AquariumControlViewAppUi.cpp
+SOURCE			DateTimeView.cpp
+SOURCE			DateTimeContainer.cpp
 
 SOURCEPATH		..\data
 
@@ -38,10 +39,14 @@ SYSTEMINCLUDE	/epoc32/include
 LIBRARY			euser.lib
 LIBRARY			apparc.lib
 LIBRARY			cone.lib
-LIBRARY			eikcore.lib
 LIBRARY			avkon.lib
+LIBRARY			eikcore.lib
+LIBRARY			eiksrv.lib
 LIBRARY			commonengine.lib
 LIBRARY			aknnotify.lib
+LIBRARY			eikcoctl.lib
+//LIBRARY			PbkView.lib
+//LIBRARY			hal.lib
 
 LANG SC
 

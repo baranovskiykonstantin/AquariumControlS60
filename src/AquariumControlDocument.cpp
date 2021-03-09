@@ -8,7 +8,7 @@
  */
 
 // INCLUDE FILES
-#include "AquariumControlAppUi.h"
+#include "AquariumControlViewAppUi.h"
 #include "AquariumControlDocument.h"
 
 // ============================ MEMBER FUNCTIONS ===============================
@@ -80,7 +80,7 @@ CEikAppUi* CAquariumControlDocument::CreateAppUiL()
 	{
 	// Create the application user interface, and return a pointer to it;
 	// the framework takes ownership of this object
-	return new (ELeave) CAquariumControlAppUi;
+	return new (ELeave) CAquariumControlViewAppUi;
 	}
 
 // End of File

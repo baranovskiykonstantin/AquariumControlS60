@@ -16,7 +16,17 @@
 enum TAquariumControlIds
 	{
 	EAbout = 0x6001, // start value must not be 0
-	ELastCommand
+	EAquariumControlSetTime,
+	EAquariumControlLastCommand
+	};
+
+// AquariumControl view codes
+enum TAquariumControlViewTabIds
+	{
+	EAquariumControlViewDateTimeTab = 1,
+	EAquariumControlViewHeatTab,
+	EAquariumControlViewLightTab,
+	EAquariumControlViewDisplayTab
 	};
 
 #endif // __AQUARIUMCONTROL_HRH__

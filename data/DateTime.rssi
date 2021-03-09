@@ -1,0 +1,70 @@
+/*
+============================================================================
+ Name        : DateTime.rssi
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This file contains the resources for the DateTimeView.
+============================================================================
+*/
+
+//  INCLUDES
+#include "DateTime.rls"
+
+// -----------------------------------------------------------------------------
+//
+// Resources for strings.
+//
+// -----------------------------------------------------------------------------
+//
+RESOURCE TBUF r_command_set_time { buf=qtn_command_set_time; }
+
+
+//  RESOURCE DEFINITIONS
+//----------------------------------------------------
+//
+//    r_datetime_view
+//    Resource definition for date/time
+//
+//----------------------------------------------------
+//
+RESOURCE AVKON_VIEW r_datetime_view
+	{
+	menubar=r_aquariumcontrol_menubar_datetime;
+	cba=R_AVKON_SOFTKEYS_OPTIONS_EXIT;
+	}
+
+
+//----------------------------------------------------
+//
+//    r_aquariumcontrol_menubar_datetime
+//    Menubar for date/time
+//
+//----------------------------------------------------
+//
+RESOURCE MENU_BAR r_aquariumcontrol_menubar_datetime
+	{
+	titles=
+		{
+		MENU_TITLE { menu_pane=r_common_menu; txt="Common"; },
+		MENU_TITLE { menu_pane=r_datetime_view_menu; txt="DateTime"; }
+		};
+	}
+
+
+//----------------------------------------------------
+//
+//    r_datetime_view_menu
+//    Menupane for date/time, includes the menu item
+//
+//----------------------------------------------------
+//
+RESOURCE MENU_PANE r_datetime_view_menu
+	{
+	items=
+		{
+		MENU_ITEM { command=EAquariumControlSetTime; txt = qtn_command_set_time; }
+		};
+	}
+
+
+// End of File
