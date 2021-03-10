@@ -41,9 +41,9 @@ CLEANLIB : do_nothing
 
 RESOURCE : $(ICONTARGETFILENAME)
 
-$(ICONTARGETFILENAME) : $(ICONDIR)\qgn_menu_AquariumControl.svg
+$(ICONTARGETFILENAME) : $(ICONDIR)\AquariumControl.svg
 	mifconv $(ICONTARGETFILENAME) \
-		/c32 $(ICONDIR)\qgn_menu_AquariumControl.svg
+		/A /c32 $(ICONDIR)\AquariumControl.svg
 
 FREEZE : do_nothing
 
