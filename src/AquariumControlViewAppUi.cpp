@@ -18,8 +18,8 @@
 #include "AquariumControl.hrh"
 #include "AquariumControl.pan"
 #include "AquariumControlApplication.h"
+#include "AquariumControlView.h"
 #include "AquariumControlViewAppUi.h"
-#include "ClockView.h"
 
 // ============================ MEMBER FUNCTIONS ===============================
 
@@ -50,12 +50,12 @@ void CAquariumControlViewAppUi::ConstructL()
 		iTabGroup = (CAknTabGroup*) iDecoratedTabGroup->DecoratedControl();
 		}
 
-	CClockView* clockView = new (ELeave) CClockView;
-
+	CAquariumControlView* clockView = new (ELeave) CAquariumControlView;
 	CleanupStack::PushL(clockView);
-	clockView->ConstructL(iTabGroup);
+
+	clockView->ConstructL(iTabGroup, EAquariumControlClockViewTab);
 	AddViewL(clockView);					// transfer ownership to CAknViewAppUi
-	CleanupStack::Pop( clockView );
+	CleanupStack::Pop(clockView);
 	iClockViewId = clockView->Id();	// view id to get view from CAknViewAppUi
 
 
@@ -118,7 +118,7 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			break;
 
 		default:
-			Panic(EAquariumControlUi);
+			Panic(EAquariumControlViewAppUi);
 			break;
 		}
 	}
@@ -198,9 +198,9 @@ void CAquariumControlViewAppUi::HandleResourceChangeL(TInt aType)
 
 	// ADDED FOR SCALABLE UI SUPPORT
 	// *****************************
-	if (aType==KEikDynamicLayoutVariantSwitch)
+	if (aType == KEikDynamicLayoutVariantSwitch)
 		{
-		((CClockView*) View(iClockViewId))->HandleClientRectChange();
+		((CAquariumControlView*) View(iClockViewId))->HandleClientRectChange();
 		}
 
 	}

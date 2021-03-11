@@ -13,7 +13,9 @@
 /** AquariumControl application panic codes */
 enum TAquariumControlPanics
 	{
-	EAquariumControlUi = 1
+	EAquariumControlViewAppUi = 1,
+	EAquariumControlViewTabId
+	
 	// add further panics here
 	};
 

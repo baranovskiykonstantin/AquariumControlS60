@@ -81,7 +81,7 @@ private:
 	CAknNavigationControlContainer*	iNaviPane;
 	CAknTabGroup*					iTabGroup;
 	CAknNavigationDecorator*		iDecoratedTabGroup;
-	TUid 							iClockViewId;
+	TUid							iClockViewId;
 
 	};
 
