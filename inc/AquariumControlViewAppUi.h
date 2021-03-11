@@ -16,7 +16,7 @@
 #include <aknnavide.h>
 
 // FORWARD DECLARATIONS
-class CDateTimeView;
+class CClockView;
 
 // CLASS DECLARATION
 /**
@@ -73,7 +73,7 @@ private:
 	* From CEikAppUi, handles key events.
 	* @param aType The type of resources that have changed
 	*/
-	virtual void HandleResourceChangeL( TInt aType );
+	virtual void HandleResourceChangeL(TInt aType);
 
 private:
 	// Data
@@ -81,7 +81,7 @@ private:
 	CAknNavigationControlContainer*	iNaviPane;
 	CAknTabGroup*					iTabGroup;
 	CAknNavigationDecorator*		iDecoratedTabGroup;
-	TUid 							iViewDateTimeId;
+	TUid 							iClockViewId;
 
 	};
 

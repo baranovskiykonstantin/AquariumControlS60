@@ -1,14 +1,14 @@
 /*
 ============================================================================
- Name        : DateTime.rssi
+ Name        : Clock.rssi
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
- Description : This file contains the resources for the DateTimeView.
+ Description : This file contains the resources for the ClockView.
 ============================================================================
 */
 
 //  INCLUDES
-#include "DateTime.rls"
+#include "ClockView.rls"
 
 // -----------------------------------------------------------------------------
 //
@@ -17,52 +17,54 @@
 // -----------------------------------------------------------------------------
 //
 RESOURCE TBUF r_command_set_time { buf=qtn_command_set_time; }
+RESOURCE TBUF r_command_set_date { buf=qtn_command_set_date; }
 
 
 //  RESOURCE DEFINITIONS
 //----------------------------------------------------
 //
-//    r_datetime_view
-//    Resource definition for date/time
+//    r_clock_view
+//    Resource definition for clock view
 //
 //----------------------------------------------------
 //
-RESOURCE AVKON_VIEW r_datetime_view
+RESOURCE AVKON_VIEW r_clock_view
 	{
-	menubar=r_aquariumcontrol_menubar_datetime;
+	menubar=r_aquariumcontrol_menubar_clock;
 	cba=R_AVKON_SOFTKEYS_OPTIONS_EXIT;
 	}
 
 
 //----------------------------------------------------
 //
-//    r_aquariumcontrol_menubar_datetime
-//    Menubar for date/time
+//    r_aquariumcontrol_menubar_clock
+//    Menubar for clock view
 //
 //----------------------------------------------------
 //
-RESOURCE MENU_BAR r_aquariumcontrol_menubar_datetime
+RESOURCE MENU_BAR r_aquariumcontrol_menubar_clock
 	{
 	titles=
 		{
 		MENU_TITLE { menu_pane=r_common_menu; txt="Common"; },
-		MENU_TITLE { menu_pane=r_datetime_view_menu; txt="DateTime"; }
+		MENU_TITLE { menu_pane=r_clock_view_menu; txt="Clock"; }
 		};
 	}
 
 
 //----------------------------------------------------
 //
-//    r_datetime_view_menu
-//    Menupane for date/time, includes the menu item
+//    r_clock_view_menu
+//    Menupane for clock view, includes the menu item
 //
 //----------------------------------------------------
 //
-RESOURCE MENU_PANE r_datetime_view_menu
+RESOURCE MENU_PANE r_clock_view_menu
 	{
 	items=
 		{
-		MENU_ITEM { command=EAquariumControlSetTime; txt = qtn_command_set_time; }
+		MENU_ITEM { command=EAquariumControlSetTime; txt = qtn_command_set_time; },
+		MENU_ITEM { command=EAquariumControlSetDate; txt = qtn_command_set_date; }
 		};
 	}
 

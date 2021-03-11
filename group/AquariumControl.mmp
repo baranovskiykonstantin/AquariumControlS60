@@ -16,8 +16,8 @@ SOURCE			AquariumControl.cpp
 SOURCE			AquariumControlApplication.cpp
 SOURCE			AquariumControlDocument.cpp
 SOURCE			AquariumControlViewAppUi.cpp
-SOURCE			DateTimeView.cpp
-SOURCE			DateTimeContainer.cpp
+SOURCE			ClockView.cpp
+SOURCE			ClockContainer.cpp
 
 SOURCEPATH		..\data
 
@@ -47,6 +47,8 @@ LIBRARY			aknnotify.lib
 LIBRARY			eikcoctl.lib
 //LIBRARY			PbkView.lib
 //LIBRARY			hal.lib
+LIBRARY			bafl.lib
+LIBRARY			eikctl.lib
 
 LANG SC
 

@@ -19,7 +19,7 @@
 #include "AquariumControl.pan"
 #include "AquariumControlApplication.h"
 #include "AquariumControlViewAppUi.h"
-#include "DateTimeView.h"
+#include "ClockView.h"
 
 // ============================ MEMBER FUNCTIONS ===============================
 
@@ -50,16 +50,16 @@ void CAquariumControlViewAppUi::ConstructL()
 		iTabGroup = (CAknTabGroup*) iDecoratedTabGroup->DecoratedControl();
 		}
 
-	CDateTimeView* viewDateTime = new (ELeave) CDateTimeView;
+	CClockView* clockView = new (ELeave) CClockView;
 
-	CleanupStack::PushL(viewDateTime);
-	viewDateTime->ConstructL(iTabGroup);
-	AddViewL(viewDateTime);					// transfer ownership to CAknViewAppUi
-	CleanupStack::Pop( viewDateTime );
-	iViewDateTimeId = viewDateTime->Id();	// view id to get view from CAknViewAppUi
+	CleanupStack::PushL(clockView);
+	clockView->ConstructL(iTabGroup);
+	AddViewL(clockView);					// transfer ownership to CAknViewAppUi
+	CleanupStack::Pop( clockView );
+	iClockViewId = clockView->Id();	// view id to get view from CAknViewAppUi
 
 
-	SetDefaultViewL(*viewDateTime);
+	SetDefaultViewL(*clockView);
 	}
 // -----------------------------------------------------------------------------
 // CAquariumControlViewAppUi::CAquariumControlViewAppUi()
@@ -96,6 +96,13 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			break;
 
 		case EAquariumControlSetTime:
+			iEikonEnv->InfoMsg(_L("Set Time"));
+			break;
+
+		case EAquariumControlSetDate:
+			iEikonEnv->InfoMsg(_L("Set Date"));
+			break;
+
 		case EAbout:
 			{
 			CAknMessageQueryDialog* dlg = new (ELeave) CAknMessageQueryDialog();
@@ -193,7 +200,7 @@ void CAquariumControlViewAppUi::HandleResourceChangeL(TInt aType)
 	// *****************************
 	if (aType==KEikDynamicLayoutVariantSwitch)
 		{
-		((CDateTimeView*) View(iViewDateTimeId))->HandleClientRectChange();
+		((CClockView*) View(iClockViewId))->HandleClientRectChange();
 		}
 
 	}

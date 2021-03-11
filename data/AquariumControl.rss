@@ -142,16 +142,7 @@ RESOURCE LOCALISABLE_APP_INFO r_localisable_app_info
 	}
 
 
-#include "DateTime.rssi"
-
-
-// -----------------------------------------------------------------------------
-//
-// Resources for strings.
-//
-// -----------------------------------------------------------------------------
-//
-RESOURCE TBUF r_datetime_tab_name { buf=qtn_datetime_tab_name; }
+#include "ClockView.rssi"
 
 
 //----------------------------------------------------
@@ -189,13 +180,13 @@ RESOURCE NAVI_DECORATOR r_aquariumcontrol_navi_decorator
 	type = ENaviDecoratorControlTabGroup;
 	control = TAB_GROUP
 		{
-		tab_width = EAknTabWidthWithFourTabs;
+		tab_width = EAknTabWidthWithTwoLongTabs;
 		active = 0;
 		tabs = {
 			TAB
 				{
-				id = EAquariumControlViewDateTimeTab;
-				txt = qtn_datetime_tab_name;
+				id = EAquariumControlClockViewTab;
+				txt = qtn_clock_tab_name;
 				}
 			// more tabs
 			};

@@ -1,10 +1,10 @@
 /*
  ============================================================================
- Name        : DateTimeView.cpp
+ Name        : ClockView.cpp
  Author      : Konstantin Baranovskiy
  Version	 : 1.0
  Copyright   : GPLv3
- Description : The date/time view class implementation.
+ Description : The clock view class implementation.
  ============================================================================
  */
 
@@ -12,29 +12,29 @@
 #include <avkon.hrh>
 #include <aquariumcontrol_0xa291b5a5.rsg>
 #include "AquariumControl.hrh"
-#include "DateTimeContainer.h"
-#include "DateTimeView.h"
+#include "ClockContainer.h"
+#include "ClockView.h"
 
 // ================= MEMBER FUNCTIONS =======================
 
 // ---------------------------------------------------------
-// CDateTimeView::ConstructL(const TRect& aRect)
+// CClockView::ConstructL(const TRect& aRect)
 // EPOC two-phased constructor
 // ---------------------------------------------------------
 //
-void CDateTimeView::ConstructL(CAknTabGroup* aTabGroup)
+void CClockView::ConstructL(CAknTabGroup* aTabGroup)
 	{
-	// construct R_MYVIEW_VIEW1 resources
-	BaseConstructL(R_DATETIME_VIEW);
-	iTabGroup=aTabGroup;
+	// construct from resources
+	BaseConstructL(R_CLOCK_VIEW);
+	iTabGroup = aTabGroup;
 	}
 
 // ---------------------------------------------------------
-// CDateTimeView::~CDateTimeView()
+// CClockView::~CClockView()
 // Default destructor
 // ---------------------------------------------------------
 //
-CDateTimeView::~CDateTimeView()
+CClockView::~CClockView()
 	{
 	if (iContainer)
 		{
@@ -45,31 +45,31 @@ CDateTimeView::~CDateTimeView()
 	}
 
 // ---------------------------------------------------------
-// TUid CDateTimeView::Id()
+// TUid CClockView::Id()
 // This returns the view ID
 // ---------------------------------------------------------
 //
-TUid CDateTimeView::Id() const
+TUid CClockView::Id() const
 	{
 	return KViewId;
 	}
 
 // ---------------------------------------------------------
-// CDateTimeView::HandleCommandL(TInt aCommand)
+// CClockView::HandleCommandL(TInt aCommand)
 // Here we handle commands for this view. 
 // Each view has their own HandleCommandL()
 // ---------------------------------------------------------
 //
-void CDateTimeView::HandleCommandL(TInt aCommand)
+void CClockView::HandleCommandL(TInt aCommand)
 	{
 	AppUi()->HandleCommandL(aCommand);
 	}
 
 // ---------------------------------------------------------
-// CDateTimeView::HandleClientRectChange()
+// CClockView::HandleClientRectChange()
 // ---------------------------------------------------------
 //
-void CDateTimeView::HandleClientRectChange()
+void CClockView::HandleClientRectChange()
 	{
 	if (iContainer)
 		{
@@ -78,7 +78,7 @@ void CDateTimeView::HandleClientRectChange()
 	}
 
 // ---------------------------------------------------------
-// CDateTimeView::DoActivateL(...)
+// CClockView::DoActivateL(...)
 // This is called when a view needs to be activated. 
 // This creates container with its controls.
 // It also receives messages sent to the view.
@@ -87,13 +87,13 @@ void CDateTimeView::HandleClientRectChange()
 // aCustomMessage is the actual message.
 // ---------------------------------------------------------
 //
-void CDateTimeView::DoActivateL(
+void CClockView::DoActivateL(
 		const TVwsViewId& /*aPrevViewId*/,TUid /*aCustomMessageId*/,
 		const TDesC8& /*aCustomMessage*/)
 	{
 	if (!iContainer)
 		{
-		iContainer = CDateTimeContainer::NewL(ClientRect());
+		iContainer = CClockContainer::NewL(ClientRect());
 		iContainer->SetMopParent(this);
 		AppUi()->AddToStackL(*this, iContainer);
 		}
@@ -102,12 +102,12 @@ void CDateTimeView::DoActivateL(
 	}
 
 // ---------------------------------------------------------
-// CDateTimeView::HandleCommandL(TInt aCommand)
+// CClockView::HandleCommandL(TInt aCommand)
 // This is called when a view needs to be deactivated. 
 // This destroys container with its controls.
 // ---------------------------------------------------------
 //
-void CDateTimeView::DoDeactivate()
+void CClockView::DoDeactivate()
 	{
 	if (iContainer)
 		{

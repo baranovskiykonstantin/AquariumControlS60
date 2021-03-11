@@ -1,14 +1,14 @@
 /*
  ============================================================================
- Name        : DateTimeView.h
+ Name        : ClockView.h
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
- Description : Declares the date/time view class for application.
+ Description : Declares the clock view class for application.
  ============================================================================
  */
 
-#ifndef __DATETIMEVIEW_H__
-#define __DATETIMEVIEW_H__
+#ifndef __CLOCKVIEW_H__
+#define __CLOCKVIEW_H__
 
 // INCLUDES
 #include <aknview.h>
@@ -19,15 +19,15 @@
 const TUid KViewId = {1};
 
 // FORWARD DECLARATIONS
-class CDateTimeContainer;
+class CClockContainer;
 
 // CLASS DECLARATION
 
 /**
- *  CDateTimeView
+ *  CClockView
  * 
  */
-class CDateTimeView : public CAknView
+class CClockView : public CAknView
 	{
 public: // Constructors and destructor
 
@@ -39,7 +39,7 @@ public: // Constructors and destructor
 	/**
 	* Destructor.
 	*/
-	~CDateTimeView();
+	~CClockView();
 
 public: // Functions from base classes
 	
@@ -73,9 +73,9 @@ private:
 	
 
 private: // Data
-	CDateTimeContainer* iContainer;
+	CClockContainer* iContainer;
 	CAknTabGroup* iTabGroup;
 
 	};
 
-#endif // __DATETIMEVIEW_H__
+#endif // __CLOCKVIEW_H__
