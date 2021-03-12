@@ -17,6 +17,7 @@ SOURCE			AquariumControlApplication.cpp
 SOURCE			AquariumControlDocument.cpp
 SOURCE			AquariumControlViewAppUi.cpp
 SOURCE			AquariumControlView.cpp
+SOURCE			AquariumControlData.cpp
 SOURCE			BaseContainer.cpp
 SOURCE			ClockContainer.cpp
 

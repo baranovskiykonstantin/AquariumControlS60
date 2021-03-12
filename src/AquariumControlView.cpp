@@ -142,5 +142,31 @@ void CAquariumControlView::DoDeactivate()
 	iContainer = NULL;
 	}
 
+// ---------------------------------------------------------------------------
+// CAquariumControlView::DynInitMenuPaneL()
+// This function is called by the EIKON framework just before it displays a 
+// menu pane.
+// ---------------------------------------------------------------------------
+//
+void CAquariumControlView::DynInitMenuPaneL(TInt aResourceId,
+		CEikMenuPane* aMenuPane)
+	{
+	AppUi()->DynInitMenuPaneL(aResourceId, aMenuPane);
+	}
+
+// ---------------------------------------------------------
+// CAquariumControlView::UpdateL()
+// This must be called on data change
+// to reflect the changes.
+// ---------------------------------------------------------
+//
+void CAquariumControlView::UpdateL()
+	{
+	if (iContainer)
+		{
+		iContainer->UpdateListBoxL();
+		}
+	
+	}
 
 // End of File

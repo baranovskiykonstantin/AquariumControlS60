@@ -8,8 +8,12 @@
  */
 
 // INCLUDE FILES
-#include <aknviewappui.h> 
+#include <aknviewappui.h>
+#include <stringloader.h>
+#include <aquariumcontrol_0xa291b5a5.rsg>
 #include "AquariumControl.hrh"
+#include "AquariumControlViewAppUi.h"
+#include "AquariumControlData.h"
 #include "ClockContainer.h"
 
 
@@ -50,11 +54,66 @@ void CClockContainer::UpdateListBoxL()
 		{
 		// Remove all items
 		iListBoxItems->Reset();
-		// Create items again
-		iListBoxItems->AppendL(_L("\tTime\t12:00\t\t"));
-		iListBoxItems->AppendL(_L("\tTime correction\t+5 sec\t\t"));
-		iListBoxItems->AppendL(_L("\tDate\t10.03.2021\t\t"));
-		iListBoxItems->AppendL(_L("\tDay of week\tWednesday\t\t"));
+
+		// Get access to aquarium data
+		const CAquariumControlData* data = ((CAquariumControlViewAppUi*) iAvkonViewAppUi)->AquariumData();
+
+		if (data->iIsConnected)
+			{
+			// Create items again
+			TBuf<64> itemText;
+			HBufC* itemTitle;
+			TBuf<32> itemValue;
+
+			// Formats
+			_LIT(KTimeFormat, "%u:%02u:%02u");
+			_LIT(KTimeCorFormat, "%i %S");
+			_LIT(KDateFormat, "%02u.%02u.20%02u");
+			
+			// Constants
+			_LIT(KSignPlus, "+");
+
+			// Time
+			itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_TIME);
+			itemValue.Format(KTimeFormat, data->iHours, data->iMinutes, data->iSeconds);
+			itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
+			iListBoxItems->AppendL(itemText);
+			CleanupStack::PopAndDestroy(itemTitle);
+
+			// Time correction
+			itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_TIMECOR);
+			HBufC* timeCorUnits = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_TIMECORUNITS);
+			itemValue.Format(KTimeCorFormat, data->iTimeCorrection, timeCorUnits);
+			if (data->iTimeCorrection >= 0)
+				itemValue.Insert(0, KSignPlus);
+			itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
+			iListBoxItems->AppendL(itemText);
+			CleanupStack::PopAndDestroy(timeCorUnits);
+			CleanupStack::PopAndDestroy(itemTitle);
+
+			// Date
+			itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_DATE);
+			itemValue.Format(KDateFormat, data->iDay, data->iMonth, data->iYear);
+			itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
+			iListBoxItems->AppendL(itemText);
+			CleanupStack::PopAndDestroy(itemTitle);
+
+			// Day of week
+			itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_DAYOFWEEK);
+			if (data->iDayOfWeek > 0 && data->iDayOfWeek < 8)
+				{
+				TDayName dayOfWeek = TDayName((TDay)(data->iDayOfWeek - 1));
+				itemText.Format(KListBoxItemFormat, itemTitle, &dayOfWeek);
+				}
+			else
+				{
+				itemText.Format(KListBoxItemFormat, itemTitle, &KNullDesC);
+				}
+			iListBoxItems->AppendL(itemText);
+			CleanupStack::PopAndDestroy(itemTitle);
+
+			}
+
 		iListBox->HandleItemAdditionL();
 		}
 	}

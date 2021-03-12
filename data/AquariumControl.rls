@@ -14,14 +14,18 @@
 // Caption string for app.
 #define qtn_caption_string "Aquarium Control"
 
+// Menu
+#define qtn_connect "Connect"
+#define qtn_disconnect "Disconnect"
 #define qtn_about "About"
-
 #define qtn_exit "Exit"
+
+// Common strings
+#define qtn_disconnected "Disconnected"
 
 #define qtn_loc_resource_file_1 "\\resource\\apps\\AquariumControl_0xa291b5a5"
 
 #define qtn_about_dialog_title "About"
-
 #define qtn_about_dialog_text "AquariumControl Version 1.0.0\n\nAuthor: Konstantin Baranovskiy\n\nSupport: baranovskiykonstantin@gmail.com\n\n(c) GPLv3"
 
 // End of File

@@ -15,18 +15,22 @@
 // AquariumControl enumerate command codes
 enum TAquariumControlIds
 	{
-	// common
+	// Common
 	EAbout = 0x6001, // start value must not be 0
+	EAquariumControlConnect,
+	EAquariumControlDisconnect,
 
-	// clock
+	// Clock
 	EAquariumControlSetTime,
+	EAquariumControlSetTimeCorrection,
 	EAquariumControlSetDate,
+	EAquariumControlSetDayOfWeek,
 
-	// heat
+	// Heat
 
-	// light
+	// Light
 
-	// display
+	// Display
 
 	EAquariumControlLastCommand
 	};

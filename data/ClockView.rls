@@ -11,8 +11,14 @@
 
 //  LOCALISATION STRINGS
 
+// Tab
 #define qtn_clock_tab_name "Clock"
-#define qtn_command_set_time "Set time"
-#define qtn_command_set_date "Set date"
+
+// Listbox items
+#define qtn_listbox_item_time "Time"
+#define qtn_listbox_item_timecor "Time correction"
+#define qtn_listbox_item_timecorunits "seconds per day"
+#define qtn_listbox_item_date "Date"
+#define qtn_listbox_item_dayofweek "Day of week"
 
 // End of File

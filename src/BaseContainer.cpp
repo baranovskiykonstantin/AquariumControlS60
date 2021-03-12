@@ -10,6 +10,8 @@
 // INCLUDE FILES
 #include <coemain.h>
 #include <aknviewappui.h> 
+#include <stringloader.h>
+#include <aquariumcontrol_0xa291b5a5.rsg>
 #include "AquariumControl.hrh"
 #include "BaseContainer.h"
 
@@ -39,6 +41,11 @@ void CBaseContainer::ConstructL(const TRect& aRect)
 	iListBox->CreateScrollBarFrameL(ETrue);
 	iListBox->ScrollBarFrame()->SetScrollBarVisibilityL(CEikScrollBarFrame::EOn, CEikScrollBarFrame::EAuto);
 */
+
+	// Set the listbox empty text
+	HBufC* emptyText = StringLoader::LoadLC(R_DISCONNECTED);
+	iListBox->View()->SetListEmptyTextL(emptyText->Des());
+	CleanupStack::PopAndDestroy(emptyText);
 
 	// Create listbox item array
 	iListBoxItems = new (ELeave) CDesCArrayFlat(4);

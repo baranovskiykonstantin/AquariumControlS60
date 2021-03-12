@@ -17,6 +17,7 @@
 
 // FORWARD DECLARATIONS
 class CClockView;
+class CAquariumControlData;
 
 // CLASS DECLARATION
 /**
@@ -48,6 +49,10 @@ public:
 	 */
 	virtual ~CAquariumControlViewAppUi();
 
+public:
+	// Data getter.
+	CAquariumControlData* AquariumData();
+
 private:
 	// Functions from base classes
 
@@ -75,6 +80,15 @@ private:
 	*/
 	virtual void HandleResourceChangeL(TInt aType);
 
+	/**
+	 * From MEikMenuObserver, DynInitMenuPaneL.
+	 * This function is called by the EIKON framework just before it
+	 * displays a menu pane.
+	 * @param aResourceId The ID of command which defined in resource file.
+	 * @param aMenuPane Pointer to menu-pane object.
+	 */
+	void DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuPane);
+
 private:
 	// Data
 
@@ -82,8 +96,11 @@ private:
 	CAknTabGroup*					iTabGroup;
 	CAknNavigationDecorator*		iDecoratedTabGroup;
 	TUid							iClockViewId;
+	CAquariumControlData*			iData;
 
 	};
+
+inline CAquariumControlData* CAquariumControlViewAppUi::AquariumData() {return iData;}
 
 #endif // __AQUARIUMCONTROLVIEWAPPUI_h__
 // End of File

@@ -55,6 +55,14 @@ public: // Functions from base classes
 	*/
 	void HandleClientRectChange();
 
+public:
+	// New methods
+	
+	/**
+	 * Update view accordingly to data change
+	 */
+	void UpdateL();
+
 private:
 
 	/**
@@ -67,7 +75,15 @@ private:
 	* From AknView, Deactivates view
 	*/
 	void DoDeactivate();
-	
+
+	/**
+	 * From MEikMenuObserver, DynInitMenuPaneL.
+	 * This function is called by the EIKON framework just before it
+	 * displays a menu pane.
+	 * @param aResourceId The ID of command which defined in resource file.
+	 * @param aMenuPane Pointer to menu-pane object.
+	 */
+	void DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuPane);
 
 private: // Data
 	TInt iId;

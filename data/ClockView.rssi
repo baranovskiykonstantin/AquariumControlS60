@@ -16,8 +16,12 @@
 //
 // -----------------------------------------------------------------------------
 //
-RESOURCE TBUF r_command_set_time { buf=qtn_command_set_time; }
-RESOURCE TBUF r_command_set_date { buf=qtn_command_set_date; }
+// Listbox items
+RESOURCE TBUF r_listbox_item_time { buf=qtn_listbox_item_time; }
+RESOURCE TBUF r_listbox_item_timecor { buf=qtn_listbox_item_timecor; }
+RESOURCE TBUF r_listbox_item_timecorunits { buf=qtn_listbox_item_timecorunits; }
+RESOURCE TBUF r_listbox_item_date { buf=qtn_listbox_item_date; }
+RESOURCE TBUF r_listbox_item_dayofweek { buf=qtn_listbox_item_dayofweek; }
 
 
 //  RESOURCE DEFINITIONS
@@ -30,42 +34,8 @@ RESOURCE TBUF r_command_set_date { buf=qtn_command_set_date; }
 //
 RESOURCE AVKON_VIEW r_clock_view
 	{
-	menubar=r_aquariumcontrol_menubar_clock;
+	menubar=r_aquariumcontrol_menubar;
 	cba=R_AVKON_SOFTKEYS_OPTIONS_EXIT;
-	}
-
-
-//----------------------------------------------------
-//
-//    r_aquariumcontrol_menubar_clock
-//    Menubar for clock view
-//
-//----------------------------------------------------
-//
-RESOURCE MENU_BAR r_aquariumcontrol_menubar_clock
-	{
-	titles=
-		{
-		MENU_TITLE { menu_pane=r_common_menu; txt="Common"; },
-		MENU_TITLE { menu_pane=r_clock_view_menu; txt="Clock"; }
-		};
-	}
-
-
-//----------------------------------------------------
-//
-//    r_clock_view_menu
-//    Menupane for clock view, includes the menu item
-//
-//----------------------------------------------------
-//
-RESOURCE MENU_PANE r_clock_view_menu
-	{
-	items=
-		{
-		MENU_ITEM { command=EAquariumControlSetTime; txt = qtn_command_set_time; },
-		MENU_ITEM { command=EAquariumControlSetDate; txt = qtn_command_set_date; }
-		};
 	}
 
 

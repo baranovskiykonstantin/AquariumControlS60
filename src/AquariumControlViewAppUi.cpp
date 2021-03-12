@@ -19,6 +19,7 @@
 #include "AquariumControl.pan"
 #include "AquariumControlApplication.h"
 #include "AquariumControlView.h"
+#include "AquariumControlData.h"
 #include "AquariumControlViewAppUi.h"
 
 // ============================ MEMBER FUNCTIONS ===============================
@@ -33,6 +34,9 @@ void CAquariumControlViewAppUi::ConstructL()
 	{
 	// Initialise app UI with standard value.
 	BaseConstructL(CAknViewAppUi::EAknEnableSkin);
+
+	// Aquarium data
+	iData = CAquariumControlData::NewL();
 
 	// Show tabs for main views from resources
 	CEikStatusPane* sp = StatusPane();
@@ -79,6 +83,7 @@ CAquariumControlViewAppUi::CAquariumControlViewAppUi()
 CAquariumControlViewAppUi::~CAquariumControlViewAppUi()
 	{
 	delete iDecoratedTabGroup;
+	delete iData;
 	}
 
 // -----------------------------------------------------------------------------
@@ -93,6 +98,16 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 		case EEikCmdExit:
 		case EAknSoftkeyExit:
 			Exit();
+			break;
+
+		case EAquariumControlConnect:
+			iData->iIsConnected = ETrue;
+			((CAquariumControlView*) View(iClockViewId))->UpdateL();
+			break;
+
+		case EAquariumControlDisconnect:
+			iData->iIsConnected = EFalse;
+			((CAquariumControlView*) View(iClockViewId))->UpdateL();
 			break;
 
 		case EAquariumControlSetTime:
@@ -203,6 +218,24 @@ void CAquariumControlViewAppUi::HandleResourceChangeL(TInt aType)
 		((CAquariumControlView*) View(iClockViewId))->HandleClientRectChange();
 		}
 
+	}
+
+// ---------------------------------------------------------------------------
+// CAquariumControlViewAppUi::DynInitMenuPaneL()
+// This function is called by the EIKON framework just before it displays a 
+// menu pane.
+// ---------------------------------------------------------------------------
+//
+void CAquariumControlViewAppUi::DynInitMenuPaneL(TInt aResourceId,
+		CEikMenuPane* aMenuPane)
+	{
+	if(aResourceId == R_COMMON_MENU)
+		{
+		if (iData->iIsConnected)
+			aMenuPane->SetItemDimmed(EAquariumControlConnect, ETrue);
+		else
+			aMenuPane->SetItemDimmed(EAquariumControlDisconnect, ETrue);
+		}
 	}
 
 // End of File

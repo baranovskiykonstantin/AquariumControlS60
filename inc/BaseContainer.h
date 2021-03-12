@@ -16,6 +16,9 @@
 #include <eiklbo.h> 
 #include <aknlists.h> 
 
+// CONSTANTS
+_LIT(KListBoxItemFormat, "\t%S\t%S\t\t");
+
 // CLASS DECLARATION
 class CBaseContainer : public CCoeControl, MEikListBoxObserver 
 	{
