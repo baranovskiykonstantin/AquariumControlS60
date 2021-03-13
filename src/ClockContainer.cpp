@@ -125,20 +125,9 @@ void CClockContainer::UpdateListBoxL()
 //
 void CClockContainer::HandleListBoxItemActivationL(TInt aItem)
 	{
-	switch (aItem)
-		{
-		case 0:
-			iAvkonViewAppUi->HandleCommandL(EAquariumControlSetTime);
-		break;
-
-		case 2:
-			iAvkonViewAppUi->HandleCommandL(EAquariumControlSetDate);
-		break;
-
-		default:
-			// Do nothing
-		break;
-		}
+	// The order of the listbox items and the order of
+	// command ids (TAquariumControlIds) must be the same.
+	iAvkonViewAppUi->HandleCommandL(EAquariumControlSetTime + aItem);
 	}
 
 // End of File

@@ -111,10 +111,12 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			break;
 
 		case EAquariumControlSetTime:
+		case EAquariumControlSetTimeCorrection:
 			iEikonEnv->InfoMsg(_L("Set Time"));
 			break;
 
 		case EAquariumControlSetDate:
+		case EAquariumControlSetDayOfWeek:
 			iEikonEnv->InfoMsg(_L("Set Date"));
 			break;
 
