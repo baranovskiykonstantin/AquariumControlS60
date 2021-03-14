@@ -1,0 +1,29 @@
+/*
+============================================================================
+ Name        : LightView.rls
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for LightView
+               A .rls file is the one and only place where the logical
+               strings to be localised are defined.
+============================================================================
+*/
+
+//  LOCALISATION STRINGS
+
+// Tab
+#define qtn_light_tab_name "Light"
+
+// Listbox items
+#define qtn_listbox_item_light_on_time "Turn on at"
+#define qtn_listbox_item_light_off_time "Turn off at"
+#define qtn_listbox_item_light_level "Brightness"
+#define qtn_listbox_item_light_rise "Rise time"
+#define qtn_listbox_item_light_rise_units "minutes"
+
+// Toolbar
+#define qtn_light_toolbar_on "On"
+#define qtn_light_toolbar_off "Off"
+#define qtn_light_toolbar_auto "Auto"
+
+// End of File

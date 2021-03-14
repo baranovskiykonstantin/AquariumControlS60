@@ -21,7 +21,13 @@
 #define qtn_exit "Exit"
 
 // Common strings
-#define qtn_disconnected "Disconnected"
+#define qtn_disconnected "(disconnected)"
+#define qtn_listbox_item_state "State"
+#define qtn_state_off "OFF"
+#define qtn_state_on "ON"
+#define qtn_listbox_item_mode "Mode"
+#define qtn_mode_auto "Automatic"
+#define qtn_mode_manual "Manual"
 
 #define qtn_loc_resource_file_1 "\\resource\\apps\\AquariumControl_0xa291b5a5"
 

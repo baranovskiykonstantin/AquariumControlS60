@@ -26,9 +26,19 @@ enum TAquariumControlIds
 	EAquariumControlSetDate,
 	EAquariumControlSetDayOfWeek,
 
-	// Heat
-
 	// Light
+	EAquariumControlSetLightSwitchState,
+	EAquariumControlSetLightSwitchMode,
+	EAquariumControlSetLightOnTime,
+	EAquariumControlSetLightOffTime,
+	EAquariumControlSetLightLevel,
+	EAquariumControlSetLightRise,
+	// Light toolbar
+	EAquariumControlSetLightStateOn,
+	EAquariumControlSetLightStateOff,
+	EAquariumControlSetLightStateAuto,
+
+	// Heat
 
 	// Display
 

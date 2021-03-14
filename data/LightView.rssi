@@ -1,0 +1,107 @@
+/*
+============================================================================
+ Name        : LightView.rssi
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This file contains the resources for the LightView.
+============================================================================
+*/
+
+//  INCLUDES
+#include "LightView.rls"
+
+// -----------------------------------------------------------------------------
+//
+// Resources for strings.
+//
+// -----------------------------------------------------------------------------
+//
+// Listbox items
+RESOURCE TBUF r_listbox_item_light_on_time { buf=qtn_listbox_item_light_on_time; }
+RESOURCE TBUF r_listbox_item_light_off_time { buf=qtn_listbox_item_light_off_time; }
+RESOURCE TBUF r_listbox_item_light_level { buf=qtn_listbox_item_light_level; }
+RESOURCE TBUF r_listbox_item_light_rise { buf=qtn_listbox_item_light_rise; }
+RESOURCE TBUF r_listbox_item_light_rise_units { buf=qtn_listbox_item_light_rise_units; }
+
+
+//  RESOURCE DEFINITIONS
+//----------------------------------------------------
+//
+//    r_light_view
+//    Resource definition for light view
+//
+//----------------------------------------------------
+//
+RESOURCE AVKON_VIEW r_light_view
+	{
+	menubar=r_aquariumcontrol_menubar;
+	toolbar=r_light_toolbar;
+	cba=R_AVKON_SOFTKEYS_OPTIONS_EXIT;
+	}
+
+
+//----------------------------------------------------
+//
+//    r_light_toolbar
+//    Resource definition for toolbar of light view
+//
+//----------------------------------------------------
+//
+RESOURCE AVKON_TOOLBAR r_light_toolbar
+	{
+	flags = KAknToolbarFixed;
+	items =
+		{
+		TBAR_CTRL
+			{
+			type = EAknCtButton;
+			id = EAquariumControlSetLightStateOn;
+			control = AVKON_BUTTON
+				{
+				flags = 0;
+				states =
+					{
+					AVKON_BUTTON_STATE
+						{
+						txt = qtn_light_toolbar_on;
+						}
+					};
+				};
+			},
+		TBAR_CTRL
+			{
+			type = EAknCtButton;
+			id = EAquariumControlSetLightStateOff;
+			control = AVKON_BUTTON
+				{
+				flags = 0;
+				states =
+					{
+					AVKON_BUTTON_STATE
+						{
+						txt = qtn_light_toolbar_off;
+						}
+					};
+				};
+			},
+		TBAR_CTRL
+			{
+			type = EAknCtButton;
+			id = EAquariumControlSetLightStateAuto;
+			control = AVKON_BUTTON
+				{
+				flags = 0;
+				states =
+					{
+					AVKON_BUTTON_STATE
+						{
+						txt = qtn_light_toolbar_auto;
+						}
+					};
+				};
+			}
+		};
+	}
+
+
+// End of File

@@ -65,6 +65,12 @@ RESOURCE TBUF32 r_about_dialog_title { buf=qtn_about_dialog_title; }
 RESOURCE TBUF r_about_dialog_text { buf=qtn_about_dialog_text; }
 
 RESOURCE TBUF r_disconnected { buf=qtn_disconnected; }
+RESOURCE TBUF r_listbox_item_state { buf=qtn_listbox_item_state; }
+RESOURCE TBUF r_state_off { buf=qtn_state_off; }
+RESOURCE TBUF r_state_on { buf=qtn_state_on; }
+RESOURCE TBUF r_listbox_item_mode { buf=qtn_listbox_item_mode; }
+RESOURCE TBUF r_mode_auto { buf=qtn_mode_auto; }
+RESOURCE TBUF r_mode_manual { buf=qtn_mode_manual; }
 
 
 //----------------------------------------------------
@@ -170,6 +176,7 @@ RESOURCE LOCALISABLE_APP_INFO r_localisable_app_info
 
 
 #include "ClockView.rssi"
+#include "LightView.rssi"
 
 
 //----------------------------------------------------
@@ -214,8 +221,12 @@ RESOURCE NAVI_DECORATOR r_aquariumcontrol_navi_decorator
 				{
 				id = EAquariumControlClockViewTab;
 				txt = qtn_clock_tab_name;
+				},
+			TAB
+				{
+				id = EAquariumControlLightViewTab;
+				txt = qtn_light_tab_name;
 				}
-			// more tabs
 			};
 		};
 	}

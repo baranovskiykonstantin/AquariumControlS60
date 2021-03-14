@@ -56,12 +56,17 @@ void CAquariumControlViewAppUi::ConstructL()
 
 	CAquariumControlView* clockView = new (ELeave) CAquariumControlView;
 	CleanupStack::PushL(clockView);
-
 	clockView->ConstructL(iTabGroup, EAquariumControlClockViewTab);
 	AddViewL(clockView);					// transfer ownership to CAknViewAppUi
 	CleanupStack::Pop(clockView);
 	iClockViewId = clockView->Id();	// view id to get view from CAknViewAppUi
 
+	CAquariumControlView* lightView = new (ELeave) CAquariumControlView;
+	CleanupStack::PushL(lightView);
+	lightView->ConstructL(iTabGroup, EAquariumControlLightViewTab);
+	AddViewL(lightView);
+	CleanupStack::Pop(lightView);
+	iLightViewId = lightView->Id();
 
 	SetDefaultViewL(*clockView);
 	}
@@ -102,12 +107,13 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 
 		case EAquariumControlConnect:
 			iData->iIsConnected = ETrue;
-			((CAquariumControlView*) View(iClockViewId))->UpdateL();
+			
+			UpdateViewsL();
 			break;
 
 		case EAquariumControlDisconnect:
 			iData->iIsConnected = EFalse;
-			((CAquariumControlView*) View(iClockViewId))->UpdateL();
+			UpdateViewsL();
 			break;
 
 		case EAquariumControlSetTime:
@@ -118,6 +124,50 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 		case EAquariumControlSetDate:
 		case EAquariumControlSetDayOfWeek:
 			iEikonEnv->InfoMsg(_L("Set Date"));
+			break;
+
+		case EAquariumControlSetLightSwitchState:
+			{
+			switch (iData->iLightState)
+				{
+				case (TAquariumDeviceState) EOn:
+					iData->iLightState = (TAquariumDeviceState) EOff;
+					break;
+				case (TAquariumDeviceState) EOff:
+					iData->iLightState = (TAquariumDeviceState) EOn;
+					break;
+				default:
+					iData->iLightState = (TAquariumDeviceState) EOff;
+					break;
+				}
+			}
+			UpdateViewsL();
+			break;
+		case EAquariumControlSetLightSwitchMode:
+			{
+			switch (iData->iLightMode)
+				{
+				case (TAquariumDeviceMode) EAuto:
+					iData->iLightMode = (TAquariumDeviceMode) EManual;
+					break;
+				case (TAquariumDeviceMode) EManual:
+					iData->iLightMode = (TAquariumDeviceMode) EAuto;
+					break;
+				default:
+					iData->iLightMode = (TAquariumDeviceMode) EAuto;
+					break;
+				}
+			}
+			UpdateViewsL();
+			break;
+		case EAquariumControlSetLightOnTime:
+		case EAquariumControlSetLightOffTime:
+		case EAquariumControlSetLightLevel:
+		case EAquariumControlSetLightRise:
+		case EAquariumControlSetLightStateOn:
+		case EAquariumControlSetLightStateOff:
+		case EAquariumControlSetLightStateAuto:
+			iEikonEnv->InfoMsg(_L("Light"));
 			break;
 
 		case EAbout:
@@ -218,6 +268,7 @@ void CAquariumControlViewAppUi::HandleResourceChangeL(TInt aType)
 	if (aType == KEikDynamicLayoutVariantSwitch)
 		{
 		((CAquariumControlView*) View(iClockViewId))->HandleClientRectChange();
+		((CAquariumControlView*) View(iLightViewId))->HandleClientRectChange();
 		}
 
 	}
@@ -238,6 +289,17 @@ void CAquariumControlViewAppUi::DynInitMenuPaneL(TInt aResourceId,
 		else
 			aMenuPane->SetItemDimmed(EAquariumControlDisconnect, ETrue);
 		}
+	}
+
+// ---------------------------------------------------------------------------
+// CAquariumControlViewAppUi::UpdateViewsL()
+// Update all views.
+// ---------------------------------------------------------------------------
+//
+inline void CAquariumControlViewAppUi::UpdateViewsL()
+	{
+	((CAquariumControlView*) View(iClockViewId))->UpdateL();
+	((CAquariumControlView*) View(iLightViewId))->UpdateL();
 	}
 
 // End of File

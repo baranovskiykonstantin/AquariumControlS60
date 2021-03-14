@@ -36,11 +36,10 @@ void CBaseContainer::ConstructL(const TRect& aRect)
 	iListBox->ConstructL(this, EAknListBoxSelectionList);
 	iListBox->SetContainerWindowL(*this);
 	iListBox->SetListBoxObserver(this);
-/*
+
 	// Set scrollbars
 	iListBox->CreateScrollBarFrameL(ETrue);
-	iListBox->ScrollBarFrame()->SetScrollBarVisibilityL(CEikScrollBarFrame::EOn, CEikScrollBarFrame::EAuto);
-*/
+	iListBox->ScrollBarFrame()->SetScrollBarVisibilityL(CEikScrollBarFrame::EAuto, CEikScrollBarFrame::EAuto);
 
 	// Set the listbox empty text
 	HBufC* emptyText = StringLoader::LoadLC(R_DISCONNECTED);
@@ -56,7 +55,6 @@ void CBaseContainer::ConstructL(const TRect& aRect)
 	// Activate Listbox
 	iListBox->SetRect(Rect());
 	iListBox->ActivateL();
-	UpdateListBoxL();
 
 	// Activate the window, which makes it ready to be drawn
 	ActivateL();
@@ -166,26 +164,6 @@ void CBaseContainer::HandleListBoxEventL(CEikListBox* /*aListBox*/, TListBoxEven
 		{
 		HandleListBoxItemActivationL(iListBox->CurrentItemIndex());
 		}
-	}
-
-// -----------------------------------------------------------------------------
-// CBaseContainer::UpdateListBoxL()
-// Handles list box item activation.
-// -----------------------------------------------------------------------------
-//
-void CBaseContainer::UpdateListBoxL()
-	{
-
-	}
-
-// -----------------------------------------------------------------------------
-// CBaseContainer::HandleListBoxItemActivationL()
-// Handles list box item activation.
-// -----------------------------------------------------------------------------
-//
-void CBaseContainer::HandleListBoxItemActivationL(TInt /*aItem*/)
-	{
-
 	}
 
 // End of File

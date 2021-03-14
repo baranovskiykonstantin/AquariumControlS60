@@ -16,7 +16,6 @@
 #include <aknnavide.h>
 
 // FORWARD DECLARATIONS
-class CClockView;
 class CAquariumControlData;
 
 // CLASS DECLARATION
@@ -90,17 +89,28 @@ private:
 	void DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuPane);
 
 private:
+	// New methods
+
+	/**
+	 * Update all views.
+	 */
+	void UpdateViewsL();
+
+private:
 	// Data
 
 	CAknNavigationControlContainer*	iNaviPane;
 	CAknTabGroup*					iTabGroup;
 	CAknNavigationDecorator*		iDecoratedTabGroup;
-	TUid							iClockViewId;
 	CAquariumControlData*			iData;
+	TUid							iClockViewId;
+	TUid							iLightViewId;
+	TUid							iHeatViewId;
+	TUid							iDisplayViewId;
 
 	};
 
-inline CAquariumControlData* CAquariumControlViewAppUi::AquariumData() {return iData;}
+inline CAquariumControlData* CAquariumControlViewAppUi::AquariumData() { return iData; }
 
 #endif // __AQUARIUMCONTROLVIEWAPPUI_h__
 // End of File

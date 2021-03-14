@@ -33,6 +33,14 @@ enum TAquariumDeviceMode {
 };
 
 /**
+ * TAquariumHeatState
+ */
+enum TAquariumDispalyMode {
+	ETime,
+	ETemperature
+};
+
+/**
  *  CAquariumControlData
  * 
  */
@@ -87,13 +95,6 @@ public:
 	TUint iSeconds;
 	TInt  iTimeCorrection;
 
-	// Heat
-	TUint					iTemp;
-	TAquariumDeviceState	iHeatState;
-	TAquariumDeviceMode		iHeatMode;
-	TUint					iHeatLow;
-	TUint					iHeatHigh;
-
 	// Light
 	TAquariumDeviceState	iLightState;
 	TAquariumDeviceMode		iLightMode;
@@ -108,6 +109,16 @@ public:
 	TUint iLightOffHours;
 	TUint iLightOffMinutes;
 	TUint iLightOffSeconds;
+
+	// Heat
+	TUint					iTemp;
+	TAquariumDeviceState	iHeatState;
+	TAquariumDeviceMode		iHeatMode;
+	TUint					iHeatLow;
+	TUint					iHeatHigh;
+
+	// Display
+	TAquariumDispalyMode	iDisplayMode;
 	};
 
 #endif // __AQUARIUMCONTROLDATA_H__

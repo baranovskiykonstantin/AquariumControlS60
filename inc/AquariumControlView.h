@@ -13,6 +13,7 @@
 // INCLUDES
 #include <aknview.h>
 #include <akntabgrp.h>        // For handling tabs
+#include <akntoolbarobserver.h>
 #include "AquariumControl.hrh"
 
 // FORWARD DECLARATIONS
@@ -24,7 +25,7 @@ class CBaseContainer;
  *  CAquariumControlView
  * 
  */
-class CAquariumControlView : public CAknView
+class CAquariumControlView : public CAknView, MAknToolbarObserver
 	{
 public: // Constructors and destructor
 
@@ -84,6 +85,13 @@ private:
 	 * @param aMenuPane Pointer to menu-pane object.
 	 */
 	void DynInitMenuPaneL(TInt aResourceId, CEikMenuPane* aMenuPane);
+
+	/**
+	 * From MAknToolbarObserver, OfferToolbarEventL
+	 * Handles toolbar events for a certain toolbar item.
+	 * @param aCommand The command ID of some toolbar item.
+	 */
+	void OfferToolbarEventL(TInt aCommand);
 
 private: // Data
 	TInt iId;

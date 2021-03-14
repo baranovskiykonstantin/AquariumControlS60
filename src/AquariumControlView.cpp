@@ -10,11 +10,15 @@
 
 #include <aknviewappui.h>
 #include <avkon.hrh>
+#include <akntoolbar.h>
 #include <aquariumcontrol_0xa291b5a5.rsg>
 #include "AquariumControl.hrh"
 #include "AquariumControl.pan"
 #include "BaseContainer.h"
 #include "ClockContainer.h"
+#include "LightContainer.h"
+#include "AquariumControlViewAppUi.h"
+#include "AquariumControlData.h"
 #include "AquariumControlView.h"
 
 // ================= MEMBER FUNCTIONS =======================
@@ -34,10 +38,22 @@ void CAquariumControlView::ConstructL(CAknTabGroup* aTabGroup,
 			BaseConstructL(R_CLOCK_VIEW);
 			break;
 			
+		case EAquariumControlLightViewTab:
+			BaseConstructL(R_LIGHT_VIEW);
+			break;
+			
 		default:
 			Panic(EAquariumControlViewTabId);
 			break;
 		}
+
+	if (Toolbar())
+		{
+		Toolbar()->SetToolbarObserver(this);
+		// Hidden by default
+		Toolbar()->SetToolbarVisibility(EFalse);
+		}
+
 	iTabGroup = aTabGroup;
 	iId = aTabId;
 	}
@@ -113,6 +129,10 @@ void CAquariumControlView::DoActivateL(
 				iContainer = CClockContainer::NewL(ClientRect());
 				break;
 
+			case EAquariumControlLightViewTab:
+				iContainer = CLightContainer::NewL(ClientRect());
+				break;
+
 			default:
 				Panic(EAquariumControlViewTabId);
 				break;
@@ -120,6 +140,7 @@ void CAquariumControlView::DoActivateL(
 
 		iContainer->SetMopParent(this);
 		AppUi()->AddToStackL(*this, iContainer);
+		UpdateL();
 		}
 
 	// Message handling would take place here.
@@ -155,6 +176,16 @@ void CAquariumControlView::DynInitMenuPaneL(TInt aResourceId,
 	}
 
 // ---------------------------------------------------------
+// CAquariumControlView::OfferToolbarEventL()
+// Handle toolbar event.
+// ---------------------------------------------------------
+//
+void CAquariumControlView::OfferToolbarEventL(TInt aCommand)
+	{
+	AppUi()->HandleCommandL(aCommand);
+	}
+
+// ---------------------------------------------------------
 // CAquariumControlView::UpdateL()
 // This must be called on data change
 // to reflect the changes.
@@ -162,11 +193,17 @@ void CAquariumControlView::DynInitMenuPaneL(TInt aResourceId,
 //
 void CAquariumControlView::UpdateL()
 	{
+	const CAquariumControlData* data = ((CAquariumControlViewAppUi*) AppUi())->AquariumData();
+	if (Toolbar() && Toolbar()->IsShown() != data->iIsConnected)
+		{
+		Toolbar()->SetToolbarVisibility(data->iIsConnected);
+		HandleClientRectChange();
+		}
+
 	if (iContainer)
 		{
 		iContainer->UpdateListBoxL();
 		}
-	
 	}
 
 // End of File
