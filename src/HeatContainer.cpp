@@ -1,9 +1,9 @@
 /*
  ============================================================================
- Name        : LightContainer.cpp
+ Name        : HeatContainer.cpp
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
- Description : Application light view implementation
+ Description : Application heat view implementation
  ============================================================================
  */
 
@@ -15,19 +15,19 @@
 #include "AquariumControl.hrh"
 #include "AquariumControlViewAppUi.h"
 #include "AquariumControlData.h"
-#include "LightContainer.h"
+#include "HeatContainer.h"
 
 
 // ============================ MEMBER FUNCTIONS ===============================
 
 // -----------------------------------------------------------------------------
-// CLightContainer::NewL()
+// CHeatContainer::NewL()
 // Two-phased constructor.
 // -----------------------------------------------------------------------------
 //
-CLightContainer* CLightContainer::NewL(const TRect& aRect)
+CHeatContainer* CHeatContainer::NewL(const TRect& aRect)
 	{
-	CLightContainer* self = new (ELeave) CLightContainer;
+	CHeatContainer* self = new (ELeave) CHeatContainer;
 	CleanupStack::PushL(self);
 	self->ConstructL(aRect);
 	CleanupStack::Pop(self);
@@ -35,21 +35,21 @@ CLightContainer* CLightContainer::NewL(const TRect& aRect)
 	}
 
 // -----------------------------------------------------------------------------
-// CLightContainer::CLightContainer()
+// CHeatContainer::CHeatContainer()
 // C++ default constructor can NOT contain any code, that might leave.
 // -----------------------------------------------------------------------------
 //
-CLightContainer::CLightContainer()
+CHeatContainer::CHeatContainer()
 	{
 	// No implementation required
 	}
 
 // -----------------------------------------------------------------------------
-// CLightContainer::UpdateListBoxL()
+// CHeatContainer::UpdateListBoxL()
 // Handles list box item activation.
 // -----------------------------------------------------------------------------
 //
-void CLightContainer::UpdateListBoxL()
+void CHeatContainer::UpdateListBoxL()
 	{
 	if (!iListBox || !iListBoxItems)
 		return;
@@ -68,15 +68,19 @@ void CLightContainer::UpdateListBoxL()
 		TBuf<32> itemValue;
 
 		// Formats
-		_LIT(KStateFormat, "%S (%u%%)");
-		_LIT(KTimeFormat, "%u:%02u:%02u");
-		_LIT(KLevelFormat, "%u %%");
-		_LIT(KRiseFormat, "%u %S");
+		_LIT(KTempFormat, "%u \u00b0C");
+
+		// Water temp
+		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_HEAT_TEMP);
+		itemValue.Format(KTempFormat, data->iTemp);
+		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
+		iListBoxItems->AppendL(itemText);
+		CleanupStack::PopAndDestroy(itemTitle);
 
 		// State
 		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_STATE);
 		HBufC* state;
-		switch (data->iLightState)
+		switch (data->iHeatState)
 			{
 			case (TAquariumDeviceState) EOn:
 				state = iEikonEnv->AllocReadResourceLC(R_STATE_ON);
@@ -88,22 +92,7 @@ void CLightContainer::UpdateListBoxL()
 				state = KNullDesC().AllocLC();
 				break;
 			}
-		if (data->iLightState == (TAquariumDeviceState)EOn &&
-				data->iLightCurrentLevel < data->iLightLevel)
-			{
-			itemValue.Format(KStateFormat, state, data->iLightCurrentLevel);
-			itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
-			}
-		else if (data->iLightState == (TAquariumDeviceState)EOff &&
-				data->iLightCurrentLevel > 0)
-			{
-			itemValue.Format(KStateFormat, state, data->iLightCurrentLevel);
-			itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
-			}
-		else
-			{
-			itemText.Format(KListBoxItemFormat, itemTitle, state);
-			}
+		itemText.Format(KListBoxItemFormat, itemTitle, state);
 		iListBoxItems->AppendL(itemText);
 		CleanupStack::PopAndDestroy(state);
 		CleanupStack::PopAndDestroy(itemTitle);
@@ -111,7 +100,7 @@ void CLightContainer::UpdateListBoxL()
 		// Mode
 		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_MODE);
 		HBufC* mode;
-		switch (data->iLightMode)
+		switch (data->iHeatMode)
 			{
 			case (TAquariumDeviceMode) EAuto:
 				mode = iEikonEnv->AllocReadResourceLC(R_MODE_AUTO);
@@ -128,34 +117,18 @@ void CLightContainer::UpdateListBoxL()
 		CleanupStack::PopAndDestroy(mode);
 		CleanupStack::PopAndDestroy(itemTitle);
 
-		// Turn on time
-		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_ON_TIME);
-		itemValue.Format(KTimeFormat, data->iLightOnHours, data->iLightOnMinutes, data->iLightOnSeconds);
+		// Minimum temperature
+		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_HEAT_LO);
+		itemValue.Format(KTempFormat, data->iHeatLow);
 		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
 		iListBoxItems->AppendL(itemText);
 		CleanupStack::PopAndDestroy(itemTitle);
 
-		// Turn off time
-		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_OFF_TIME);
-		itemValue.Format(KTimeFormat, data->iLightOffHours, data->iLightOffMinutes, data->iLightOffSeconds);
+		// Maximum temperature
+		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_HEAT_HI);
+		itemValue.Format(KTempFormat, data->iHeatHigh);
 		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
 		iListBoxItems->AppendL(itemText);
-		CleanupStack::PopAndDestroy(itemTitle);
-
-		// Brightness
-		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_LEVEL);
-		itemValue.Format(KLevelFormat, data->iLightLevel);
-		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
-		iListBoxItems->AppendL(itemText);
-		CleanupStack::PopAndDestroy(itemTitle);
-
-		// Rise time
-		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_RISE);
-		HBufC* riseUnits = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_RISE_UNITS);
-		itemValue.Format(KRiseFormat, data->iLightRise, riseUnits);
-		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
-		iListBoxItems->AppendL(itemText);
-		CleanupStack::PopAndDestroy(riseUnits);
 		CleanupStack::PopAndDestroy(itemTitle);
 
 		}
@@ -168,11 +141,11 @@ void CLightContainer::UpdateListBoxL()
 // Handles list box item activation.
 // -----------------------------------------------------------------------------
 //
-void CLightContainer::HandleListBoxItemActivationL(TInt aItem)
+void CHeatContainer::HandleListBoxItemActivationL(TInt aItem)
 	{
 	// The order of the listbox items and the order of
 	// command ids (TAquariumControlIds) must be the same.
-	iAvkonViewAppUi->HandleCommandL(EAquariumControlSwitchLightState + aItem);
+	iAvkonViewAppUi->HandleCommandL(EAquariumControlWaterTemp + aItem);
 	}
 
 // End of File

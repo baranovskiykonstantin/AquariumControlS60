@@ -68,6 +68,13 @@ void CAquariumControlViewAppUi::ConstructL()
 	CleanupStack::Pop(lightView);
 	iLightViewId = lightView->Id();
 
+	CAquariumControlView* heatView = new (ELeave) CAquariumControlView;
+	CleanupStack::PushL(heatView);
+	heatView->ConstructL(iTabGroup, EAquariumControlHeatViewTab);
+	AddViewL(heatView);
+	CleanupStack::Pop(heatView);
+	iHeatViewId = heatView->Id();
+
 	SetDefaultViewL(*clockView);
 	}
 // -----------------------------------------------------------------------------
@@ -110,7 +117,6 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			
 			UpdateViewsL();
 			break;
-
 		case EAquariumControlDisconnect:
 			iData->iIsConnected = EFalse;
 			UpdateViewsL();
@@ -120,13 +126,12 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 		case EAquariumControlSetTimeCorrection:
 			iEikonEnv->InfoMsg(_L("Set Time"));
 			break;
-
 		case EAquariumControlSetDate:
 		case EAquariumControlSetDayOfWeek:
 			iEikonEnv->InfoMsg(_L("Set Date"));
 			break;
 
-		case EAquariumControlSetLightSwitchState:
+		case EAquariumControlSwitchLightState:
 			{
 			switch (iData->iLightState)
 				{
@@ -143,7 +148,7 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			}
 			UpdateViewsL();
 			break;
-		case EAquariumControlSetLightSwitchMode:
+		case EAquariumControlSwitchLightMode:
 			{
 			switch (iData->iLightMode)
 				{
@@ -164,10 +169,59 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 		case EAquariumControlSetLightOffTime:
 		case EAquariumControlSetLightLevel:
 		case EAquariumControlSetLightRise:
+			iEikonEnv->InfoMsg(_L("Light"));
+			break;
 		case EAquariumControlSetLightStateOn:
 		case EAquariumControlSetLightStateOff:
-		case EAquariumControlSetLightStateAuto:
-			iEikonEnv->InfoMsg(_L("Light"));
+		case EAquariumControlSetLightModeAuto:
+			iEikonEnv->InfoMsg(_L("Light toolbar"));
+			break;
+
+		case EAquariumControlWaterTemp:
+			// dummy
+			break;
+		case EAquariumControlSwitchHeatState:
+			{
+			switch (iData->iHeatState)
+				{
+				case (TAquariumDeviceState) EOn:
+					iData->iHeatState = (TAquariumDeviceState) EOff;
+					break;
+				case (TAquariumDeviceState) EOff:
+					iData->iHeatState = (TAquariumDeviceState) EOn;
+					break;
+				default:
+					iData->iHeatState = (TAquariumDeviceState) EOff;
+					break;
+				}
+			}
+			UpdateViewsL();
+			break;
+		case EAquariumControlSwitchHeatMode:
+			{
+			switch (iData->iHeatMode)
+				{
+				case (TAquariumDeviceMode) EAuto:
+					iData->iHeatMode = (TAquariumDeviceMode) EManual;
+					break;
+				case (TAquariumDeviceMode) EManual:
+					iData->iHeatMode = (TAquariumDeviceMode) EAuto;
+					break;
+				default:
+					iData->iHeatMode = (TAquariumDeviceMode) EAuto;
+					break;
+				}
+			}
+			UpdateViewsL();
+			break;
+		case EAquariumControlSetHeatLow:
+		case EAquariumControlSetHeatHigh:
+			iEikonEnv->InfoMsg(_L("Heat"));
+			break;
+		case EAquariumControlSetHeatStateOn:
+		case EAquariumControlSetHeatStateOff:
+		case EAquariumControlSetHeatModeAuto:
+			iEikonEnv->InfoMsg(_L("Heat toolbar"));
 			break;
 
 		case EAbout:
@@ -269,6 +323,7 @@ void CAquariumControlViewAppUi::HandleResourceChangeL(TInt aType)
 		{
 		((CAquariumControlView*) View(iClockViewId))->HandleClientRectChange();
 		((CAquariumControlView*) View(iLightViewId))->HandleClientRectChange();
+		((CAquariumControlView*) View(iHeatViewId))->HandleClientRectChange();
 		}
 
 	}
@@ -300,6 +355,7 @@ inline void CAquariumControlViewAppUi::UpdateViewsL()
 	{
 	((CAquariumControlView*) View(iClockViewId))->UpdateL();
 	((CAquariumControlView*) View(iLightViewId))->UpdateL();
+	((CAquariumControlView*) View(iHeatViewId))->UpdateL();
 	}
 
 // End of File

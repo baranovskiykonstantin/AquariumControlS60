@@ -21,6 +21,7 @@ SOURCE			AquariumControlData.cpp
 SOURCE			BaseContainer.cpp
 SOURCE			ClockContainer.cpp
 SOURCE			LightContainer.cpp
+SOURCE			HeatContainer.cpp
 
 SOURCEPATH		..\data
 

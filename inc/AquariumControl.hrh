@@ -27,8 +27,8 @@ enum TAquariumControlIds
 	EAquariumControlSetDayOfWeek,
 
 	// Light
-	EAquariumControlSetLightSwitchState,
-	EAquariumControlSetLightSwitchMode,
+	EAquariumControlSwitchLightState,
+	EAquariumControlSwitchLightMode,
 	EAquariumControlSetLightOnTime,
 	EAquariumControlSetLightOffTime,
 	EAquariumControlSetLightLevel,
@@ -36,9 +36,18 @@ enum TAquariumControlIds
 	// Light toolbar
 	EAquariumControlSetLightStateOn,
 	EAquariumControlSetLightStateOff,
-	EAquariumControlSetLightStateAuto,
+	EAquariumControlSetLightModeAuto,
 
 	// Heat
+	EAquariumControlWaterTemp, // dummy
+	EAquariumControlSwitchHeatState,
+	EAquariumControlSwitchHeatMode,
+	EAquariumControlSetHeatLow,
+	EAquariumControlSetHeatHigh,
+	// Heat toolbar
+	EAquariumControlSetHeatStateOn,
+	EAquariumControlSetHeatStateOff,
+	EAquariumControlSetHeatModeAuto,
 
 	// Display
 
@@ -49,8 +58,8 @@ enum TAquariumControlIds
 enum TAquariumControlViewTabIds
 	{
 	EAquariumControlClockViewTab = 1,
-	EAquariumControlHeatViewTab,
 	EAquariumControlLightViewTab,
+	EAquariumControlHeatViewTab,
 	EAquariumControlDisplayViewTab
 	};
 

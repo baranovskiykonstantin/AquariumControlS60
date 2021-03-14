@@ -17,6 +17,7 @@
 #include "BaseContainer.h"
 #include "ClockContainer.h"
 #include "LightContainer.h"
+#include "HeatContainer.h"
 #include "AquariumControlViewAppUi.h"
 #include "AquariumControlData.h"
 #include "AquariumControlView.h"
@@ -37,11 +38,12 @@ void CAquariumControlView::ConstructL(CAknTabGroup* aTabGroup,
 		case EAquariumControlClockViewTab:
 			BaseConstructL(R_CLOCK_VIEW);
 			break;
-			
 		case EAquariumControlLightViewTab:
 			BaseConstructL(R_LIGHT_VIEW);
 			break;
-			
+		case EAquariumControlHeatViewTab:
+			BaseConstructL(R_HEAT_VIEW);
+			break;
 		default:
 			Panic(EAquariumControlViewTabId);
 			break;
@@ -128,11 +130,12 @@ void CAquariumControlView::DoActivateL(
 			case EAquariumControlClockViewTab:
 				iContainer = CClockContainer::NewL(ClientRect());
 				break;
-
 			case EAquariumControlLightViewTab:
 				iContainer = CLightContainer::NewL(ClientRect());
 				break;
-
+			case EAquariumControlHeatViewTab:
+				iContainer = CHeatContainer::NewL(ClientRect());
+				break;
 			default:
 				Panic(EAquariumControlViewTabId);
 				break;
@@ -193,15 +196,15 @@ void CAquariumControlView::OfferToolbarEventL(TInt aCommand)
 //
 void CAquariumControlView::UpdateL()
 	{
-	const CAquariumControlData* data = ((CAquariumControlViewAppUi*) AppUi())->AquariumData();
-	if (Toolbar() && Toolbar()->IsShown() != data->iIsConnected)
-		{
-		Toolbar()->SetToolbarVisibility(data->iIsConnected);
-		HandleClientRectChange();
-		}
-
 	if (iContainer)
 		{
+		const CAquariumControlData* data = ((CAquariumControlViewAppUi*) AppUi())->AquariumData();
+		if (Toolbar() && Toolbar()->IsShown() != data->iIsConnected)
+			{
+			Toolbar()->SetToolbarVisibility(data->iIsConnected);
+			HandleClientRectChange();
+			}
+
 		iContainer->UpdateListBoxL();
 		}
 	}

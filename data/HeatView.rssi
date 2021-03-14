@@ -1,14 +1,14 @@
 /*
 ============================================================================
- Name        : LightView.rssi
+ Name        : HeatView.rssi
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
- Description : This file contains the resources for the LightView.
+ Description : This file contains the resources for the HeatView.
 ============================================================================
 */
 
 //  INCLUDES
-#include "LightView.rls"
+#include "HeatView.rls"
 
 // -----------------------------------------------------------------------------
 //
@@ -17,37 +17,35 @@
 // -----------------------------------------------------------------------------
 //
 // Listbox items
-RESOURCE TBUF r_listbox_item_light_on_time { buf=qtn_listbox_item_light_on_time; }
-RESOURCE TBUF r_listbox_item_light_off_time { buf=qtn_listbox_item_light_off_time; }
-RESOURCE TBUF r_listbox_item_light_level { buf=qtn_listbox_item_light_level; }
-RESOURCE TBUF r_listbox_item_light_rise { buf=qtn_listbox_item_light_rise; }
-RESOURCE TBUF r_listbox_item_light_rise_units { buf=qtn_listbox_item_light_rise_units; }
+RESOURCE TBUF r_listbox_item_heat_temp { buf=qtn_listbox_item_heat_temp; }
+RESOURCE TBUF r_listbox_item_heat_lo { buf=qtn_listbox_item_heat_lo; }
+RESOURCE TBUF r_listbox_item_heat_hi { buf=qtn_listbox_item_heat_hi; }
 
 
 //  RESOURCE DEFINITIONS
 //----------------------------------------------------
 //
-//    r_light_view
-//    Resource definition for light view
+//    r_heat_view
+//    Resource definition for heat view
 //
 //----------------------------------------------------
 //
-RESOURCE AVKON_VIEW r_light_view
+RESOURCE AVKON_VIEW r_heat_view
 	{
 	menubar=r_aquariumcontrol_menubar;
-	toolbar=r_light_toolbar;
+	toolbar=r_heat_toolbar;
 	cba=R_AVKON_SOFTKEYS_OPTIONS_EXIT;
 	}
 
 
 //----------------------------------------------------
 //
-//    r_light_toolbar
-//    Resource definition for toolbar of light view
+//    r_heat_toolbar
+//    Resource definition for toolbar of heat view
 //
 //----------------------------------------------------
 //
-RESOURCE AVKON_TOOLBAR r_light_toolbar
+RESOURCE AVKON_TOOLBAR r_heat_toolbar
 	{
 	flags = KAknToolbarFixed;
 	items =
@@ -55,7 +53,7 @@ RESOURCE AVKON_TOOLBAR r_light_toolbar
 		TBAR_CTRL
 			{
 			type = EAknCtButton;
-			id = EAquariumControlSetLightStateOn;
+			id = EAquariumControlSetHeatStateOn;
 			control = AVKON_BUTTON
 				{
 				flags = 0;
@@ -63,7 +61,7 @@ RESOURCE AVKON_TOOLBAR r_light_toolbar
 					{
 					AVKON_BUTTON_STATE
 						{
-						txt = qtn_light_toolbar_on;
+						txt = qtn_heat_toolbar_on;
 						}
 					};
 				};
@@ -71,7 +69,7 @@ RESOURCE AVKON_TOOLBAR r_light_toolbar
 		TBAR_CTRL
 			{
 			type = EAknCtButton;
-			id = EAquariumControlSetLightStateOff;
+			id = EAquariumControlSetHeatStateOff;
 			control = AVKON_BUTTON
 				{
 				flags = 0;
@@ -79,7 +77,7 @@ RESOURCE AVKON_TOOLBAR r_light_toolbar
 					{
 					AVKON_BUTTON_STATE
 						{
-						txt = qtn_light_toolbar_off;
+						txt = qtn_heat_toolbar_off;
 						}
 					};
 				};
@@ -87,7 +85,7 @@ RESOURCE AVKON_TOOLBAR r_light_toolbar
 		TBAR_CTRL
 			{
 			type = EAknCtButton;
-			id = EAquariumControlSetLightModeAuto;
+			id = EAquariumControlSetHeatModeAuto;
 			control = AVKON_BUTTON
 				{
 				flags = 0;
@@ -95,7 +93,7 @@ RESOURCE AVKON_TOOLBAR r_light_toolbar
 					{
 					AVKON_BUTTON_STATE
 						{
-						txt = qtn_light_toolbar_auto;
+						txt = qtn_heat_toolbar_auto;
 						}
 					};
 				};

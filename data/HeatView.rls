@@ -1,0 +1,27 @@
+/*
+============================================================================
+ Name        : HeatView.rls
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for HeatView
+               A .rls file is the one and only place where the logical
+               strings to be localised are defined.
+============================================================================
+*/
+
+//  LOCALISATION STRINGS
+
+// Tab
+#define qtn_heat_tab_name "Heat"
+
+// Listbox items
+#define qtn_listbox_item_heat_temp "Water temperature"
+#define qtn_listbox_item_heat_lo "Min. temperature"
+#define qtn_listbox_item_heat_hi "Max. temperature"
+
+// Toolbar
+#define qtn_heat_toolbar_on "On"
+#define qtn_heat_toolbar_off "Off"
+#define qtn_heat_toolbar_auto "Auto"
+
+// End of File

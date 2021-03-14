@@ -177,6 +177,7 @@ RESOURCE LOCALISABLE_APP_INFO r_localisable_app_info
 
 #include "ClockView.rssi"
 #include "LightView.rssi"
+#include "HeatView.rssi"
 
 
 //----------------------------------------------------
@@ -226,6 +227,11 @@ RESOURCE NAVI_DECORATOR r_aquariumcontrol_navi_decorator
 				{
 				id = EAquariumControlLightViewTab;
 				txt = qtn_light_tab_name;
+				},
+			TAB
+				{
+				id = EAquariumControlHeatViewTab;
+				txt = qtn_heat_tab_name;
 				}
 			};
 		};
