@@ -160,7 +160,7 @@ CBaseContainer::OfferKeyEventL(const TKeyEvent &aKeyEvent, TEventCode aType)
 //
 void CBaseContainer::HandleListBoxEventL(CEikListBox* /*aListBox*/, TListBoxEvent aEventType)
 	{
-	if (aEventType == EEventEnterKeyPressed || aEventType == EEventItemClicked)
+	if (aEventType == EEventEnterKeyPressed || aEventType == EEventItemDoubleClicked)
 		{
 		HandleListBoxItemActivationL(iListBox->CurrentItemIndex());
 		}
