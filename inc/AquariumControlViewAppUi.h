@@ -11,6 +11,7 @@
 #define __AQUARIUMCONTROLVIEWAPPUI_h__
 
 // INCLUDES
+#include <e32base.h> // CPeriodic
 #include <aknviewappui.h>
 #include <akntabgrp.h>
 #include <aknnavide.h>
@@ -96,17 +97,33 @@ private:
 	 */
 	void UpdateViewsL();
 
+	/**
+	 * Called by iTimer.
+	 */
+	static TInt TimerCallBack(TAny* aObject);
+
 private:
 	// Data
 
-	CAknNavigationControlContainer*	iNaviPane;
-	CAknTabGroup*					iTabGroup;
-	CAknNavigationDecorator*		iDecoratedTabGroup;
-	CAquariumControlData*			iData;
-	TUid							iClockViewId;
-	TUid							iLightViewId;
-	TUid							iHeatViewId;
-	TUid							iDisplayViewId;
+	/**
+	 * Tabs
+	 */
+	CAknTabGroup*				iTabGroup;
+	CAknNavigationDecorator*	iDecoratedTabGroup;
+	CAquariumControlData*		iData;
+
+	/**
+	 * Views
+	 */
+	TUid iClockViewId;
+	TUid iLightViewId;
+	TUid iHeatViewId;
+	TUid iDisplayViewId;
+
+	/**
+	 * iTimer is used to update views periodically
+	 */
+	CPeriodic* iTimer;
 
 	};
 

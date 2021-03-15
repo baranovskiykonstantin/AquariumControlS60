@@ -42,13 +42,13 @@ void CAquariumControlViewAppUi::ConstructL()
 	CEikStatusPane* sp = StatusPane();
 
 	// Fetch pointer to the default navi pane control
-	iNaviPane = (CAknNavigationControlContainer*)sp->ControlL(
+	CAknNavigationControlContainer* naviPane = (CAknNavigationControlContainer*)sp->ControlL(
 		TUid::Uid(EEikStatusPaneUidNavi));
 
 	// Tabgroup has been read from resource and it was pushed to the navi pane.
 	// Get pointer to the navigation decorator with the ResourceDecorator() function.
 	// Application owns the decorator and it has responsibility to delete the object.
-	iDecoratedTabGroup = iNaviPane->ResourceDecorator();
+	iDecoratedTabGroup = naviPane->ResourceDecorator();
 	if (iDecoratedTabGroup)
 		{
 		iTabGroup = (CAknTabGroup*) iDecoratedTabGroup->DecoratedControl();
@@ -83,6 +83,10 @@ void CAquariumControlViewAppUi::ConstructL()
 	iDisplayViewId = displayView->Id();
 
 	SetDefaultViewL(*clockView);
+
+	iTimer = CPeriodic::NewL(EPriorityLow);
+	const TInt tickInterval = 2000000;
+	iTimer->Start(tickInterval, tickInterval, TCallBack(TimerCallBack, this));
 	}
 // -----------------------------------------------------------------------------
 // CAquariumControlViewAppUi::CAquariumControlViewAppUi()
@@ -103,6 +107,12 @@ CAquariumControlViewAppUi::~CAquariumControlViewAppUi()
 	{
 	delete iDecoratedTabGroup;
 	delete iData;
+	if (iTimer)
+		{
+		iTimer->Cancel();
+		}
+	delete iTimer;
+	iTimer = NULL;
 	}
 
 // -----------------------------------------------------------------------------
@@ -383,6 +393,22 @@ inline void CAquariumControlViewAppUi::UpdateViewsL()
 	((CAquariumControlView*) View(iLightViewId))->UpdateL();
 	((CAquariumControlView*) View(iHeatViewId))->UpdateL();
 	((CAquariumControlView*) View(iDisplayViewId))->UpdateL();
+	}
+
+// ----------------------------------------------------------------------------
+// CAquariumControlViewAppUi::TimerCallBack()
+// Update views.
+// ----------------------------------------------------------------------------
+//
+TInt CAquariumControlViewAppUi::TimerCallBack(TAny* aObject)
+	{
+	CAquariumControlViewAppUi* self = static_cast<CAquariumControlViewAppUi*> (aObject);
+	TInt error(KErrNone);
+	if (self->iData->iIsConnected)
+		{
+		TRAP(error, self->UpdateViewsL());
+		}
+	return error;
 	}
 
 // End of File
