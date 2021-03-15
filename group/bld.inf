@@ -19,7 +19,7 @@ PRJ_EXTENSIONS
 	OPTION TARGETFILE aquariumcontrol_0xa291b5a5.mif
 	OPTION HEADERFILE aquariumcontrol_0xa291b5a5.mbg
 	OPTION SOURCEDIR ../gfx
-	OPTION SOURCES -c32 qgn_menu_AquariumControl
+	OPTION SOURCES -c32 AquariumControl
 	END
 
 #else

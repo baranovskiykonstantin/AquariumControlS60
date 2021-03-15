@@ -28,10 +28,6 @@
 "$(EPOCROOT)epoc32\data\z\resource\apps\aquariumcontrol_0xa291b5a5.rsc"		-"!:\resource\apps\AquariumControl_0xa291b5a5.rsc"
 "$(EPOCROOT)epoc32\data\z\private\10003a3f\apps\aquariumcontrol_0xa291b5a5_reg.rsc"	-"!:\private\10003a3f\import\apps\AquariumControl_0xa291b5a5_reg.rsc"
 "$(EPOCROOT)epoc32\data\z\resource\apps\aquariumcontrol_0xa291b5a5.mif" -"!:\resource\apps\AquariumControl_0xa291b5a5.mif"
-"..\help\aquariumcontrol_0xa291b5a5.hlp"							 -"!:\resource\help\AquariumControl_0xa291b5a5.hlp"
-
-; Add any installation notes if applicable
-;"AquariumControl.txt"		-"!:\private\a291b5a5\AquariumControl.txt"
 
 ;required for application to be covered by backup/restore facility 
 "..\sis\backup_registration.xml"		-"!:\private\a291b5a5\backup_registration.xml"
