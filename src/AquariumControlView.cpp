@@ -18,6 +18,7 @@
 #include "ClockContainer.h"
 #include "LightContainer.h"
 #include "HeatContainer.h"
+#include "DisplayContainer.h"
 #include "AquariumControlViewAppUi.h"
 #include "AquariumControlData.h"
 #include "AquariumControlView.h"
@@ -43,6 +44,9 @@ void CAquariumControlView::ConstructL(CAknTabGroup* aTabGroup,
 			break;
 		case EAquariumControlHeatViewTab:
 			BaseConstructL(R_HEAT_VIEW);
+			break;
+		case EAquariumControlDisplayViewTab:
+			BaseConstructL(R_DISPLAY_VIEW);
 			break;
 		default:
 			Panic(EAquariumControlViewTabId);
@@ -135,6 +139,9 @@ void CAquariumControlView::DoActivateL(
 				break;
 			case EAquariumControlHeatViewTab:
 				iContainer = CHeatContainer::NewL(ClientRect());
+				break;
+			case EAquariumControlDisplayViewTab:
+				iContainer = CDisplayContainer::NewL(ClientRect());
 				break;
 			default:
 				Panic(EAquariumControlViewTabId);

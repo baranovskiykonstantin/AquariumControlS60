@@ -1,20 +1,20 @@
 /*
  ============================================================================
- Name        : LightContainer.h
+ Name        : DisplayContainer.h
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
- Description : Declares the light view's controls class for application.
+ Description : Declares the display view's controls class for application.
  ============================================================================
  */
 
-#ifndef __LIGHTCONTAINER_H__
-#define __LIGHTCONTAINER_H__
+#ifndef __DISPLAYCONTAINER_H__
+#define __DISPLAYCONTAINER_H__
 
 // INCLUDES
 #include "BaseContainer.h"
 
 // CLASS DECLARATION
-class CLightContainer : public CBaseContainer
+class CDisplayContainer : public CBaseContainer
 	{
 
 public:
@@ -23,19 +23,19 @@ public:
 	/**
 	 * NewL.
 	 * Two-phased constructor.
-	 * Create a CLightContainer object, which will draw itself to aRect.
+	 * Create a CDisplayContainer object, which will draw itself to aRect.
 	 * @param aRect The rectangle this view will be drawn to.
-	 * @return a pointer to the created instance of CLightContainer.
+	 * @return a pointer to the created instance of CDisplayContainer.
 	 */
-	static CLightContainer* NewL(const TRect& aRect);
+	static CDisplayContainer* NewL(const TRect& aRect);
 
 private:
 	
 	/**
-	 * CLightContainer.
+	 * CDisplayContainer.
 	 * C++ default constructor.
 	 */
-	CLightContainer();
+	CDisplayContainer();
 
 public:
 
@@ -56,5 +56,5 @@ protected:
 
 	};
 
-#endif // __LIGHTCONTAINER_H__
+#endif // __DISPLAYCONTAINER_H__
 // End of File

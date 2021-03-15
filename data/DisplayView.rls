@@ -1,0 +1,22 @@
+/*
+============================================================================
+ Name        : DisplayView.rls
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for DisplayView
+               A .rls file is the one and only place where the logical
+               strings to be localised are defined.
+============================================================================
+*/
+
+//  LOCALISATION STRINGS
+
+// Tab
+#define qtn_display_tab_name "Display"
+
+// Listbox items
+#define qtn_listbox_item_display "Show"
+#define qtn_listbox_item_display_time "Current time"
+#define qtn_listbox_item_display_temp "Water temperature"
+
+// End of File

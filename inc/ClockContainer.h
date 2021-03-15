@@ -32,7 +32,7 @@ public:
 private:
 	
 	/**
-	 * CClcokContainer.
+	 * CClockContainer.
 	 * C++ default constructor.
 	 */
 	CClockContainer();

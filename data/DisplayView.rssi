@@ -1,0 +1,40 @@
+/*
+============================================================================
+ Name        : DisplayView.rssi
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This file contains the resources for the DisplayView.
+============================================================================
+*/
+
+//  INCLUDES
+#include "DisplayView.rls"
+
+// -----------------------------------------------------------------------------
+//
+// Resources for strings.
+//
+// -----------------------------------------------------------------------------
+//
+// Listbox items
+RESOURCE TBUF r_listbox_item_display { buf=qtn_listbox_item_display; }
+RESOURCE TBUF r_listbox_item_display_time { buf=qtn_listbox_item_display_time; }
+RESOURCE TBUF r_listbox_item_display_temp { buf=qtn_listbox_item_display_temp; }
+
+
+//  RESOURCE DEFINITIONS
+//----------------------------------------------------
+//
+//    r_display_view
+//    Resource definition for display view
+//
+//----------------------------------------------------
+//
+RESOURCE AVKON_VIEW r_display_view
+	{
+	menubar=r_aquariumcontrol_menubar;
+	cba=R_AVKON_SOFTKEYS_OPTIONS_EXIT;
+	}
+
+
+// End of File

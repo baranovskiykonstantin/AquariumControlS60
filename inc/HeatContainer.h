@@ -32,7 +32,7 @@ public:
 private:
 	
 	/**
-	 * CClcokContainer.
+	 * CHeatContainer.
 	 * C++ default constructor.
 	 */
 	CHeatContainer();

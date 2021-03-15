@@ -75,6 +75,13 @@ void CAquariumControlViewAppUi::ConstructL()
 	CleanupStack::Pop(heatView);
 	iHeatViewId = heatView->Id();
 
+	CAquariumControlView* displayView = new (ELeave) CAquariumControlView;
+	CleanupStack::PushL(displayView);
+	displayView->ConstructL(iTabGroup, EAquariumControlDisplayViewTab);
+	AddViewL(displayView);
+	CleanupStack::Pop(displayView);
+	iDisplayViewId = displayView->Id();
+
 	SetDefaultViewL(*clockView);
 	}
 // -----------------------------------------------------------------------------
@@ -238,6 +245,24 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			}
 			break;
 
+		case EAquariumControlSwitchDisplayMode:
+			{
+			switch (iData->iDisplayMode)
+				{
+				case (TAquariumDispalyMode) ETime:
+					iData->iDisplayMode = (TAquariumDispalyMode) ETemperature;
+					break;
+				case (TAquariumDispalyMode) ETemperature:
+					iData->iDisplayMode = (TAquariumDispalyMode) ETime;
+					break;
+				default:
+					iData->iDisplayMode = (TAquariumDispalyMode) ETime;
+					break;
+				}
+			}
+			UpdateViewsL();
+			break;
+
 		default:
 			Panic(EAquariumControlViewAppUi);
 			break;
@@ -324,6 +349,7 @@ void CAquariumControlViewAppUi::HandleResourceChangeL(TInt aType)
 		((CAquariumControlView*) View(iClockViewId))->HandleClientRectChange();
 		((CAquariumControlView*) View(iLightViewId))->HandleClientRectChange();
 		((CAquariumControlView*) View(iHeatViewId))->HandleClientRectChange();
+		((CAquariumControlView*) View(iDisplayViewId))->HandleClientRectChange();
 		}
 
 	}
@@ -356,6 +382,7 @@ inline void CAquariumControlViewAppUi::UpdateViewsL()
 	((CAquariumControlView*) View(iClockViewId))->UpdateL();
 	((CAquariumControlView*) View(iLightViewId))->UpdateL();
 	((CAquariumControlView*) View(iHeatViewId))->UpdateL();
+	((CAquariumControlView*) View(iDisplayViewId))->UpdateL();
 	}
 
 // End of File
