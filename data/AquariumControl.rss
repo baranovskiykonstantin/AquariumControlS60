@@ -216,7 +216,7 @@ RESOURCE NAVI_DECORATOR r_aquariumcontrol_navi_decorator
 	type = ENaviDecoratorControlTabGroup;
 	control = TAB_GROUP
 		{
-		tab_width = EAknTabWidthWithTwoLongTabs;
+		tab_width = EAknTabWidthWithThreeLongTabs;
 		active = 0;
 		tabs = {
 			TAB
