@@ -18,6 +18,7 @@
 //
 // Listbox items
 RESOURCE TBUF r_listbox_item_heat_temp { buf=qtn_listbox_item_heat_temp; }
+RESOURCE TBUF r_listbox_item_heat_temp_unknown { buf=qtn_listbox_item_heat_temp_unknown; }
 RESOURCE TBUF r_listbox_item_heat_lo { buf=qtn_listbox_item_heat_lo; }
 RESOURCE TBUF r_listbox_item_heat_hi { buf=qtn_listbox_item_heat_hi; }
 

@@ -87,6 +87,14 @@ void CAquariumControlViewAppUi::ConstructL()
 	iTimer = CPeriodic::NewL(EPriorityLow);
 	const TInt tickInterval = 2000000;
 	iTimer->Start(tickInterval, tickInterval, TCallBack(TimerCallBack, this));
+
+	// TEST
+	iData->ParseLineL(_L8("Date: 01.02.2017 Friday"));
+	iData->ParseLineL(_L8("Time: 13:29:59 (-3 sec at 12:00:00)"));
+	iData->ParseLineL(_L8("Temp: 21"));
+	iData->ParseLineL(_L8("Heat: OFF auto (20-22)"));
+	iData->ParseLineL(_L8("Light: ON manual (10:00:00-20:00:00) 43/50% 10min"));
+	iData->ParseLineL(_L8("Display: time"));
 	}
 // -----------------------------------------------------------------------------
 // CAquariumControlViewAppUi::CAquariumControlViewAppUi()

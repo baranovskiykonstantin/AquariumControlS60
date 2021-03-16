@@ -16,6 +16,7 @@
 
 // Listbox items
 #define qtn_listbox_item_heat_temp "Water temperature"
+#define qtn_listbox_item_heat_temp_unknown "unknown"
 #define qtn_listbox_item_heat_lo "Min. temperature"
 #define qtn_listbox_item_heat_hi "Max. temperature"
 

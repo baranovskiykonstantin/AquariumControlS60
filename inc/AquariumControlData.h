@@ -14,6 +14,9 @@
 #include <e32std.h>
 #include <e32base.h>
 
+// CONSTANTS
+const TInt KUnknownTemp(127);
+
 // CLASS DECLARATION
 
 /**
@@ -64,6 +67,23 @@ public:
 	 */
 	static CAquariumControlData* NewLC();
 
+public:
+	// New functions
+
+	/**
+	 * Parse a line of the status message from aquarium controller
+	 * and extract data from it.
+	 * Status message example:
+	 *     Date: 01.01.2017 Friday
+	 *     Time: 13:29:59 (-3 sec at 12:00:00)
+	 *     Temp: 22
+	 *     Heat: OFF auto (20-22)
+	 *     Light: ON manual (10:00:00-20:00:00) 43/50% 10min
+	 *     Display: time
+	 * @param aLine A text line from status message.
+	 */
+	void ParseLineL(const TDesC8& aLine);
+
 private:
 
 	/**
@@ -111,7 +131,7 @@ public:
 	TUint iLightOffSeconds;
 
 	// Heat
-	TUint					iTemp;
+	TInt					iTemp;
 	TAquariumDeviceState	iHeatState;
 	TAquariumDeviceMode		iHeatMode;
 	TUint					iHeatLow;

@@ -68,12 +68,21 @@ void CHeatContainer::UpdateListBoxL()
 		TBuf<32> itemValue;
 
 		// Formats
-		_LIT(KTempFormat, "%u \u00b0C");
+		_LIT(KTempFormat, "%i \u00b0C");
 
 		// Water temp
 		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_HEAT_TEMP);
-		itemValue.Format(KTempFormat, data->iTemp);
-		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
+		if (data->iTemp == KUnknownTemp)
+			{
+			HBufC* unknown = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_HEAT_TEMP_UNKNOWN);
+			itemText.Format(KListBoxItemFormat, itemTitle, unknown);
+			CleanupStack::PopAndDestroy(unknown);
+			}
+		else
+			{
+			itemValue.Format(KTempFormat, data->iTemp);
+			itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
+			}
 		iListBoxItems->AppendL(itemText);
 		CleanupStack::PopAndDestroy(itemTitle);
 
