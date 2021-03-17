@@ -60,9 +60,6 @@ RESOURCE EIK_APP_INFO
 // -----------------------------------------------------------------------------
 //
 RESOURCE TBUF32 r_caption_string { buf=qtn_caption_string; }
-RESOURCE TBUF32 r_about_dialog_title { buf=qtn_about_dialog_title; }
-
-RESOURCE TBUF r_about_dialog_text { buf=qtn_about_dialog_text; }
 
 RESOURCE TBUF r_disconnected { buf=qtn_disconnected; }
 RESOURCE TBUF r_listbox_item_state { buf=qtn_listbox_item_state; }
@@ -141,6 +138,7 @@ RESOURCE DIALOG r_about_query_dialog
 			itemflags = EEikDlgItemNonFocusing;
 			control = AVKON_HEADING
 				{
+				label = qtn_about_dialog_title;
 				};
 			},
 		DLG_LINE
@@ -149,6 +147,7 @@ RESOURCE DIALOG r_about_query_dialog
 			id = EAknMessageQueryContentId;
 			control = AVKON_MESSAGE_QUERY
 				{
+				message = qtn_about_dialog_text;
 				};
 			}
 		};

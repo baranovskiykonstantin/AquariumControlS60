@@ -252,14 +252,7 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 		case EAbout:
 			{
 			CAknMessageQueryDialog* dlg = new (ELeave) CAknMessageQueryDialog();
-			dlg->PrepareLC(R_ABOUT_QUERY_DIALOG);
-			HBufC* title = iEikonEnv->AllocReadResourceLC(R_ABOUT_DIALOG_TITLE);
-			dlg->QueryHeading()->SetTextL(*title);
-			CleanupStack::PopAndDestroy(); //title
-			HBufC* msg = iEikonEnv->AllocReadResourceLC(R_ABOUT_DIALOG_TEXT);
-			dlg->SetMessageTextL(*msg);
-			CleanupStack::PopAndDestroy(); //msg
-			dlg->RunLD();
+			dlg->ExecuteLD(R_ABOUT_QUERY_DIALOG);
 			}
 			break;
 
