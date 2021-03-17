@@ -54,13 +54,16 @@ void CLightContainer::UpdateListBoxL()
 	if (!iListBox || !iListBoxItems)
 		return;
 
-	// Remove all items
-	iListBoxItems->Reset();
-
 	// Get access to aquarium data
 	const CAquariumControlData* data = ((CAquariumControlViewAppUi*) iAvkonViewAppUi)->AquariumData();
 
-	if (data->iIsConnected)
+	if (data->iConnectionStatus == EPaused)
+		return;
+
+	// Remove all items
+	iListBoxItems->Reset();
+
+	if (data->iConnectionStatus == EConnected)
 		{
 		// Create items again
 		TBuf<64> itemText;
@@ -88,14 +91,12 @@ void CLightContainer::UpdateListBoxL()
 				state = KNullDesC().AllocLC();
 				break;
 			}
-		if (data->iLightState == (TAquariumDeviceState)EOn &&
-				data->iLightCurrentLevel < data->iLightLevel)
+		if (data->iLightState == EOn && data->iLightCurrentLevel < data->iLightLevel)
 			{
 			itemValue.Format(KStateFormat, state, data->iLightCurrentLevel);
 			itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
 			}
-		else if (data->iLightState == (TAquariumDeviceState)EOff &&
-				data->iLightCurrentLevel > 0)
+		else if (data->iLightState == EOff && data->iLightCurrentLevel > 0)
 			{
 			itemValue.Format(KStateFormat, state, data->iLightCurrentLevel);
 			itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);

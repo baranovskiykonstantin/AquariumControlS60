@@ -10,7 +10,7 @@
 #include "AquariumControlData.h"
 
 CAquariumControlData::CAquariumControlData() :
-		iIsConnected(EFalse),
+		iConnectionStatus(EDisconnected),
 		iDayOfWeek(1),
 		iTemp(KUnknownTemp)
 	{

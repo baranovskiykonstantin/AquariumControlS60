@@ -54,13 +54,16 @@ void CHeatContainer::UpdateListBoxL()
 	if (!iListBox || !iListBoxItems)
 		return;
 
-	// Remove all items
-	iListBoxItems->Reset();
-
 	// Get access to aquarium data
 	const CAquariumControlData* data = ((CAquariumControlViewAppUi*) iAvkonViewAppUi)->AquariumData();
 
-	if (data->iIsConnected)
+	if (data->iConnectionStatus == EPaused)
+		return;
+
+	// Remove all items
+	iListBoxItems->Reset();
+
+	if (data->iConnectionStatus == EConnected)
 		{
 		// Create items again
 		TBuf<64> itemText;

@@ -87,7 +87,7 @@ void CAquariumControlViewAppUi::ConstructL()
 	SetDefaultViewL(*clockView);
 
 	iTimer = CPeriodic::NewL(EPriorityLow);
-	const TInt tickInterval = 2000000;
+	const TInt tickInterval = 1000000;
 	iTimer->Start(tickInterval, tickInterval, TCallBack(TimerCallBack, this));
 
 	// TEST
@@ -133,6 +133,8 @@ CAquariumControlViewAppUi::~CAquariumControlViewAppUi()
 void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 	{
 	TBool updatingIsNeeded(EFalse);
+	if (iData->iConnectionStatus == EConnected)
+		iData->iConnectionStatus = EPaused;
 	switch (aCommand)
 		{
 		case EEikCmdExit:
@@ -141,12 +143,12 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			break;
 
 		case EAquariumControlConnect:
-			iData->iIsConnected = ETrue;
+			iData->iConnectionStatus = EConnected;
 			
 			updatingIsNeeded = ETrue;
 			break;
 		case EAquariumControlDisconnect:
-			iData->iIsConnected = EFalse;
+			iData->iConnectionStatus = EDisconnected;
 			updatingIsNeeded = ETrue;
 			break;
 
@@ -205,13 +207,13 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			switch (iData->iLightState)
 				{
 				case (TAquariumDeviceState) EOn:
-					iData->iLightState = (TAquariumDeviceState) EOff;
+					iData->iLightState = EOff;
 					break;
 				case (TAquariumDeviceState) EOff:
-					iData->iLightState = (TAquariumDeviceState) EOn;
+					iData->iLightState = EOn;
 					break;
 				default:
-					iData->iLightState = (TAquariumDeviceState) EOff;
+					iData->iLightState = EOff;
 					break;
 				}
 			}
@@ -222,13 +224,13 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			switch (iData->iLightMode)
 				{
 				case (TAquariumDeviceMode) EAuto:
-					iData->iLightMode = (TAquariumDeviceMode) EManual;
+					iData->iLightMode = EManual;
 					break;
 				case (TAquariumDeviceMode) EManual:
-					iData->iLightMode = (TAquariumDeviceMode) EAuto;
+					iData->iLightMode = EAuto;
 					break;
 				default:
-					iData->iLightMode = (TAquariumDeviceMode) EAuto;
+					iData->iLightMode = EAuto;
 					break;
 				}
 			}
@@ -254,13 +256,13 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			switch (iData->iHeatState)
 				{
 				case (TAquariumDeviceState) EOn:
-					iData->iHeatState = (TAquariumDeviceState) EOff;
+					iData->iHeatState = EOff;
 					break;
 				case (TAquariumDeviceState) EOff:
-					iData->iHeatState = (TAquariumDeviceState) EOn;
+					iData->iHeatState = EOn;
 					break;
 				default:
-					iData->iHeatState = (TAquariumDeviceState) EOff;
+					iData->iHeatState = EOff;
 					break;
 				}
 			}
@@ -271,13 +273,13 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			switch (iData->iHeatMode)
 				{
 				case (TAquariumDeviceMode) EAuto:
-					iData->iHeatMode = (TAquariumDeviceMode) EManual;
+					iData->iHeatMode = EManual;
 					break;
 				case (TAquariumDeviceMode) EManual:
-					iData->iHeatMode = (TAquariumDeviceMode) EAuto;
+					iData->iHeatMode = EAuto;
 					break;
 				default:
-					iData->iHeatMode = (TAquariumDeviceMode) EAuto;
+					iData->iHeatMode = EAuto;
 					break;
 				}
 			}
@@ -305,13 +307,13 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			switch (iData->iDisplayMode)
 				{
 				case (TAquariumDispalyMode) ETime:
-					iData->iDisplayMode = (TAquariumDispalyMode) ETemperature;
+					iData->iDisplayMode = ETemperature;
 					break;
 				case (TAquariumDispalyMode) ETemperature:
-					iData->iDisplayMode = (TAquariumDispalyMode) ETime;
+					iData->iDisplayMode = ETime;
 					break;
 				default:
-					iData->iDisplayMode = (TAquariumDispalyMode) ETime;
+					iData->iDisplayMode = ETime;
 					break;
 				}
 			}
@@ -322,6 +324,8 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			Panic(EAquariumControlViewAppUi);
 			break;
 		}
+	if (iData->iConnectionStatus == EPaused)
+		iData->iConnectionStatus = EConnected;
 	if (updatingIsNeeded)
 		UpdateViewsL();
 	}
@@ -336,10 +340,16 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 //
 void CAquariumControlViewAppUi::HandleForegroundEventL(TBool aForeground)
 	{
-	if (aForeground==TRUE)
-	iEikonEnv->InfoMsg(_L("Foreground true"));
+	if (aForeground == TRUE)
+		{
+		if (iData->iConnectionStatus == EPaused)
+			iData->iConnectionStatus = EConnected;
+		}
 	else
-	iEikonEnv->InfoMsg(_L("Foreground false"));
+		{
+		if (iData->iConnectionStatus == EConnected)
+			iData->iConnectionStatus = EPaused;
+		}
 	}
 
 // ----------------------------------------------------
@@ -422,10 +432,10 @@ void CAquariumControlViewAppUi::DynInitMenuPaneL(TInt aResourceId,
 	{
 	if(aResourceId == R_COMMON_MENU)
 		{
-		if (iData->iIsConnected)
-			aMenuPane->SetItemDimmed(EAquariumControlConnect, ETrue);
-		else
+		if (iData->iConnectionStatus == EDisconnected)
 			aMenuPane->SetItemDimmed(EAquariumControlDisconnect, ETrue);
+		else
+			aMenuPane->SetItemDimmed(EAquariumControlConnect, ETrue);
 		}
 	}
 
@@ -451,8 +461,11 @@ TInt CAquariumControlViewAppUi::TimerCallBack(TAny* aObject)
 	{
 	CAquariumControlViewAppUi* self = static_cast<CAquariumControlViewAppUi*> (aObject);
 	TInt error(KErrNone);
-	if (self->iData->iIsConnected)
+	if (self->iData->iConnectionStatus == EConnected)
 		{
+		self->iData->iSeconds += 1;
+		if (self->iData->iSeconds > 59)
+			self->iData->iSeconds = 0;
 		TRAP(error, self->UpdateViewsL());
 		}
 	return error;

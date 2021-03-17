@@ -20,6 +20,15 @@ const TInt KUnknownTemp(127);
 // CLASS DECLARATION
 
 /**
+ * TAquariumConnectionStatus
+ */
+enum TAquariumConnectionStatus {
+	EDisconnected,
+	EConnected,
+	EPaused
+};
+
+/**
  * TAquariumHeatState
  */
 enum TAquariumDeviceState {
@@ -97,11 +106,8 @@ private:
 	void ConstructL();
 
 public:
-	// Connection status.
-	// ETure if the connection is established
-	// and a complete aquarium status has received.
-	// Resets to EFalse if the connection is lost.
-	TBool iIsConnected;
+	// Connection status
+	TAquariumConnectionStatus iConnectionStatus;
 
 	// Date
 	TUint iDay;
