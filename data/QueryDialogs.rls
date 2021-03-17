@@ -20,7 +20,15 @@
 #define qtn_settimevariangs_dialog_variant1 "Current"
 #define qtn_settimevariangs_dialog_variant2 "Custom..."
 
+// SetTimeVariants
+#define qtn_setdatevariangs_dialog_title "Set date"
+#define qtn_setdatevariangs_dialog_variant1 "Current"
+#define qtn_setdatevariangs_dialog_variant2 "Custom..."
+
 // SetTime
 #define qtn_settime_dialog_title "Set time"
+
+// SetDate
+#define qtn_setdate_dialog_title "Set date"
 
 // End of File

@@ -122,7 +122,6 @@ CAquariumControlViewAppUi::~CAquariumControlViewAppUi()
 		iTimer->Cancel();
 		}
 	delete iTimer;
-	iTimer = NULL;
 	}
 
 // -----------------------------------------------------------------------------
@@ -197,6 +196,47 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			iEikonEnv->InfoMsg(_L("Set Time"));
 			break;
 		case EAquariumControlSetDate:
+			{
+			TInt variant;
+			TInt answer;
+			CAknListQueryDialog* dlg = new (ELeave) CAknListQueryDialog(&variant);
+			answer = dlg->ExecuteLD(R_SETDATEVARIANTS_QUERY_DIALOG);
+			if (EAknSoftkeyOk == answer)
+				{
+				TTime date;
+				if (variant == 0)
+					{
+					date.HomeTime();
+					iData->iDay = date.DateTime().Day() + 1;
+					iData->iMonth = date.DateTime().Month() + 1;
+					iData->iYear = date.DateTime().Year() - 2000;
+					updatingIsNeeded = ETrue;
+					iEikonEnv->InfoMsg(_L("Set current"));
+					}
+				else if (variant == 1)
+					{
+					_LIT(KTimeStrFormat, "20%02u%02u%02u:.");
+					TBuf<10> dateStr;
+					dateStr.Format(KTimeStrFormat, iData->iYear, iData->iMonth - 1 , iData->iDay - 1);
+					date.Set(dateStr);
+					CAknTimeQueryDialog* dlg = new (ELeave) CAknTimeQueryDialog(date);
+					answer = dlg->ExecuteLD(R_SETDATE_QUERY_DIALOG);
+					if (EAknSoftkeyOk == answer)
+						{
+						iData->iDay = date.DateTime().Day() + 1;
+						iData->iMonth = date.DateTime().Month() + 1;
+						iData->iYear = date.DateTime().Year() - 2000;
+						updatingIsNeeded = ETrue;
+						iEikonEnv->InfoMsg(_L("Set custom"));
+						}
+					}
+				else
+					{
+					break;
+					}
+				}
+			}
+			break;
 		case EAquariumControlSetDayOfWeek:
 			iEikonEnv->InfoMsg(_L("Set Date"));
 			break;
