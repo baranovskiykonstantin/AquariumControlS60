@@ -77,56 +77,50 @@ void CHeatContainer::UpdateListBoxL()
 		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_HEAT_TEMP);
 		if (data->iTemp == KUnknownTemp)
 			{
-			HBufC* unknown = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_HEAT_TEMP_UNKNOWN);
-			itemText.Format(KListBoxItemFormat, itemTitle, unknown);
-			CleanupStack::PopAndDestroy(unknown);
+			iEikonEnv->ReadResourceL(itemValue, R_LISTBOX_ITEM_HEAT_TEMP_UNKNOWN);
 			}
 		else
 			{
 			itemValue.Format(KTempFormat, data->iTemp);
-			itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
 			}
+		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
 		iListBoxItems->AppendL(itemText);
 		CleanupStack::PopAndDestroy(itemTitle);
 
 		// State
 		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_STATE);
-		HBufC* state;
 		switch (data->iHeatState)
 			{
 			case (TAquariumDeviceState) EOn:
-				state = iEikonEnv->AllocReadResourceLC(R_STATE_ON);
+				iEikonEnv->ReadResourceL(itemValue, R_STATE_ON);
 				break;
 			case (TAquariumDeviceState) EOff:
-				state = iEikonEnv->AllocReadResourceLC(R_STATE_OFF);
+				iEikonEnv->ReadResourceL(itemValue, R_STATE_OFF);
 				break;
 			default:
-				state = KNullDesC().AllocLC();
+				itemValue.Zero();
 				break;
 			}
-		itemText.Format(KListBoxItemFormat, itemTitle, state);
+		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
 		iListBoxItems->AppendL(itemText);
-		CleanupStack::PopAndDestroy(state);
 		CleanupStack::PopAndDestroy(itemTitle);
 
 		// Mode
 		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_MODE);
-		HBufC* mode;
 		switch (data->iHeatMode)
 			{
 			case (TAquariumDeviceMode) EAuto:
-				mode = iEikonEnv->AllocReadResourceLC(R_MODE_AUTO);
+				iEikonEnv->ReadResourceL(itemValue, R_MODE_AUTO);
 				break;
 			case (TAquariumDeviceMode) EManual:
-				mode = iEikonEnv->AllocReadResourceLC(R_MODE_MANUAL);
+				iEikonEnv->ReadResourceL(itemValue, R_MODE_MANUAL);
 				break;
 			default:
-				mode = KNullDesC().AllocLC();
+				itemValue.Zero();
 				break;
 			}
-		itemText.Format(KListBoxItemFormat, itemTitle, mode);
+		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
 		iListBoxItems->AppendL(itemText);
-		CleanupStack::PopAndDestroy(mode);
 		CleanupStack::PopAndDestroy(itemTitle);
 
 		// Minimum temperature

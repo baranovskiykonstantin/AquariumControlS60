@@ -111,22 +111,20 @@ void CLightContainer::UpdateListBoxL()
 
 		// Mode
 		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_MODE);
-		HBufC* mode;
 		switch (data->iLightMode)
 			{
 			case (TAquariumDeviceMode) EAuto:
-				mode = iEikonEnv->AllocReadResourceLC(R_MODE_AUTO);
+				iEikonEnv->ReadResourceL(itemValue, R_MODE_AUTO);
 				break;
 			case (TAquariumDeviceMode) EManual:
-				mode = iEikonEnv->AllocReadResourceLC(R_MODE_MANUAL);
+				iEikonEnv->ReadResourceL(itemValue, R_MODE_MANUAL);
 				break;
 			default:
-				mode = KNullDesC().AllocLC();
+				itemValue.Zero();
 				break;
 			}
-		itemText.Format(KListBoxItemFormat, itemTitle, mode);
+		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
 		iListBoxItems->AppendL(itemText);
-		CleanupStack::PopAndDestroy(mode);
 		CleanupStack::PopAndDestroy(itemTitle);
 
 		// Turn on time
