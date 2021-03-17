@@ -102,6 +102,12 @@ private:
 	 */
 	static TInt TimerCallBack(TAny* aObject);
 
+	/**
+	 * Pause view updating.
+	 */
+	inline void PauseUpdating();
+	inline void ResumeUpdating();
+
 private:
 	// Data
 

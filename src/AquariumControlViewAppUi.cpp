@@ -133,8 +133,7 @@ CAquariumControlViewAppUi::~CAquariumControlViewAppUi()
 void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 	{
 	TBool updatingIsNeeded(EFalse);
-	if (iData->iConnectionStatus == EConnected)
-		iData->iConnectionStatus = EPaused;
+	PauseUpdating();
 	switch (aCommand)
 		{
 		case EEikCmdExit:
@@ -324,8 +323,7 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			Panic(EAquariumControlViewAppUi);
 			break;
 		}
-	if (iData->iConnectionStatus == EPaused)
-		iData->iConnectionStatus = EConnected;
+	ResumeUpdating();
 	if (updatingIsNeeded)
 		UpdateViewsL();
 	}
@@ -341,15 +339,9 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 void CAquariumControlViewAppUi::HandleForegroundEventL(TBool aForeground)
 	{
 	if (aForeground == TRUE)
-		{
-		if (iData->iConnectionStatus == EPaused)
-			iData->iConnectionStatus = EConnected;
-		}
+		ResumeUpdating();
 	else
-		{
-		if (iData->iConnectionStatus == EConnected)
-			iData->iConnectionStatus = EPaused;
-		}
+		PauseUpdating();
 	}
 
 // ----------------------------------------------------
@@ -469,6 +461,28 @@ TInt CAquariumControlViewAppUi::TimerCallBack(TAny* aObject)
 		TRAP(error, self->UpdateViewsL());
 		}
 	return error;
+	}
+
+// ----------------------------------------------------------------------------
+// CAquariumControlViewAppUi::PauseUpdating()
+// Pause view updating.
+// ----------------------------------------------------------------------------
+//
+void CAquariumControlViewAppUi::PauseUpdating()
+	{
+	if (iData->iConnectionStatus == EConnected)
+		iData->iConnectionStatus = EPaused;
+	}
+
+// ----------------------------------------------------------------------------
+// CAquariumControlViewAppUi::ResumeUpdating()
+// Resume view updating.
+// ----------------------------------------------------------------------------
+//
+void CAquariumControlViewAppUi::ResumeUpdating()
+	{
+	if (iData->iConnectionStatus == EPaused)
+		iData->iConnectionStatus = EConnected;
 	}
 
 // End of File
