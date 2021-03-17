@@ -1,0 +1,54 @@
+/*
+============================================================================
+ Name        : QueryDialogs.rss
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This file contains all the resources for the query dialogs.
+============================================================================
+*/
+
+// -----------------------------------------------------------------------------
+//
+// Resources for strings.
+//
+// -----------------------------------------------------------------------------
+//
+//RESOURCE TBUF r_ { buf=qtn_; }
+
+
+// -----------------------------------------------------------------------------
+//
+// About dialog resource.
+//
+// -----------------------------------------------------------------------------
+//
+RESOURCE DIALOG r_about_query_dialog
+	{
+	flags = EGeneralQueryFlags | EEikDialogFlagNoBorder | EEikDialogFlagNoShadow;
+	buttons = R_AVKON_SOFTKEYS_OK_EMPTY;
+	items=
+		{
+		DLG_LINE 
+			{
+			type = EAknCtPopupHeadingPane;
+			id = EAknMessageQueryHeaderId;
+			itemflags = EEikDlgItemNonFocusing;
+			control = AVKON_HEADING
+				{
+				label = qtn_about_dialog_title;
+				};
+			},
+		DLG_LINE
+			{
+			type = EAknCtMessageQuery;
+			id = EAknMessageQueryContentId;
+			control = AVKON_MESSAGE_QUERY
+				{
+				message = qtn_about_dialog_text;
+				};
+			}
+		};
+	}
+
+
+// End of File

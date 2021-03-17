@@ -1,0 +1,18 @@
+/*
+============================================================================
+ Name        : QueryDialogs.rls
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for query dialogs
+               A .rls file is the one and only place where the logical
+               strings to be localised are defined.
+============================================================================
+*/
+
+//  LOCALISATION STRINGS
+
+// About dialog
+#define qtn_about_dialog_title "About"
+#define qtn_about_dialog_text "AquariumControl Version 1.0.0\n\nAuthor: Konstantin Baranovskiy\n\nSupport: baranovskiykonstantin@gmail.com\n\n(c) GPLv3"
+
+// End of File
