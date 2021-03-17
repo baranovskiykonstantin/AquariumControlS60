@@ -15,4 +15,12 @@
 #define qtn_about_dialog_title "About"
 #define qtn_about_dialog_text "AquariumControl Version 1.0.0\n\nAuthor: Konstantin Baranovskiy\n\nSupport: baranovskiykonstantin@gmail.com\n\n(c) GPLv3"
 
+// SetTimeVariants
+#define qtn_settimevariangs_dialog_title "Set time"
+#define qtn_settimevariangs_dialog_variant1 "Current"
+#define qtn_settimevariangs_dialog_variant2 "Custom..."
+
+// SetTime
+#define qtn_settime_dialog_title "Set time"
+
 // End of File

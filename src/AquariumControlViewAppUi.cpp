@@ -9,6 +9,8 @@
 
 // INCLUDE FILES
 #include <avkon.hrh>
+#include <aknquerydialog.h>
+#include <aknlistquerydialog.h>
 #include <aknmessagequerydialog.h>
 #include <aknnotewrappers.h>
 #include <stringloader.h>
@@ -130,6 +132,7 @@ CAquariumControlViewAppUi::~CAquariumControlViewAppUi()
 //
 void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 	{
+	TBool updatingIsNeeded(EFalse);
 	switch (aCommand)
 		{
 		case EEikCmdExit:
@@ -140,14 +143,55 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 		case EAquariumControlConnect:
 			iData->iIsConnected = ETrue;
 			
-			UpdateViewsL();
+			updatingIsNeeded = ETrue;
 			break;
 		case EAquariumControlDisconnect:
 			iData->iIsConnected = EFalse;
-			UpdateViewsL();
+			updatingIsNeeded = ETrue;
 			break;
 
 		case EAquariumControlSetTime:
+			{
+			TInt variant;
+			TInt answer;
+			CAknListQueryDialog* dlg = new (ELeave) CAknListQueryDialog(&variant);
+			answer = dlg->ExecuteLD(R_SETTIMEVARIANTS_QUERY_DIALOG);
+			if (EAknSoftkeyOk == answer)
+				{
+				TTime time;
+				if (variant == 0)
+					{
+					time.HomeTime();
+					iData->iHours = time.DateTime().Hour();
+					iData->iMinutes = time.DateTime().Minute();
+					iData->iSeconds = time.DateTime().Second();
+					updatingIsNeeded = ETrue;
+					iEikonEnv->InfoMsg(_L("Set current"));
+					}
+				else if (variant == 1)
+					{
+					_LIT(KTimeStrFormat, ":%02u%02u%02u.");
+					TBuf<8> timeStr;
+					timeStr.Format(KTimeStrFormat, iData->iHours, iData->iMinutes, iData->iSeconds);
+					time.Set(timeStr);
+					CAknTimeQueryDialog* dlg = new (ELeave) CAknTimeQueryDialog(time);
+					answer = dlg->ExecuteLD(R_SETTIME_QUERY_DIALOG);
+					if (EAknSoftkeyOk == answer)
+						{
+						iData->iHours = time.DateTime().Hour();
+						iData->iMinutes = time.DateTime().Minute();
+						iData->iSeconds = time.DateTime().Second();
+						updatingIsNeeded = ETrue;
+						iEikonEnv->InfoMsg(_L("Set custom"));
+						}
+					}
+				else
+					{
+					break;
+					}
+				}
+			}
+			break;
 		case EAquariumControlSetTimeCorrection:
 			iEikonEnv->InfoMsg(_L("Set Time"));
 			break;
@@ -171,7 +215,7 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 					break;
 				}
 			}
-			UpdateViewsL();
+			updatingIsNeeded = ETrue;
 			break;
 		case EAquariumControlSwitchLightMode:
 			{
@@ -188,7 +232,7 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 					break;
 				}
 			}
-			UpdateViewsL();
+			updatingIsNeeded = ETrue;
 			break;
 		case EAquariumControlSetLightOnTime:
 		case EAquariumControlSetLightOffTime:
@@ -220,7 +264,7 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 					break;
 				}
 			}
-			UpdateViewsL();
+			updatingIsNeeded = ETrue;
 			break;
 		case EAquariumControlSwitchHeatMode:
 			{
@@ -237,7 +281,7 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 					break;
 				}
 			}
-			UpdateViewsL();
+			updatingIsNeeded = ETrue;
 			break;
 		case EAquariumControlSetHeatLow:
 		case EAquariumControlSetHeatHigh:
@@ -271,13 +315,15 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 					break;
 				}
 			}
-			UpdateViewsL();
+			updatingIsNeeded = ETrue;
 			break;
 
 		default:
 			Panic(EAquariumControlViewAppUi);
 			break;
 		}
+	if (updatingIsNeeded)
+		UpdateViewsL();
 	}
 
 // ------------------------------------------------------------------------------
