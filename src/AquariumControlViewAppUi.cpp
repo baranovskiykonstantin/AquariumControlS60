@@ -440,8 +440,42 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			updatingIsNeeded = ETrue;
 			break;
 		case EAquariumControlSetHeatLow:
+			{
+			TInt answer;
+			TInt low(iData->iHeatLow);
+			HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_HEAT_LO);
+			CAknNumberQueryDialog* dlg = new (ELeave) CAknNumberQueryDialog(low);
+			dlg->PrepareLC(R_SETINT_QUERY_DIALOG);
+			dlg->SetPromptL(*title);
+			dlg->SetMinimumAndMaximum(18, iData->iHeatHigh);
+			answer = dlg->RunLD();
+			CleanupStack::PopAndDestroy(title);
+			if (EAknSoftkeyOk == answer)
+				{
+				iData->iHeatLow = low;
+				updatingIsNeeded = ETrue;
+				iEikonEnv->InfoMsg(_L("Set HeatLow"));
+				}
+			}
+			break;
 		case EAquariumControlSetHeatHigh:
-			iEikonEnv->InfoMsg(_L("Heat"));
+			{
+			TInt answer;
+			TInt high(iData->iHeatHigh);
+			HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_HEAT_HI);
+			CAknNumberQueryDialog* dlg = new (ELeave) CAknNumberQueryDialog(high);
+			dlg->PrepareLC(R_SETINT_QUERY_DIALOG);
+			dlg->SetPromptL(*title);
+			dlg->SetMinimumAndMaximum(iData->iHeatLow, 35);
+			answer = dlg->RunLD();
+			CleanupStack::PopAndDestroy(title);
+			if (EAknSoftkeyOk == answer)
+				{
+				iData->iHeatHigh = high;
+				updatingIsNeeded = ETrue;
+				iEikonEnv->InfoMsg(_L("Set HeatHigh"));
+				}
+			}
 			break;
 		case EAquariumControlSetHeatStateOn:
 		case EAquariumControlSetHeatStateOff:
