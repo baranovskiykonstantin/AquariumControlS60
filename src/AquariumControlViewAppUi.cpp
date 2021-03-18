@@ -295,7 +295,69 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			updatingIsNeeded = ETrue;
 			break;
 		case EAquariumControlSetLightOnTime:
+			{
+			_LIT(KTimeStrFormat, ":%02u%02u%02u.");
+			_LIT(KMinTimeStr, ":000000.");
+			TInt answer;
+			TTime timeOn;
+			TTime minTime, maxTime;
+			TBuf<8> timeOnStr;
+			TBuf<8> maxTimeStr;
+			HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_ON_TIME);
+			timeOnStr.Format(KTimeStrFormat, iData->iLightOnHours, iData->iLightOnMinutes, iData->iLightOnSeconds);
+			maxTimeStr.Format(KTimeStrFormat, iData->iLightOffHours, iData->iLightOffMinutes, iData->iLightOffSeconds);
+			timeOn.Set(timeOnStr);
+			minTime.Set(KMinTimeStr);
+			maxTime.Set(maxTimeStr);
+			maxTime -= TTimeIntervalSeconds(1);
+			CAknTimeQueryDialog* dlg = new (ELeave) CAknTimeQueryDialog(timeOn);
+			dlg->PrepareLC(R_SETTIME_QUERY_DIALOG);
+			dlg->SetPromptL(*title);
+			dlg->SetMinimumAndMaximum(minTime, maxTime);
+			answer = dlg->RunLD();
+			CleanupStack::PopAndDestroy(title);
+			if (EAknSoftkeyOk == answer)
+				{
+				iData->iLightOnHours = timeOn.DateTime().Hour();
+				iData->iLightOnMinutes = timeOn.DateTime().Minute();
+				iData->iLightOnSeconds = timeOn.DateTime().Second();
+				updatingIsNeeded = ETrue;
+				iEikonEnv->InfoMsg(_L("Set TimeOn"));
+				}
+			}
+			break;
 		case EAquariumControlSetLightOffTime:
+			{
+			_LIT(KTimeStrFormat, ":%02u%02u%02u.");
+			_LIT(KMaxTimeStr, ":235959.");
+			TInt answer;
+			TTime timeOff;
+			TTime minTime, maxTime;
+			TBuf<8> timeOffStr;
+			TBuf<8> minTimeStr;
+			HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_OFF_TIME);
+			timeOffStr.Format(KTimeStrFormat, iData->iLightOffHours, iData->iLightOffMinutes, iData->iLightOffSeconds);
+			minTimeStr.Format(KTimeStrFormat, iData->iLightOnHours, iData->iLightOnMinutes, iData->iLightOnSeconds);
+			timeOff.Set(timeOffStr);
+			minTime.Set(minTimeStr);
+			maxTime.Set(KMaxTimeStr);
+			minTime += TTimeIntervalSeconds(1);
+			CAknTimeQueryDialog* dlg = new (ELeave) CAknTimeQueryDialog(timeOff);
+			dlg->PrepareLC(R_SETTIME_QUERY_DIALOG);
+			dlg->SetPromptL(*title);
+			dlg->SetMinimumAndMaximum(minTime, maxTime);
+			answer = dlg->RunLD();
+			CleanupStack::PopAndDestroy(title);
+			if (EAknSoftkeyOk == answer)
+				{
+				iData->iLightOffHours = timeOff.DateTime().Hour();
+				iData->iLightOffMinutes = timeOff.DateTime().Minute();
+				iData->iLightOffSeconds = timeOff.DateTime().Second();
+				updatingIsNeeded = ETrue;
+				iEikonEnv->InfoMsg(_L("Set TimeOn"));
+				}
+			}
+			break;
 		case EAquariumControlSetLightLevel:
 		case EAquariumControlSetLightRise:
 			iEikonEnv->InfoMsg(_L("Light"));
