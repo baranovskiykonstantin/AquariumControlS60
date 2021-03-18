@@ -378,7 +378,23 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			}
 			break;
 		case EAquariumControlSetLightRise:
-			iEikonEnv->InfoMsg(_L("Light"));
+			{
+			TInt answer;
+			TInt rise(iData->iLightRise);
+			HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_RISE);
+			CAknNumberQueryDialog* dlg = new (ELeave) CAknNumberQueryDialog(rise);
+			dlg->PrepareLC(R_SETINT_QUERY_DIALOG);
+			dlg->SetPromptL(*title);
+			dlg->SetMinimumAndMaximum(0, 30);
+			answer = dlg->RunLD();
+			CleanupStack::PopAndDestroy(title);
+			if (EAknSoftkeyOk == answer)
+				{
+				iData->iLightRise = rise;
+				updatingIsNeeded = ETrue;
+				iEikonEnv->InfoMsg(_L("Set Rise"));
+				}
+			}
 			break;
 		case EAquariumControlSetLightStateOn:
 		case EAquariumControlSetLightStateOff:
