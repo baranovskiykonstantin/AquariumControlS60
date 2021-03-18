@@ -86,6 +86,8 @@ void CAquariumControlViewAppUi::ConstructL()
 	CleanupStack::Pop(displayView);
 	iDisplayViewId = displayView->Id();
 
+	SetDefaultViewL(*clockView);
+
 	iTimer = CPeriodic::NewL(EPriorityLow);
 	const TInt tickInterval = 1000000;
 	iTimer->Start(tickInterval, tickInterval, TCallBack(TimerCallBack, this));
@@ -107,8 +109,6 @@ void CAquariumControlViewAppUi::ConstructL()
 
 	// Empty by default
 	iBtDataTail = HBufC::New(0);
-
-	SetDefaultViewL(*clockView);
 
 	// TEST
 /*
