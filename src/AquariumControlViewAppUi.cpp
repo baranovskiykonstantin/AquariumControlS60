@@ -185,15 +185,27 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 						iEikonEnv->InfoMsg(_L("Set custom"));
 						}
 					}
-				else
-					{
-					break;
-					}
 				}
 			}
 			break;
 		case EAquariumControlSetTimeCorrection:
-			iEikonEnv->InfoMsg(_L("Set Time"));
+			{
+			TInt answer;
+			TInt timeCorr(iData->iTimeCorrection);
+			HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_TIMECOR);
+			CAknNumberQueryDialog* dlg = new (ELeave) CAknNumberQueryDialog(timeCorr);
+			dlg->PrepareLC(R_SETINT_QUERY_DIALOG);
+			dlg->SetPromptL(*title);
+			dlg->SetMinimumAndMaximum(-59, 59);
+			answer = dlg->RunLD();
+			CleanupStack::PopAndDestroy(title);
+			if (EAknSoftkeyOk == answer)
+				{
+				iData->iTimeCorrection = timeCorr;
+				updatingIsNeeded = ETrue;
+				iEikonEnv->InfoMsg(_L("Set TimeCorr"));
+				}
+			}
 			break;
 		case EAquariumControlSetDate:
 			{
@@ -230,15 +242,22 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 						iEikonEnv->InfoMsg(_L("Set custom"));
 						}
 					}
-				else
-					{
-					break;
-					}
 				}
 			}
 			break;
 		case EAquariumControlSetDayOfWeek:
-			iEikonEnv->InfoMsg(_L("Set Date"));
+			{
+			TInt dayOfWeek;
+			TInt answer;
+			CAknListQueryDialog* dlg = new (ELeave) CAknListQueryDialog(&dayOfWeek);
+			answer = dlg->ExecuteLD(R_SETDAYOFWEEK_QUERY_DIALOG);
+			if (EAknSoftkeyOk == answer)
+				{
+				iData->iDayOfWeek = dayOfWeek + 1;
+				updatingIsNeeded = ETrue;
+				iEikonEnv->InfoMsg(_L("Set DayOfWeek"));
+				}
+			}
 			break;
 
 		case EAquariumControlSwitchLightState:

@@ -31,4 +31,14 @@
 // SetDate
 #define qtn_setdate_dialog_title "Set date"
 
+// SetDayOfWeek
+#define qtn_setdayofweek_dialog_title "Day of week"
+#define qtn_setdayofweek_dialog_day1 "Monday"
+#define qtn_setdayofweek_dialog_day2 "Tuesday"
+#define qtn_setdayofweek_dialog_day3 "Wednesday"
+#define qtn_setdayofweek_dialog_day4 "Thursday"
+#define qtn_setdayofweek_dialog_day5 "Friday"
+#define qtn_setdayofweek_dialog_day6 "Saturday"
+#define qtn_setdayofweek_dialog_day7 "Sunday"
+
 // End of File
