@@ -151,113 +151,16 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			break;
 
 		case EAquariumControlSetTime:
-			{
-			TInt variant;
-			TInt answer;
-			CAknListQueryDialog* dlg = new (ELeave) CAknListQueryDialog(&variant);
-			answer = dlg->ExecuteLD(R_SETTIMEVARIANTS_QUERY_DIALOG);
-			if (EAknSoftkeyOk == answer)
-				{
-				TTime time;
-				if (variant == 0)
-					{
-					time.HomeTime();
-					iData->iHours = time.DateTime().Hour();
-					iData->iMinutes = time.DateTime().Minute();
-					iData->iSeconds = time.DateTime().Second();
-					updatingIsNeeded = ETrue;
-					iEikonEnv->InfoMsg(_L("Set current"));
-					}
-				else if (variant == 1)
-					{
-					_LIT(KTimeStrFormat, ":%02u%02u%02u.");
-					TBuf<8> timeStr;
-					timeStr.Format(KTimeStrFormat, iData->iHours, iData->iMinutes, iData->iSeconds);
-					time.Set(timeStr);
-					CAknTimeQueryDialog* dlg = new (ELeave) CAknTimeQueryDialog(time);
-					answer = dlg->ExecuteLD(R_SETTIME_QUERY_DIALOG);
-					if (EAknSoftkeyOk == answer)
-						{
-						iData->iHours = time.DateTime().Hour();
-						iData->iMinutes = time.DateTime().Minute();
-						iData->iSeconds = time.DateTime().Second();
-						updatingIsNeeded = ETrue;
-						iEikonEnv->InfoMsg(_L("Set custom"));
-						}
-					}
-				}
-			}
+			updatingIsNeeded = CommandSetTime();
 			break;
 		case EAquariumControlSetTimeCorrection:
-			{
-			TInt answer;
-			TInt timeCorr(iData->iTimeCorrection);
-			HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_TIMECOR);
-			CAknNumberQueryDialog* dlg = new (ELeave) CAknNumberQueryDialog(timeCorr);
-			dlg->PrepareLC(R_SETINT_QUERY_DIALOG);
-			dlg->SetPromptL(*title);
-			dlg->SetMinimumAndMaximum(-59, 59);
-			answer = dlg->RunLD();
-			CleanupStack::PopAndDestroy(title);
-			if (EAknSoftkeyOk == answer)
-				{
-				iData->iTimeCorrection = timeCorr;
-				updatingIsNeeded = ETrue;
-				iEikonEnv->InfoMsg(_L("Set TimeCorr"));
-				}
-			}
+			updatingIsNeeded = CommandSetTimeCor();
 			break;
 		case EAquariumControlSetDate:
-			{
-			TInt variant;
-			TInt answer;
-			CAknListQueryDialog* dlg = new (ELeave) CAknListQueryDialog(&variant);
-			answer = dlg->ExecuteLD(R_SETDATEVARIANTS_QUERY_DIALOG);
-			if (EAknSoftkeyOk == answer)
-				{
-				TTime date;
-				if (variant == 0)
-					{
-					date.HomeTime();
-					iData->iDay = date.DateTime().Day() + 1;
-					iData->iMonth = date.DateTime().Month() + 1;
-					iData->iYear = date.DateTime().Year() - 2000;
-					updatingIsNeeded = ETrue;
-					iEikonEnv->InfoMsg(_L("Set current"));
-					}
-				else if (variant == 1)
-					{
-					_LIT(KTimeStrFormat, "20%02u%02u%02u:.");
-					TBuf<10> dateStr;
-					dateStr.Format(KTimeStrFormat, iData->iYear, iData->iMonth - 1 , iData->iDay - 1);
-					date.Set(dateStr);
-					CAknTimeQueryDialog* dlg = new (ELeave) CAknTimeQueryDialog(date);
-					answer = dlg->ExecuteLD(R_SETDATE_QUERY_DIALOG);
-					if (EAknSoftkeyOk == answer)
-						{
-						iData->iDay = date.DateTime().Day() + 1;
-						iData->iMonth = date.DateTime().Month() + 1;
-						iData->iYear = date.DateTime().Year() - 2000;
-						updatingIsNeeded = ETrue;
-						iEikonEnv->InfoMsg(_L("Set custom"));
-						}
-					}
-				}
-			}
+			updatingIsNeeded = CommandSetDate();
 			break;
 		case EAquariumControlSetDayOfWeek:
-			{
-			TInt dayOfWeek;
-			TInt answer;
-			CAknListQueryDialog* dlg = new (ELeave) CAknListQueryDialog(&dayOfWeek);
-			answer = dlg->ExecuteLD(R_SETDAYOFWEEK_QUERY_DIALOG);
-			if (EAknSoftkeyOk == answer)
-				{
-				iData->iDayOfWeek = dayOfWeek + 1;
-				updatingIsNeeded = ETrue;
-				iEikonEnv->InfoMsg(_L("Set DayOfWeek"));
-				}
-			}
+			updatingIsNeeded = CommandSetDayOfWeek();
 			break;
 
 		case EAquariumControlSwitchLightState:
@@ -295,106 +198,16 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			updatingIsNeeded = ETrue;
 			break;
 		case EAquariumControlSetLightOnTime:
-			{
-			_LIT(KTimeStrFormat, ":%02u%02u%02u.");
-			_LIT(KMinTimeStr, ":000000.");
-			TInt answer;
-			TTime timeOn;
-			TTime minTime, maxTime;
-			TBuf<8> timeOnStr;
-			TBuf<8> maxTimeStr;
-			HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_ON_TIME);
-			timeOnStr.Format(KTimeStrFormat, iData->iLightOnHours, iData->iLightOnMinutes, iData->iLightOnSeconds);
-			maxTimeStr.Format(KTimeStrFormat, iData->iLightOffHours, iData->iLightOffMinutes, iData->iLightOffSeconds);
-			timeOn.Set(timeOnStr);
-			minTime.Set(KMinTimeStr);
-			maxTime.Set(maxTimeStr);
-			maxTime -= TTimeIntervalSeconds(1);
-			CAknTimeQueryDialog* dlg = new (ELeave) CAknTimeQueryDialog(timeOn);
-			dlg->PrepareLC(R_SETTIME_QUERY_DIALOG);
-			dlg->SetPromptL(*title);
-			dlg->SetMinimumAndMaximum(minTime, maxTime);
-			answer = dlg->RunLD();
-			CleanupStack::PopAndDestroy(title);
-			if (EAknSoftkeyOk == answer)
-				{
-				iData->iLightOnHours = timeOn.DateTime().Hour();
-				iData->iLightOnMinutes = timeOn.DateTime().Minute();
-				iData->iLightOnSeconds = timeOn.DateTime().Second();
-				updatingIsNeeded = ETrue;
-				iEikonEnv->InfoMsg(_L("Set TimeOn"));
-				}
-			}
+			updatingIsNeeded = CommandSetLightOnTime();
 			break;
 		case EAquariumControlSetLightOffTime:
-			{
-			_LIT(KTimeStrFormat, ":%02u%02u%02u.");
-			_LIT(KMaxTimeStr, ":235959.");
-			TInt answer;
-			TTime timeOff;
-			TTime minTime, maxTime;
-			TBuf<8> timeOffStr;
-			TBuf<8> minTimeStr;
-			HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_OFF_TIME);
-			timeOffStr.Format(KTimeStrFormat, iData->iLightOffHours, iData->iLightOffMinutes, iData->iLightOffSeconds);
-			minTimeStr.Format(KTimeStrFormat, iData->iLightOnHours, iData->iLightOnMinutes, iData->iLightOnSeconds);
-			timeOff.Set(timeOffStr);
-			minTime.Set(minTimeStr);
-			maxTime.Set(KMaxTimeStr);
-			minTime += TTimeIntervalSeconds(1);
-			CAknTimeQueryDialog* dlg = new (ELeave) CAknTimeQueryDialog(timeOff);
-			dlg->PrepareLC(R_SETTIME_QUERY_DIALOG);
-			dlg->SetPromptL(*title);
-			dlg->SetMinimumAndMaximum(minTime, maxTime);
-			answer = dlg->RunLD();
-			CleanupStack::PopAndDestroy(title);
-			if (EAknSoftkeyOk == answer)
-				{
-				iData->iLightOffHours = timeOff.DateTime().Hour();
-				iData->iLightOffMinutes = timeOff.DateTime().Minute();
-				iData->iLightOffSeconds = timeOff.DateTime().Second();
-				updatingIsNeeded = ETrue;
-				iEikonEnv->InfoMsg(_L("Set TimeOn"));
-				}
-			}
+			updatingIsNeeded = CommandSetLightOffTime();
 			break;
 		case EAquariumControlSetLightLevel:
-			{
-			TInt answer;
-			TInt level(iData->iLightLevel);
-			HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_LEVEL);
-			CAknNumberQueryDialog* dlg = new (ELeave) CAknNumberQueryDialog(level);
-			dlg->PrepareLC(R_SETINT_QUERY_DIALOG);
-			dlg->SetPromptL(*title);
-			dlg->SetMinimumAndMaximum(0, 100);
-			answer = dlg->RunLD();
-			CleanupStack::PopAndDestroy(title);
-			if (EAknSoftkeyOk == answer)
-				{
-				iData->iLightLevel = level;
-				updatingIsNeeded = ETrue;
-				iEikonEnv->InfoMsg(_L("Set Level"));
-				}
-			}
+			updatingIsNeeded = CommandSetLightLevel();
 			break;
 		case EAquariumControlSetLightRise:
-			{
-			TInt answer;
-			TInt rise(iData->iLightRise);
-			HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_RISE);
-			CAknNumberQueryDialog* dlg = new (ELeave) CAknNumberQueryDialog(rise);
-			dlg->PrepareLC(R_SETINT_QUERY_DIALOG);
-			dlg->SetPromptL(*title);
-			dlg->SetMinimumAndMaximum(0, 30);
-			answer = dlg->RunLD();
-			CleanupStack::PopAndDestroy(title);
-			if (EAknSoftkeyOk == answer)
-				{
-				iData->iLightRise = rise;
-				updatingIsNeeded = ETrue;
-				iEikonEnv->InfoMsg(_L("Set Rise"));
-				}
-			}
+			updatingIsNeeded = CommandSetLightRise();
 			break;
 		case EAquariumControlSetLightStateOn:
 		case EAquariumControlSetLightStateOff:
@@ -440,42 +253,10 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			updatingIsNeeded = ETrue;
 			break;
 		case EAquariumControlSetHeatLow:
-			{
-			TInt answer;
-			TInt low(iData->iHeatLow);
-			HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_HEAT_LO);
-			CAknNumberQueryDialog* dlg = new (ELeave) CAknNumberQueryDialog(low);
-			dlg->PrepareLC(R_SETINT_QUERY_DIALOG);
-			dlg->SetPromptL(*title);
-			dlg->SetMinimumAndMaximum(18, iData->iHeatHigh);
-			answer = dlg->RunLD();
-			CleanupStack::PopAndDestroy(title);
-			if (EAknSoftkeyOk == answer)
-				{
-				iData->iHeatLow = low;
-				updatingIsNeeded = ETrue;
-				iEikonEnv->InfoMsg(_L("Set HeatLow"));
-				}
-			}
+			updatingIsNeeded = CommandSetHeatLow();
 			break;
 		case EAquariumControlSetHeatHigh:
-			{
-			TInt answer;
-			TInt high(iData->iHeatHigh);
-			HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_HEAT_HI);
-			CAknNumberQueryDialog* dlg = new (ELeave) CAknNumberQueryDialog(high);
-			dlg->PrepareLC(R_SETINT_QUERY_DIALOG);
-			dlg->SetPromptL(*title);
-			dlg->SetMinimumAndMaximum(iData->iHeatLow, 35);
-			answer = dlg->RunLD();
-			CleanupStack::PopAndDestroy(title);
-			if (EAknSoftkeyOk == answer)
-				{
-				iData->iHeatHigh = high;
-				updatingIsNeeded = ETrue;
-				iEikonEnv->InfoMsg(_L("Set HeatHigh"));
-				}
-			}
+			updatingIsNeeded = CommandSetHeatHigh();
 			break;
 		case EAquariumControlSetHeatStateOn:
 		case EAquariumControlSetHeatStateOff:
@@ -672,6 +453,315 @@ void CAquariumControlViewAppUi::ResumeUpdating()
 	{
 	if (iData->iConnectionStatus == EPaused)
 		iData->iConnectionStatus = EConnected;
+	}
+
+// ----------------------------------------------------------------------------
+// CAquariumControlViewAppUi::CommandSetTime()
+// SetTime command handler.
+// ----------------------------------------------------------------------------
+//
+TBool CAquariumControlViewAppUi::CommandSetTime()
+	{
+	TInt variant;
+	TInt answer;
+	CAknListQueryDialog* dlg = new (ELeave) CAknListQueryDialog(&variant);
+	answer = dlg->ExecuteLD(R_SETTIMEVARIANTS_QUERY_DIALOG);
+	if (EAknSoftkeyOk == answer)
+		{
+		TTime time;
+		if (variant == 0)
+			{
+			time.HomeTime();
+			iData->iHours = time.DateTime().Hour();
+			iData->iMinutes = time.DateTime().Minute();
+			iData->iSeconds = time.DateTime().Second();
+			iEikonEnv->InfoMsg(_L("Set current"));
+			return ETrue;
+			}
+		else if (variant == 1)
+			{
+			_LIT(KTimeStrFormat, ":%02u%02u%02u.");
+			TBuf<8> timeStr;
+			timeStr.Format(KTimeStrFormat, iData->iHours, iData->iMinutes, iData->iSeconds);
+			time.Set(timeStr);
+			CAknTimeQueryDialog* dlg = new (ELeave) CAknTimeQueryDialog(time);
+			answer = dlg->ExecuteLD(R_SETTIME_QUERY_DIALOG);
+			if (EAknSoftkeyOk == answer)
+				{
+				iData->iHours = time.DateTime().Hour();
+				iData->iMinutes = time.DateTime().Minute();
+				iData->iSeconds = time.DateTime().Second();
+				iEikonEnv->InfoMsg(_L("Set custom"));
+				return ETrue;
+				}
+			}
+		}
+	return EFalse;
+	}
+
+// ----------------------------------------------------------------------------
+// CAquariumControlViewAppUi::CommandSetTimeCor()
+// SetTimeCor command handler.
+// ----------------------------------------------------------------------------
+//
+TBool CAquariumControlViewAppUi::CommandSetTimeCor()
+	{
+	TInt answer;
+	TInt timeCorr(iData->iTimeCorrection);
+	HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_TIMECOR);
+	CAknNumberQueryDialog* dlg = new (ELeave) CAknNumberQueryDialog(timeCorr);
+	dlg->PrepareLC(R_SETINT_QUERY_DIALOG);
+	dlg->SetPromptL(*title);
+	dlg->SetMinimumAndMaximum(-59, 59);
+	answer = dlg->RunLD();
+	CleanupStack::PopAndDestroy(title);
+	if (EAknSoftkeyOk == answer)
+		{
+		iData->iTimeCorrection = timeCorr;
+		iEikonEnv->InfoMsg(_L("Set TimeCorr"));
+		return ETrue;
+		}
+	return EFalse;
+	}
+
+// ----------------------------------------------------------------------------
+// CAquariumControlViewAppUi::CommandSetDate()
+// SetDate command handler.
+// ----------------------------------------------------------------------------
+//
+TBool CAquariumControlViewAppUi::CommandSetDate()
+	{
+	TInt variant;
+	TInt answer;
+	CAknListQueryDialog* dlg = new (ELeave) CAknListQueryDialog(&variant);
+	answer = dlg->ExecuteLD(R_SETDATEVARIANTS_QUERY_DIALOG);
+	if (EAknSoftkeyOk == answer)
+		{
+		TTime date;
+		if (variant == 0)
+			{
+			date.HomeTime();
+			iData->iDay = date.DateTime().Day() + 1;
+			iData->iMonth = date.DateTime().Month() + 1;
+			iData->iYear = date.DateTime().Year() - 2000;
+			iEikonEnv->InfoMsg(_L("Set current"));
+			return ETrue;
+			}
+		else if (variant == 1)
+			{
+			_LIT(KTimeStrFormat, "20%02u%02u%02u:.");
+			TBuf<10> dateStr;
+			dateStr.Format(KTimeStrFormat, iData->iYear, iData->iMonth - 1 , iData->iDay - 1);
+			date.Set(dateStr);
+			CAknTimeQueryDialog* dlg = new (ELeave) CAknTimeQueryDialog(date);
+			answer = dlg->ExecuteLD(R_SETDATE_QUERY_DIALOG);
+			if (EAknSoftkeyOk == answer)
+				{
+				iData->iDay = date.DateTime().Day() + 1;
+				iData->iMonth = date.DateTime().Month() + 1;
+				iData->iYear = date.DateTime().Year() - 2000;
+				iEikonEnv->InfoMsg(_L("Set custom"));
+				return ETrue;
+				}
+			}
+		}
+	return EFalse;
+	}
+
+// ----------------------------------------------------------------------------
+// CAquariumControlViewAppUi::CommandSetDayOfWeek()
+// SetDayOfWeek command handler.
+// ----------------------------------------------------------------------------
+//
+TBool CAquariumControlViewAppUi::CommandSetDayOfWeek()
+	{
+	TInt dayOfWeek;
+	TInt answer;
+	CAknListQueryDialog* dlg = new (ELeave) CAknListQueryDialog(&dayOfWeek);
+	answer = dlg->ExecuteLD(R_SETDAYOFWEEK_QUERY_DIALOG);
+	if (EAknSoftkeyOk == answer)
+		{
+		iData->iDayOfWeek = dayOfWeek + 1;
+		iEikonEnv->InfoMsg(_L("Set DayOfWeek"));
+		return ETrue;
+		}
+	return EFalse;
+	}
+
+// ----------------------------------------------------------------------------
+// CAquariumControlViewAppUi::CommandSetLightOnTime()
+// SetLightOnTime command handler.
+// ----------------------------------------------------------------------------
+//
+TBool CAquariumControlViewAppUi::CommandSetLightOnTime()
+	{
+	_LIT(KTimeStrFormat, ":%02u%02u%02u.");
+	_LIT(KMinTimeStr, ":000000.");
+	TInt answer;
+	TTime timeOn;
+	TTime minTime, maxTime;
+	TBuf<8> timeOnStr;
+	TBuf<8> maxTimeStr;
+	HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_ON_TIME);
+	timeOnStr.Format(KTimeStrFormat, iData->iLightOnHours, iData->iLightOnMinutes, iData->iLightOnSeconds);
+	maxTimeStr.Format(KTimeStrFormat, iData->iLightOffHours, iData->iLightOffMinutes, iData->iLightOffSeconds);
+	timeOn.Set(timeOnStr);
+	minTime.Set(KMinTimeStr);
+	maxTime.Set(maxTimeStr);
+	maxTime -= TTimeIntervalSeconds(1);
+	CAknTimeQueryDialog* dlg = new (ELeave) CAknTimeQueryDialog(timeOn);
+	dlg->PrepareLC(R_SETTIME_QUERY_DIALOG);
+	dlg->SetPromptL(*title);
+	dlg->SetMinimumAndMaximum(minTime, maxTime);
+	answer = dlg->RunLD();
+	CleanupStack::PopAndDestroy(title);
+	if (EAknSoftkeyOk == answer)
+		{
+		iData->iLightOnHours = timeOn.DateTime().Hour();
+		iData->iLightOnMinutes = timeOn.DateTime().Minute();
+		iData->iLightOnSeconds = timeOn.DateTime().Second();
+		iEikonEnv->InfoMsg(_L("Set TimeOn"));
+		return ETrue;
+		}
+	return EFalse;
+	}
+
+// ----------------------------------------------------------------------------
+// CAquariumControlViewAppUi::CommandSetLightOffTime()
+// SetLightOffTime command handler.
+// ----------------------------------------------------------------------------
+//
+TBool CAquariumControlViewAppUi::CommandSetLightOffTime()
+	{
+	_LIT(KTimeStrFormat, ":%02u%02u%02u.");
+	_LIT(KMaxTimeStr, ":235959.");
+	TInt answer;
+	TTime timeOff;
+	TTime minTime, maxTime;
+	TBuf<8> timeOffStr;
+	TBuf<8> minTimeStr;
+	HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_OFF_TIME);
+	timeOffStr.Format(KTimeStrFormat, iData->iLightOffHours, iData->iLightOffMinutes, iData->iLightOffSeconds);
+	minTimeStr.Format(KTimeStrFormat, iData->iLightOnHours, iData->iLightOnMinutes, iData->iLightOnSeconds);
+	timeOff.Set(timeOffStr);
+	minTime.Set(minTimeStr);
+	maxTime.Set(KMaxTimeStr);
+	minTime += TTimeIntervalSeconds(1);
+	CAknTimeQueryDialog* dlg = new (ELeave) CAknTimeQueryDialog(timeOff);
+	dlg->PrepareLC(R_SETTIME_QUERY_DIALOG);
+	dlg->SetPromptL(*title);
+	dlg->SetMinimumAndMaximum(minTime, maxTime);
+	answer = dlg->RunLD();
+	CleanupStack::PopAndDestroy(title);
+	if (EAknSoftkeyOk == answer)
+		{
+		iData->iLightOffHours = timeOff.DateTime().Hour();
+		iData->iLightOffMinutes = timeOff.DateTime().Minute();
+		iData->iLightOffSeconds = timeOff.DateTime().Second();
+		iEikonEnv->InfoMsg(_L("Set TimeOn"));
+		return ETrue;
+		}
+	return EFalse;
+	}
+
+// ----------------------------------------------------------------------------
+// CAquariumControlViewAppUi::CommandSetLightLevel()
+// SetLightLevel command handler.
+// ----------------------------------------------------------------------------
+//
+TBool CAquariumControlViewAppUi::CommandSetLightLevel()
+	{
+	TInt answer;
+	TInt level(iData->iLightLevel);
+	HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_LEVEL);
+	CAknNumberQueryDialog* dlg = new (ELeave) CAknNumberQueryDialog(level);
+	dlg->PrepareLC(R_SETINT_QUERY_DIALOG);
+	dlg->SetPromptL(*title);
+	dlg->SetMinimumAndMaximum(0, 100);
+	answer = dlg->RunLD();
+	CleanupStack::PopAndDestroy(title);
+	if (EAknSoftkeyOk == answer)
+		{
+		iData->iLightLevel = level;
+		iEikonEnv->InfoMsg(_L("Set Level"));
+		return ETrue;
+		}
+	return EFalse;
+	}
+
+// ----------------------------------------------------------------------------
+// CAquariumControlViewAppUi::CommandSetLightRise()
+// SetLightRise command handler.
+// ----------------------------------------------------------------------------
+//
+TBool CAquariumControlViewAppUi::CommandSetLightRise()
+	{
+	TInt answer;
+	TInt rise(iData->iLightRise);
+	HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_RISE);
+	CAknNumberQueryDialog* dlg = new (ELeave) CAknNumberQueryDialog(rise);
+	dlg->PrepareLC(R_SETINT_QUERY_DIALOG);
+	dlg->SetPromptL(*title);
+	dlg->SetMinimumAndMaximum(0, 30);
+	answer = dlg->RunLD();
+	CleanupStack::PopAndDestroy(title);
+	if (EAknSoftkeyOk == answer)
+		{
+		iData->iLightRise = rise;
+		iEikonEnv->InfoMsg(_L("Set Rise"));
+		return ETrue;
+		}
+	return EFalse;
+	}
+
+// ----------------------------------------------------------------------------
+// CAquariumControlViewAppUi::CommandSetHeatLow()
+// SetHeatLow command handler.
+// ----------------------------------------------------------------------------
+//
+TBool CAquariumControlViewAppUi::CommandSetHeatLow()
+	{
+	TInt answer;
+	TInt low(iData->iHeatLow);
+	HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_HEAT_LO);
+	CAknNumberQueryDialog* dlg = new (ELeave) CAknNumberQueryDialog(low);
+	dlg->PrepareLC(R_SETINT_QUERY_DIALOG);
+	dlg->SetPromptL(*title);
+	dlg->SetMinimumAndMaximum(18, iData->iHeatHigh);
+	answer = dlg->RunLD();
+	CleanupStack::PopAndDestroy(title);
+	if (EAknSoftkeyOk == answer)
+		{
+		iData->iHeatLow = low;
+		iEikonEnv->InfoMsg(_L("Set HeatLow"));
+		return ETrue;
+		}
+	return EFalse;
+	}
+
+// ----------------------------------------------------------------------------
+// CAquariumControlViewAppUi::CommandSetHeatHigh()
+// SetHeatHigh command handler.
+// ----------------------------------------------------------------------------
+//
+TBool CAquariumControlViewAppUi::CommandSetHeatHigh()
+	{
+	TInt answer;
+	TInt high(iData->iHeatHigh);
+	HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_HEAT_HI);
+	CAknNumberQueryDialog* dlg = new (ELeave) CAknNumberQueryDialog(high);
+	dlg->PrepareLC(R_SETINT_QUERY_DIALOG);
+	dlg->SetPromptL(*title);
+	dlg->SetMinimumAndMaximum(iData->iHeatLow, 35);
+	answer = dlg->RunLD();
+	CleanupStack::PopAndDestroy(title);
+	if (EAknSoftkeyOk == answer)
+		{
+		iData->iHeatHigh = high;
+		iEikonEnv->InfoMsg(_L("Set HeatHigh"));
+		return ETrue;
+		}
+	return EFalse;
 	}
 
 // End of File

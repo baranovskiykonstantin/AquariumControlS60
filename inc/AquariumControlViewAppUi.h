@@ -108,6 +108,21 @@ private:
 	inline void PauseUpdating();
 	inline void ResumeUpdating();
 
+	/**
+	 * Command handlers.
+	 * @return EFalse if command canceled by user, ETrue otherwise.
+	 */
+	TBool CommandSetTime();
+	TBool CommandSetTimeCor();
+	TBool CommandSetDate();
+	TBool CommandSetDayOfWeek();
+	TBool CommandSetLightOnTime();
+	TBool CommandSetLightOffTime();
+	TBool CommandSetLightLevel();
+	TBool CommandSetLightRise();
+	TBool CommandSetHeatLow();
+	TBool CommandSetHeatHigh();
+
 private:
 	// Data
 
