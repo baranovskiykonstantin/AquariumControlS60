@@ -24,8 +24,10 @@
 #include "AquariumControlData.h"
 #include "AquariumControlViewAppUi.h"
 
-// ============================ MEMBER FUNCTIONS ===============================
+// CONSTANTS
+_LIT(KStatusCmd, "status\n");
 
+// ============================ MEMBER FUNCTIONS ===============================
 
 // -----------------------------------------------------------------------------
 // CAquariumControlViewAppUi::ConstructL()
@@ -84,19 +86,42 @@ void CAquariumControlViewAppUi::ConstructL()
 	CleanupStack::Pop(displayView);
 	iDisplayViewId = displayView->Id();
 
-	SetDefaultViewL(*clockView);
-
 	iTimer = CPeriodic::NewL(EPriorityLow);
 	const TInt tickInterval = 1000000;
 	iTimer->Start(tickInterval, tickInterval, TCallBack(TimerCallBack, this));
 
+	// Bluetooth
+	iBtClient = CRFtermBt::NewL();
+	iBtClient->SetObserver(this);
+	// check whether BT is available or not
+	RSdp sdpSession;
+	if (sdpSession.Connect() == KErrNone)
+		{
+		sdpSession.Close();
+		iBtAvailable = ETrue;
+		}
+	else
+		{
+		iBtAvailable = EFalse;
+		}
+
+	// Empty by default
+	iBtDataTail = HBufC::New(0);
+
+	SetDefaultViewL(*clockView);
+
 	// TEST
-	iData->ParseLineL(_L8("Date: 01.02.2017 Friday"));
+/*
+	HandleBtDataL(_L("Date: 01.02.17 Friday\r\nTime: 13:29:59 (-3 sec at 12:00:00)\r\nTemp: 21\r\nHeat: OFF"));
+	HandleBtDataL(_L(" auto (20-22)\r\nLight: ON manual (10:00:00-20:00:00) 43/50% 10min\r\nDisplay: time\r\n"));
+
+	iData->ParseLineL(_L8("Date: 01.02.17 Friday"));
 	iData->ParseLineL(_L8("Time: 13:29:59 (-3 sec at 12:00:00)"));
 	iData->ParseLineL(_L8("Temp: 21"));
 	iData->ParseLineL(_L8("Heat: OFF auto (20-22)"));
 	iData->ParseLineL(_L8("Light: ON manual (10:00:00-20:00:00) 43/50% 10min"));
 	iData->ParseLineL(_L8("Display: time"));
+*/
 	}
 // -----------------------------------------------------------------------------
 // CAquariumControlViewAppUi::CAquariumControlViewAppUi()
@@ -122,6 +147,8 @@ CAquariumControlViewAppUi::~CAquariumControlViewAppUi()
 		iTimer->Cancel();
 		}
 	delete iTimer;
+	delete iBtClient;
+	delete iBtDataTail;
 	}
 
 // -----------------------------------------------------------------------------
@@ -141,13 +168,14 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			break;
 
 		case EAquariumControlConnect:
-			iData->iConnectionStatus = EConnected;
-			
-			updatingIsNeeded = ETrue;
+			if (!iBtAvailable)
+				ShowBTNotAvailableNoteL();
+			else
+				iBtClient->ConnectL();
 			break;
 		case EAquariumControlDisconnect:
-			iData->iConnectionStatus = EDisconnected;
-			updatingIsNeeded = ETrue;
+			if (iBtAvailable)
+				iBtClient->DisconnectL();
 			break;
 
 		case EAquariumControlSetTime:
@@ -394,7 +422,7 @@ void CAquariumControlViewAppUi::DynInitMenuPaneL(TInt aResourceId,
 	{
 	if(aResourceId == R_COMMON_MENU)
 		{
-		if (iData->iConnectionStatus == EDisconnected)
+		if (iData->iConnectionStatus == EStatusDisconnected)
 			aMenuPane->SetItemDimmed(EAquariumControlDisconnect, ETrue);
 		else
 			aMenuPane->SetItemDimmed(EAquariumControlConnect, ETrue);
@@ -423,12 +451,9 @@ TInt CAquariumControlViewAppUi::TimerCallBack(TAny* aObject)
 	{
 	CAquariumControlViewAppUi* self = static_cast<CAquariumControlViewAppUi*> (aObject);
 	TInt error(KErrNone);
-	if (self->iData->iConnectionStatus == EConnected)
+	if (self->iData->iConnectionStatus == EStatusConnected)
 		{
-		self->iData->iSeconds += 1;
-		if (self->iData->iSeconds > 59)
-			self->iData->iSeconds = 0;
-		TRAP(error, self->UpdateViewsL());
+		TRAP(error, self->iBtClient->SendMessageL(KStatusCmd));
 		}
 	return error;
 	}
@@ -440,8 +465,8 @@ TInt CAquariumControlViewAppUi::TimerCallBack(TAny* aObject)
 //
 void CAquariumControlViewAppUi::PauseUpdating()
 	{
-	if (iData->iConnectionStatus == EConnected)
-		iData->iConnectionStatus = EPaused;
+	if (iData->iConnectionStatus == EStatusConnected)
+		iData->iConnectionStatus = EStatusPaused;
 	}
 
 // ----------------------------------------------------------------------------
@@ -451,8 +476,8 @@ void CAquariumControlViewAppUi::PauseUpdating()
 //
 void CAquariumControlViewAppUi::ResumeUpdating()
 	{
-	if (iData->iConnectionStatus == EPaused)
-		iData->iConnectionStatus = EConnected;
+	if (iData->iConnectionStatus == EStatusPaused)
+		iData->iConnectionStatus = EStatusConnected;
 	}
 
 // ----------------------------------------------------------------------------
@@ -762,6 +787,103 @@ TBool CAquariumControlViewAppUi::CommandSetHeatHigh()
 		return ETrue;
 		}
 	return EFalse;
+	}
+
+// -----------------------------------------------------------------------------
+// CAquariumControlViewAppUi::ShowBTNotAvailableNoteL()
+// Show note if BT is not available 
+// -----------------------------------------------------------------------------
+//
+void CAquariumControlViewAppUi::ShowBTNotAvailableNoteL()
+	{
+	HBufC* textResource = StringLoader::LoadLC(R_ERR_NO_BT);
+	CAknErrorNote* errorNote = new (ELeave) CAknErrorNote;
+	errorNote->ExecuteLD(*textResource);
+	CleanupStack::PopAndDestroy(textResource);
+	}
+
+// -----------------------------------------------------------------------------
+// CAquariumControlViewAppUi::HandleBtDeviceChangeL()
+// Update the information about connected BT.
+// -----------------------------------------------------------------------------
+//
+void CAquariumControlViewAppUi::HandleBtDeviceChangeL(CBTDevice* aRemoteDevice)
+	{
+	if (aRemoteDevice)
+		{
+		iData->iConnectionStatus = EStatusConnected;
+		iBtClient->SendMessageL(KStatusCmd);
+		}
+	else
+		{
+		iData->iConnectionStatus = EStatusDisconnected;
+		UpdateViewsL();
+		}
+	
+	}
+
+// -----------------------------------------------------------------------------
+// CAquariumControlViewAppUi::HandleBtNotifyL()
+// Show log message from BT client.
+// -----------------------------------------------------------------------------
+//
+void CAquariumControlViewAppUi::HandleBtNotifyL(const TDesC& aMessage)
+	{
+	CAknInformationNote* errorNote = new (ELeave) CAknInformationNote;
+	errorNote->ExecuteLD(aMessage);
+	}
+
+// -----------------------------------------------------------------------------
+// CAquariumControlViewAppUi::HandleBtDataL()
+// Handle received data from BT client.
+// -----------------------------------------------------------------------------
+//
+void CAquariumControlViewAppUi::HandleBtDataL(const TDesC& aData)
+	{
+	_LIT(KNewLineMark, "\r\n");
+	HBufC* fullData = HBufC::NewLC(iBtDataTail->Length() + aData.Length());
+	fullData->Des().Copy(*iBtDataTail);
+	fullData->Des().Append(aData);
+
+	TPtrC unprocessed(*fullData);
+	TPtrC line;
+
+	// skip command echo
+	line.Set(unprocessed.Left(KStatusCmd().Length()));
+	if (line == KStatusCmd)
+		{
+		// Echo has additional '\r' character. Skit it too.
+		TInt dataLength = unprocessed.Length() - KStatusCmd().Length() - 1;
+		unprocessed.Set(unprocessed.Right(dataLength));
+		}
+
+	TInt rnPos = unprocessed.Find(KNewLineMark);
+	while (KErrNotFound != rnPos)
+		{
+		line.Set(unprocessed.Left(rnPos));
+		rnPos += KNewLineMark().Length();
+		unprocessed.Set(unprocessed.Right(unprocessed.Length() - rnPos));
+		rnPos = unprocessed.Find(KNewLineMark);
+		iData->ParseLineL(line);
+		}
+
+	delete iBtDataTail;
+	iBtDataTail = HBufC::NewL(unprocessed.Length());
+	iBtDataTail->Des().Copy(unprocessed);
+
+	UpdateViewsL();
+
+	CleanupStack::PopAndDestroy(fullData);
+	}
+
+// -----------------------------------------------------------------------------
+// CAquariumControlViewAppUi::HandleBtFileSendingFinishL()
+// Show note if file has been successfully sent.
+// -----------------------------------------------------------------------------
+//
+void CAquariumControlViewAppUi::HandleBtFileSendingFinishL()
+	{
+	
 	}
 
 // End of File

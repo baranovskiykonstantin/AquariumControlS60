@@ -23,9 +23,10 @@ const TInt KUnknownTemp(127);
  * TAquariumConnectionStatus
  */
 enum TAquariumConnectionStatus {
-	EDisconnected,
-	EConnected,
-	EPaused
+	EStatusDisconnected,
+	EStatusConnecting,
+	EStatusConnected,
+	EStatusPaused
 };
 
 /**
@@ -83,7 +84,7 @@ public:
 	 * Parse a line of the status message from aquarium controller
 	 * and extract data from it.
 	 * Status message example:
-	 *     Date: 01.01.2017 Friday
+	 *     Date: 01.01.17 Friday
 	 *     Time: 13:29:59 (-3 sec at 12:00:00)
 	 *     Temp: 22
 	 *     Heat: OFF auto (20-22)
@@ -91,7 +92,7 @@ public:
 	 *     Display: time
 	 * @param aLine A text line from status message.
 	 */
-	void ParseLineL(const TDesC8& aLine);
+	void ParseLineL(const TDesC& aLine);
 
 private:
 

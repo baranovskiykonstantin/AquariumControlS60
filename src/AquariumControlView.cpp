@@ -206,7 +206,7 @@ void CAquariumControlView::UpdateL()
 	if (iContainer)
 		{
 		const CAquariumControlData* data = ((CAquariumControlViewAppUi*) AppUi())->AquariumData();
-		TBool isConnected = (data->iConnectionStatus != EDisconnected);
+		TBool isConnected = (data->iConnectionStatus != EStatusDisconnected);
 		if (Toolbar() && Toolbar()->IsShown() != isConnected)
 			{
 			Toolbar()->SetToolbarVisibility(isConnected);

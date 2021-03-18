@@ -10,7 +10,7 @@
 #include "AquariumControlData.h"
 
 CAquariumControlData::CAquariumControlData() :
-		iConnectionStatus(EDisconnected),
+		iConnectionStatus(EStatusDisconnected),
 		iDayOfWeek(1),
 		iTemp(KUnknownTemp)
 	{
@@ -39,39 +39,39 @@ void CAquariumControlData::ConstructL()
 	{
 	}
 
-void CAquariumControlData::ParseLineL(const TDesC8& aLine)
+void CAquariumControlData::ParseLineL(const TDesC& aLine)
 	{
 	// Line IDs
-	_LIT8(KDate, "Date:");
-	_LIT8(KTime, "Time:");
-	_LIT8(KTemp, "Temp:");
-	_LIT8(KHeat, "Heat:");
-	_LIT8(KLight, "Light:");
-	_LIT8(KDisplay, "Display:");
+	_LIT(KDate, "Date:");
+	_LIT(KTime, "Time:");
+	_LIT(KTemp, "Temp:");
+	_LIT(KHeat, "Heat:");
+	_LIT(KLight, "Light:");
+	_LIT(KDisplay, "Display:");
 	// State
-	_LIT8(KStateOn, "ON");
-	_LIT8(KStateOff, "OFF");
+	_LIT(KStateOn, "ON");
+	_LIT(KStateOff, "OFF");
 	// Mode
-	_LIT8(KModeAuto, "auto");
-	_LIT8(KModeManual, "manual");
+	_LIT(KModeAuto, "auto");
+	_LIT(KModeManual, "manual");
 
-	TLex8 intParser;
-	TLex8 parser(aLine);
+	TLex intParser;
+	TLex parser(aLine);
 	parser.Mark();
 	parser.SkipCharacters();
 
 	if (parser.MarkedToken() == KDate)
 		{
 		// Day of week
-		_LIT8(KMonday, "Monday");
-		_LIT8(KTuesday, "Tuesday");
-		_LIT8(KWednesday, "Wednesday");
-		_LIT8(KThursday, "Thursday");
-		_LIT8(KFriday, "Friday");
-		_LIT8(KSaturday, "Saturday");
-		_LIT8(KSunday, "Sunday");
+		_LIT(KMonday, "Monday");
+		_LIT(KTuesday, "Tuesday");
+		_LIT(KWednesday, "Wednesday");
+		_LIT(KThursday, "Thursday");
+		_LIT(KFriday, "Friday");
+		_LIT(KSaturday, "Saturday");
+		_LIT(KSunday, "Sunday");
 		// Date format
-		_LIT8(KDateFormat, "??.??.20??");
+		_LIT(KDateFormat, "??.??.??");
 
 		TUint day, month, year, dayOfWeek;
 
@@ -88,7 +88,7 @@ void CAquariumControlData::ParseLineL(const TDesC8& aLine)
 		parser.Inc(2);
 		intParser.Assign(parser.MarkedToken());
 		intParser.Val(month);
-		parser.Inc(3); // skip ".20"
+		parser.Inc(); // skip a point
 		parser.Mark();
 		parser.Inc(2);
 		intParser.Assign(parser.MarkedToken());
@@ -123,7 +123,7 @@ void CAquariumControlData::ParseLineL(const TDesC8& aLine)
 	else if (parser.MarkedToken() == KTime)
 		{
 		// Time format
-		_LIT8(KTimeFormat, "??:??:??");
+		_LIT(KTimeFormat, "??:??:??");
 
 		TUint hour, min, sec;
 		TInt corr;
@@ -217,7 +217,7 @@ intParser.Val(hour);
 		// Heater thresholds format
 		// "?-" and "?)" brings some strange behavior.
 		// Escaping the question marks with slash solves the issue.
-		_LIT8(KHeatFormat, "(?\?-?\?)");
+		_LIT(KHeatFormat, "(?\?-?\?)");
 
 		TAquariumDeviceState state;
 		TAquariumDeviceMode mode;
@@ -269,7 +269,7 @@ intParser.Val(hour);
 		// Light thresholds format
 		// "?-" and "?)" brings some strange behavior.
 		// Escaping the question marks with slash solves the issue.
-		_LIT8(KLightFormat, "(??:??:?\?-??:??:?\?)");
+		_LIT(KLightFormat, "(??:??:?\?-??:??:?\?)");
 
 		TAquariumDeviceState state;
 		TAquariumDeviceMode mode;
@@ -386,8 +386,8 @@ intParser.Val(hour);
 	else if (parser.MarkedToken() == KDisplay)
 		{
 		// Display mode
-		_LIT8(KDisplayTime, "time");
-		_LIT8(KDisplayTemp, "temp");
+		_LIT(KDisplayTime, "time");
+		_LIT(KDisplayTemp, "temp");
 
 		TAquariumDispalyMode mode;
 

@@ -15,6 +15,8 @@
 #include <aknviewappui.h>
 #include <akntabgrp.h>
 #include <aknnavide.h>
+#include "RFtermBt.h"
+#include "RFtermBtObserver.h"
 
 // FORWARD DECLARATIONS
 class CAquariumControlData;
@@ -25,7 +27,7 @@ class CAquariumControlData;
  * Interacts with the user through the UI and request message processing
  * from the handler class
  */
-class CAquariumControlViewAppUi : public CAknViewAppUi
+class CAquariumControlViewAppUi : public CAknViewAppUi, MRFtermBtObserver
 	{
 public:
 	// Constructors and destructor
@@ -123,6 +125,20 @@ private:
 	TBool CommandSetHeatLow();
 	TBool CommandSetHeatHigh();
 
+	/**
+	* ShowBTNotAvailableNoteL.
+	* Show note if BT is not available
+	*/
+	void ShowBTNotAvailableNoteL();
+
+	/**
+	 * From MRFtermBtObserver
+	 */
+	void HandleBtDeviceChangeL(CBTDevice* aRemoteDevice);
+	void HandleBtNotifyL(const TDesC& aMessage);
+	void HandleBtDataL(const TDesC& aData);
+	void HandleBtFileSendingFinishL();
+
 private:
 	// Data
 
@@ -145,6 +161,27 @@ private:
 	 * iTimer is used to update views periodically
 	 */
 	CPeriodic* iTimer;
+
+	/** 
+	 * iBtClient
+	 * the BT engine 
+	 * Owned by ViewAppUi
+	 */
+	CRFtermBt* iBtClient;
+
+	/**
+	 * iBtAvailable, ETrue if an SDP session can be opened, EFalse otherwise.
+	 */
+	TBool iBtAvailable;
+
+	/**
+	 * Bluetooth data is processed line by line.
+	 * iBtDataTail contains the last part of text
+	 * that does not end with "\r\n".
+	 * This part will be prefixed to the next
+	 * portion of bluetooth data.
+	 */
+	HBufC* iBtDataTail;
 
 	};
 

@@ -56,13 +56,13 @@ void CDisplayContainer::UpdateListBoxL()
 	// Get access to aquarium data
 	const CAquariumControlData* data = ((CAquariumControlViewAppUi*) iAvkonViewAppUi)->AquariumData();
 
-	if (data->iConnectionStatus == EPaused)
+	if (data->iConnectionStatus == EStatusPaused)
 		return;
 
 	// Remove all items
 	iListBoxItems->Reset();
 
-	if (data->iConnectionStatus == EConnected)
+	if (data->iConnectionStatus == EStatusConnected)
 		{
 		// Create items again
 		TBuf<64> itemText;
