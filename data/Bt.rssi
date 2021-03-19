@@ -22,9 +22,6 @@
 RESOURCE TBUF r_rfterm_service_name { buf=qtn_rfterm_service_name; }
 RESOURCE TBUF r_rfterm_service_description { buf=qtn_rfterm_service_description; }
 
-RESOURCE TBUF r_str_signal_input { buf=qtn_str_signal_input; }
-RESOURCE TBUF r_str_signal_output { buf=qtn_str_signal_output; }
-
 RESOURCE TBUF r_str_disconnected { buf=qtn_str_disconnected; }
 RESOURCE TBUF r_str_disconnect_complete { buf=qtn_str_disconnect_complete; }
 RESOURCE TBUF r_str_connected { buf=qtn_str_connected; }
@@ -35,7 +32,6 @@ RESOURCE TBUF r_str_connecting { buf=qtn_str_connecting; }
 RESOURCE TBUF r_str_waiting_conn { buf=qtn_str_waiting_conn; }
 RESOURCE TBUF r_str_port_number { buf=qtn_str_port_number; }
 //RESOURCE TBUF r_str_ { buf=qtn_str_; }
-
 
 RESOURCE TBUF r_err_no_bt { buf=qtn_err_no_bt; }
 RESOURCE TBUF r_err_no_device_selected { buf=qtn_err_no_device_selected; }
@@ -51,8 +47,6 @@ RESOURCE TBUF r_err_nrrc_no_records { buf=qtn_err_nrrc_no_records; }
 RESOURCE TBUF r_err_cant_get_attribute { buf=qtn_err_cant_get_attribute; }
 RESOURCE TBUF r_err_attr_req_com { buf=qtn_err_attr_req_com; }
 RESOURCE TBUF r_err_registry { buf=qtn_err_registry; }
-RESOURCE TBUF r_err_file_opening { buf=qtn_err_file_opening; }
 //RESOURCE TBUF r_err_ { buf=qtn_err_; }
-
 
 // End of File

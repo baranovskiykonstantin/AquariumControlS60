@@ -14,14 +14,12 @@
 enum TBtPanics
 	{
 	ERFtermInvalidLogicState = 1,
-	ERFtermUnableToDisconnect,
-	ERFtermSignalsAreUnavailable
+	ERFtermUnableToDisconnect
 	// add further panics here
 	};
 
 /** Panic Category */
 _LIT(KPanicBt, "Bluetooth");
-_LIT(KPanicBtServiceAdvertiser, "BTServiceAdvertiser");
 
 inline void Panic(TBtPanics aReason)
 	{

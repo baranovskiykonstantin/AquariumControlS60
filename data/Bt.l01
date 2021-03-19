@@ -11,90 +11,9 @@
 
 //  LOCALISATION STRINGS
 
-// Items in "Options" menu pane
-#define qtn_connect "Connect"
-#define qtn_disconnect "Disconnect"
-
-#define qtn_start "Start"
-#define qtn_stop "Stop"
-
-#define qtn_send "Send"
-#define qtn_send_message "Message"
-#define qtn_send_history "Message from history"
-#define qtn_send_ctrl_char "Control character"
-#define qtn_send_signal "Signal"
-#define qtn_send_file "File"
-
-#define qtn_clear "Clear"
-
-#define qtn_save "Save"
-
-#define qtn_settings "Settings"
-
-#define qtn_help "Help"
-
-#define qtn_exit "Exit"
-
-// Navigation pane
-#define qtn_str_navi_disconnected "disconnected"
-
 // Bluetooth
 #define qtn_rfterm_service_name "Serial Port"
 #define qtn_rfterm_service_description "RFterm application"
-
-// Dialogs
-#define qtn_str_text_query_label "Send:"
-#define qtn_str_ignoresym_confirmation "Next symbols are not supported by code page and will be ignored:\n%S\nDo you wisht to continue?"
-#define qtn_str_history_query_label "Message History"
-#define qtn_str_ctrlchar_query_label "Control Characters"
-#define qtn_str_ctrlchar_custom "Custom..."
-#define qtn_str_int_query_label "Byte (0-255)"
-#define qtn_str_signal_query_label "RS-232 signals"
-
-// Settings
-#define qtn_str_settings_input_label "Input"
-
-#define qtn_str_setting_appendix_label "Append to message"
-#define qtn_str_setting_appendix_item0 "CARRIAGE RETURN"
-#define qtn_str_setting_appendix_item1 "LINE FEED"
-#define qtn_str_setting_appendix_item2 "CR+LF"
-#define qtn_str_setting_appendix_item3 "Nothing"
-
-#define qtn_str_setting_historysize_label "Message history size"
-
-#define qtn_str_setting_echo_label "Output sent message (echo)"
-#define qtn_str_setting_no_label "No"
-#define qtn_str_setting_yes_label "Yes"
-
-
-#define qtn_str_settings_output_label "Output"
-
-#define qtn_str_setting_fontsize_label "Font size"
-
-#define qtn_str_setting_tabsize_label "Tab size"
-
-#define qtn_str_setting_mapping_label "Control char mapping"
-#define qtn_str_setting_mapping_item0 "CR -> LF"
-#define qtn_str_setting_mapping_item1 "CR -> CR+LF"
-#define qtn_str_setting_mapping_item2 "LF -> CR"
-#define qtn_str_setting_mapping_item3 "LF -> CR+LF"
-#define qtn_str_setting_mapping_item4 "None"
-
-#define qtn_str_setting_codepage_label "Code page"
-#define qtn_str_setting_codepage_item0 "ISO 8859-1 (Latin-1)"
-#define qtn_str_setting_codepage_item1 "ISO 8859-2 (Latin-2)"
-#define qtn_str_setting_codepage_item2 "ISO 8859-3 (Latin-3)"
-#define qtn_str_setting_codepage_item3 "ISO 8859-4 (Latin-4)"
-#define qtn_str_setting_codepage_item4 "ISO 8859-5 (Latin/Cyrillic)"
-#define qtn_str_setting_codepage_item5 "CP 1251 (Cyrillic)"
-#define qtn_str_setting_codepage_item6 "CP 1252 (Latin-1)"
-#define qtn_str_setting_codepage_item7 "KOI-8"
-
-#define qtn_str_setting_save_notifies_label "Save notifies"
-
-// RS-232 Signals
-#define qtn_str_signal_input "input"
-#define qtn_str_signal_output "output"
 
 // Messages
 #define qtn_str_disconnected "Disconnected"
@@ -106,9 +25,6 @@
 #define qtn_str_connecting "Connecting to service"
 #define qtn_str_waiting_conn "Waiting connection"
 #define qtn_str_port_number "Channel "
-#define qtn_str_bell "RFterm: BELL"
-#define qtn_str_output_is_saved "Output has been saved."
-#define qtn_str_file_is_sent "File has been sent."
 //#define qtn_str_
 
 #define qtn_err_no_bt "Bluetooth unavailable."
@@ -125,7 +41,6 @@
 #define qtn_err_cant_get_attribute "Can't get attribute "
 #define qtn_err_attr_req_com "AttrReqCom"
 #define qtn_err_registry "Unknown device"
-#define qtn_err_file_opening "File opening error"
 //#define qtn_err_
 
 // End of File

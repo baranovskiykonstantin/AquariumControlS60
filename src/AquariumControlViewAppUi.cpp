@@ -905,14 +905,4 @@ void CAquariumControlViewAppUi::HandleBtDataL(const TDesC& aData)
 	CleanupStack::PopAndDestroy(fullData);
 	}
 
-// -----------------------------------------------------------------------------
-// CAquariumControlViewAppUi::HandleBtFileSendingFinishL()
-// Show note if file has been successfully sent.
-// -----------------------------------------------------------------------------
-//
-void CAquariumControlViewAppUi::HandleBtFileSendingFinishL()
-	{
-	
-	}
-
 // End of File

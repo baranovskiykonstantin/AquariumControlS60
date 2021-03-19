@@ -10,7 +10,6 @@
 // INCLUDE FILES
 #include <StringLoader.h>
 #include <coemain.h>
-#include "RFtermBtServiceAdvertiser.h"
 #include "RFtermBtServiceSearcher.h"
 #include "RFtermConstants.h"
 #include "Bt.pan"
@@ -50,9 +49,7 @@ CRFtermBt* CRFtermBt::NewLC()
 //
 CRFtermBt::CRFtermBt() :
 	CActive(CActive::EPriorityStandard),
-	iState(EWaitingToGetDevice),
-	iServerMode(EFalse),
-	iFileIsOpenned(EFalse)
+	iState(EWaitingToGetDevice)
 	{
 	CActiveScheduler::Add(this);
 	}
@@ -77,13 +74,6 @@ CRFtermBt::~CRFtermBt()
 	delete iBatteryStatus;
 	iBatteryStatus = NULL;
 
-	if (iFileIsOpenned)
-		{
-		iFile.Close();
-		iFileSession.Close();
-		iFileIsOpenned = EFalse;
-		}
-
 	iBTPhysicalLinkAdapter.Close();
 
 	iSocket.Close();
@@ -95,9 +85,6 @@ CRFtermBt::~CRFtermBt()
 
 	delete iServiceSearcher;
 	iServiceSearcher = NULL;
-
-	delete iAdvertiser;
-	iAdvertiser = NULL;
 
 	delete iRemoteDevice;
 	iRemoteDevice = NULL;
@@ -112,7 +99,6 @@ void CRFtermBt::ConstructL()
 	{
 	iServiceSearcher = CRFtermBtServiceSearcher::NewL();
 	iServiceSearcher->SetObserver(iObserver);
-	iAdvertiser = CRFtermBtServiceAdvertiser::NewL();
 	User::LeaveIfError(iSocketServer.Connect());
 	iBatteryStatus = CRFtermBatteryStatus::NewL(this);
 	}
@@ -143,26 +129,7 @@ void CRFtermBt::RunL()
 
 	HBufC* textResource = NULL;
 
-	if (iStatus == KErrDisconnected)
-		{
-		// Disconnected
-		HBufC* strDisconnected = StringLoader::LoadLC(R_STR_DISCONNECTED);
-		NotifyL(*strDisconnected);
-		CleanupStack::PopAndDestroy(strDisconnected);
-		StopL();
-		return;
-		}
-		
-	else if (iStatus == KErrAbort)
-		{
-		HBufC* strDisconnected = StringLoader::LoadLC(R_STR_DISCONNECTED);
-		NotifyL(*strDisconnected);
-		CleanupStack::PopAndDestroy(strDisconnected);
-		StopL();
-		return;
-		}
-
-	else if (iStatus == KErrHCILinkDisconnection)
+	if (iStatus == KErrHCILinkDisconnection)
 		// this error happens if connected server
 		// sudently loses link (powered down for example)
 		{
@@ -224,14 +191,6 @@ void CRFtermBt::RunL()
 				SetState(EDisconnecting);
 				break;
 				
-			case ESendingFile:
-				textResource = StringLoader::LoadLC(R_ERR_FILE_SENDING_FAILED);
-				NotifyL(*textResource);
-				CleanupStack::PopAndDestroy(textResource);
-				DisconnectFromServerL();
-				SetState(EDisconnecting);
-				break;
-				
 			case EDisconnecting:
 				if (iStatus == KErrDisconnected)
 					{
@@ -239,7 +198,6 @@ void CRFtermBt::RunL()
 					NotifyL(*textResource);
 					CleanupStack::PopAndDestroy(textResource);
 
-					StopL();
 					SetState(EWaitingToGetDevice);
 					}
 				else
@@ -280,20 +238,6 @@ void CRFtermBt::RunL()
 				SetActive();
 				break;
 				
-			case EConnecting:
-				textResource = StringLoader::LoadLC(R_STR_CONNECTED);
-				NotifyL(*textResource);
-				CleanupStack::PopAndDestroy(textResource);
-				
-				// do not accept any more connections
-				iAdvertiser->UpdateAvailabilityL(EFalse);
-				
-				SetState(EConnected);
-				PreventLowPowerModes();
-				NotifyDeviceIsConnectedL();
-				RequestData();
-				break;
-				
 			case EGettingService:
 				textResource = StringLoader::LoadLC(R_STR_FOUND_SERVICE);
 				NotifyL(*textResource);
@@ -330,10 +274,6 @@ void CRFtermBt::RunL()
 				RequestData();
 				break;
 				
-			case ESendingFile:
-				SendFileL(KNullDesC, iDoFileEcho);
-				break;
-				
 			case EDisconnecting:
 				textResource = StringLoader::LoadLC(R_STR_DISCONNECT_COMPLETE);
 				NotifyL(*textResource);
@@ -350,26 +290,6 @@ void CRFtermBt::RunL()
 				break;
 			};
 		}
-	}
-
-// ----------------------------------------------------------------------------
-// CRFtermBt::IsServer()
-// True if the acting as server.
-// ----------------------------------------------------------------------------
-//
-TBool CRFtermBt::Server()
-	{
-	return iServerMode;
-	}
-
-// ----------------------------------------------------------------------------
-// CRFtermBt::SetServer()
-// 
-// ----------------------------------------------------------------------------
-//
-void CRFtermBt::SetServer(TBool aServerMode)
-	{
-	iServerMode = aServerMode;
 	}
 
 // ----------------------------------------------------------------------------
@@ -394,7 +314,7 @@ TInt CRFtermBt::State()
 
 // ----------------------------------------------------------------------------
 // CRFtermBt::IsReadyToSend()
-// True if the client can send a message or a file.
+// True if the client can send a message.
 // ----------------------------------------------------------------------------
 //
 TBool CRFtermBt::IsReadyToSend()
@@ -409,10 +329,7 @@ TBool CRFtermBt::IsReadyToSend()
 //
 TBool CRFtermBt::IsConnected()
 	{
-	return ((State() == EConnected)
-		||(State() == ESendingMessage)
-		||(State() == ESendingFile)
-		);
+	return ((State() == EConnected) || (State() == ESendingMessage));
 	}
 
 // ----------------------------------------------------------------------------
@@ -427,8 +344,6 @@ TBool CRFtermBt::IsConnecting()
 		(State() == EGettingService)
 		||
 		(State() == EGettingConnection)
-		|| 
-		(State() == EConnecting)
 		);
 	}
 
@@ -441,7 +356,6 @@ void CRFtermBt::ConnectL()
 	{
 	if (State() == EWaitingToGetDevice && !IsActive())
 		{
-		SetServer(EFalse);
 		SetState(EGettingDevice);
 		iServiceSearcher->SelectDeviceByDiscoveryL(iStatus);
 		SetActive();
@@ -484,13 +398,6 @@ void CRFtermBt::DisconnectL()
 //
 void CRFtermBt::DisconnectFromServerL()
 	{
-	if (iFileIsOpenned)
-		{
-		iFile.Close();
-		iFileSession.Close();
-		iFileIsOpenned = EFalse;
-		}
-
 	NotifyDeviceIsDisconnectedL();
 
 	// Terminate all operations
@@ -538,7 +445,7 @@ void CRFtermBt::ConnectToServerL()
 // Send a message to a service on a remote machine.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBt::SendMessageL(const TDesC& aText, const TBool aDoEcho)
+void CRFtermBt::SendMessageL(const TDesC& aText)
 	{
 	if (State() != EConnected)
 		{
@@ -562,7 +469,7 @@ void CRFtermBt::SendMessageL(const TDesC& aText, const TBool aDoEcho)
 	iMessage = HBufC8::NewL(aText.Length());
 	iMessage->Des().Copy(aText);
 
-	if (aDoEcho && iObserver)
+	if (iObserver)
 		{
 		iObserver->HandleBtDataL(aText);
 		}
@@ -573,221 +480,6 @@ void CRFtermBt::SendMessageL(const TDesC& aText, const TBool aDoEcho)
 		}
 
 	SetActive();
-	}
-
-// ----------------------------------------------------------------------------
-// CRFtermBt::SendFileL()
-// Send a file to a service on a remote machine.
-// The file is being sent by chunks of KRFtermTextBufLength size.
-// While sending the file name is not used (KNullDesC value is passed).
-// ----------------------------------------------------------------------------
-//
-void CRFtermBt::SendFileL(const TDesC& aFileName, const TBool aDoEcho)
-	{
-	if (State() != ESendingFile)
-		{
-		if (State() != EConnected)
-			{
-			User::Leave(KErrDisconnected);
-			}
-		
-		User::LeaveIfError(iFileSession.Connect());
-		TInt result = iFile.Open(iFileSession, aFileName, EFileRead);
-		if (result != KErrNone)
-			{
-			HBufC* errFileOpening = StringLoader::LoadLC(R_ERR_FILE_OPENING);
-			NotifyL(*errFileOpening);
-			iFileSession.Close();
-			return;
-			}
-		iFileIsOpenned = ETrue;
-		iDoFileEcho = aDoEcho;
-		SetState(ESendingFile);
-		}
-
-	// stop reading socket
-	if (iActiveSocket)
-		{
-		iActiveSocket->CancelRead();
-		}
-
-	if (IsActive())
-		{
-		Cancel();
-		}
-
-	delete iMessage;
-	iMessage = HBufC8::NewL(KRFtermTextBufLength);
-	TPtr8 messagePtr(iMessage->Des());
-
-	iFile.Read(messagePtr, KRFtermTextBufLength);
-	if (!iMessage->Length())
-		{
-		// Nothing to read from file
-		iFile.Close();
-		iFileSession.Close();
-		iFileIsOpenned = EFalse;
-		SetState(EConnected);
-		RequestData();
-		if (iObserver)
-			{
-			iObserver->HandleBtFileSendingFinishL();
-			}
-		return;
-		}
-
-	if (aDoEcho && iObserver)
-		{
-		TBuf16<KRFtermTextBufLength> textBuf16;
-		textBuf16.Copy(*iMessage); // convert 8-bit to 16-bit data
-		iObserver->HandleBtDataL(textBuf16);
-		}
-
-	if (iActiveSocket)
-		{
-		iActiveSocket->Write(*iMessage, iStatus);
-		}
-
-	SetActive();
-	}
-
-// ----------------------------------------------------------------------------
-// CRFtermBt::StartL()
-// Starts the server.
-// ----------------------------------------------------------------------------
-//
-void CRFtermBt::StartL()
-	{
-	if (State() != EWaitingToGetDevice)
-		{
-		User::Leave(KErrInUse);
-		}
-
-	TInt result(0);
-	result = iSocket.Open(iSocketServer, KStrRFCOMM);
-	if (result != KErrNone)
-		{
-		iSocketServer.Close();
-		User::Leave(result); 
-		}
-
-	// 
-	// Set the Socket's security with parameters, 
-	// Authentication, Encryption, Authorisation and Denied
-	// Method also return the channel available to listen to. 
-	TInt channel;
-	SetSecurityWithChannelL(EFalse, EFalse, ETrue, EFalse, channel);
-
-	iAdvertiser->StartAdvertisingL(channel);
-	iAdvertiser->UpdateAvailabilityL(ETrue);
-
-	SetServer(ETrue);
-	}
-
-// ----------------------------------------------------------------------------
-// CRFtermBt::SetSecurityWithChannelL()
-// Sets the security on the channel port and returns the available port.
-// ----------------------------------------------------------------------------
-//
-void CRFtermBt::SetSecurityWithChannelL(
-	TBool aAuthentication,
-	TBool aEncryption,
-	TBool aAuthorisation,
-	TBool aDenied,
-	TInt& aChannel)
-
-	{
-
-	// Local variable to channel to listen to.
-	TInt channel;
-
-	User::LeaveIfError(iSocket.GetOpt(
-		KRFCOMMGetAvailableServerChannel, 
-		KSolBtRFCOMM, 
-		channel));
-
-	TBTSockAddr listeningAddress;
-	// Set the Port to listen to.
-	listeningAddress.SetPort(channel);
-
-	User::LeaveIfError(iSocket.Bind(listeningAddress));
-	User::LeaveIfError(iSocket.Listen(KListeningQueSize));
-
-	// close old connection - if any
-	iAcceptedSocket.Close();
-
-	// Open abstract socket
-	User::LeaveIfError(iAcceptedSocket.Open(iSocketServer));
-
-	// Set the Active Object's State to Connecting indicated.
-	SetState(EConnecting);
-
-	iSocket.Accept(iAcceptedSocket, iStatus);
-
-	iActiveSocket = &iAcceptedSocket;
-
-	// Set the Active Object Active again,
-	SetActive();
-
-	// Write Log events
-	HBufC* strWaitingConn = StringLoader::LoadLC(R_STR_WAITING_CONN);
-	NotifyL(*strWaitingConn);
-	CleanupStack::PopAndDestroy(strWaitingConn);
-
-	HBufC* strPortNumber = StringLoader::LoadLC(R_STR_PORT_NUMBER);
-	TBuf<10> channelStr;
-	channelStr.Num(channel);
-	HBufC* portStrWithNumber = HBufC::NewLC(strPortNumber->Length() + channelStr.Length());
-	portStrWithNumber->Des().Copy(*strPortNumber);
-	portStrWithNumber->Des().Append(channelStr);
-	NotifyL(*portStrWithNumber);
-	CleanupStack::PopAndDestroy(2); // strPortNumber, portStrWithNumber
-
-	// Set the security according to.
-	TBTServiceSecurity serviceSecurity;
-	serviceSecurity.SetUid(KAppUid);
-	serviceSecurity.SetAuthentication(aAuthentication);
-	serviceSecurity.SetEncryption(aEncryption);
-	serviceSecurity.SetAuthorisation(aAuthorisation);
-	serviceSecurity.SetDenied(aDenied);
-
-	// Attach the security settings.
-	listeningAddress.SetSecurity(serviceSecurity);
-
-	// Return the port to listen to.
-	aChannel = channel;
-
-	}
-
-// ----------------------------------------------------------------------------
-// CRFtermBt::StopL()
-// Stops the server.
-// ----------------------------------------------------------------------------
-//
-void CRFtermBt::StopL()
-	{
-	if (State() != EDisconnected)
-		{
-		if (iAdvertiser->IsAdvertising())
-			{
-			iAdvertiser->StopAdvertisingL();
-			}
-		// Close() will wait forever for Read to complete
-		if (State() == EConnected)
-			{
-			if (iActiveSocket)
-				{
-				iActiveSocket->CancelRead();
-				}
-			}
-		
-		NotifyDeviceIsDisconnectedL();
-		
-		iAcceptedSocket.Close();
-		iSocket.Close();
-		}
-
-	SetState(EWaitingToGetDevice);
 	}
 
 // ----------------------------------------------------------------------------
@@ -927,89 +619,6 @@ void CRFtermBt::HandleBatteryStatusChangeL()
 			AllowLowPowerModes();
 			}
 		}
-	}
-
-// ----------------------------------------------------------------------------
-// CRFtermBt::GetInputSignals()
-// Get RS-232 input signals.
-// ----------------------------------------------------------------------------
-//
-TUint8 CRFtermBt::GetInputSignals()
-	{
-	__ASSERT_ALWAYS(IsConnected(), Panic(ERFtermSignalsAreUnavailable));
-	TPckgBuf<TUint8> signalsPckg(0);
-	iActiveSocket->GetOpt(KRFCOMMGetRemoteModemStatus, KSolBtRFCOMM, signalsPckg);
-	TUint8 inputSignals(signalsPckg());
-	return inputSignals;
-	}
-
-// ----------------------------------------------------------------------------
-// CRFtermBt::GetOutputSignals()
-// Get RS-232 ouptut signals.
-// ----------------------------------------------------------------------------
-//
-TUint8 CRFtermBt::GetOutputSignals()
-	{
-	__ASSERT_ALWAYS(IsConnected(), Panic(ERFtermSignalsAreUnavailable));
-	TPckgBuf<TUint8> signalsPckg(0);
-	iActiveSocket->GetOpt(KRFCOMMLocalModemStatus, KSolBtRFCOMM, signalsPckg);
-	TUint8 outputSignals(signalsPckg());
-	return outputSignals;
-	}
-
-// ----------------------------------------------------------------------------
-// CRFtermBt::SetOutputSignals()
-// Set RS-232 output signals.
-// ----------------------------------------------------------------------------
-//
-void CRFtermBt::SetOutputSignals(TUint8 aOutputSignals)
-	{
-	__ASSERT_ALWAYS(IsConnected(), Panic(ERFtermSignalsAreUnavailable));
-	TPckgBuf<TUint8> signalsPckg(0);
-	iActiveSocket->GetOpt(KRFCOMMLocalModemStatus, KSolBtRFCOMM, signalsPckg);
-	// Only KRS232SignalDTR and KRS232SignalRTS are accepted.
-	aOutputSignals &= KRS232SignalDTR | KRS232SignalRTS;
-	signalsPckg() |= aOutputSignals;
-	iActiveSocket->SetOpt(KRFCOMMLocalModemStatus, KSolBtRFCOMM, signalsPckg);
-	/*
-	TRequestStatus ioctlStatus;
-	iActiveSocket->Ioctl(KRFCOMMModemStatusCmdIoctl, ioctlStatus, &signalsPckg, KSolBtRFCOMM);
-	User::WaitForRequest(ioctlStatus); // wait synchronously
-	*/
-	}
-
-// ----------------------------------------------------------------------------
-// CRFtermBt::ClearOutputSignals()
-// Clear RS-232 output signals.
-// ----------------------------------------------------------------------------
-//
-void CRFtermBt::ClearOutputSignals(TUint8 aOutputSignals)
-	{
-	__ASSERT_ALWAYS(IsConnected(), Panic(ERFtermSignalsAreUnavailable));
-	TPckgBuf<TUint8> signalsPckg(0);
-	iActiveSocket->GetOpt(KRFCOMMLocalModemStatus, KSolBtRFCOMM, signalsPckg);
-	// Only KRS232SignalDTR and KRS232SignalRTS are accepted.
-	aOutputSignals &= KRS232SignalDTR | KRS232SignalRTS;
-	signalsPckg() &= ~aOutputSignals;
-	iActiveSocket->SetOpt(KRFCOMMLocalModemStatus, KSolBtRFCOMM, signalsPckg);
-	}
-
-// ----------------------------------------------------------------------------
-// CRFtermBt::ToggleOutputSignals()
-// Set RS-232 output signals to opposite state.
-// ----------------------------------------------------------------------------
-//
-TUint8 CRFtermBt::ToggleOutputSignals(TUint8 aOutputSignals)
-	{
-	__ASSERT_ALWAYS(IsConnected(), Panic(ERFtermSignalsAreUnavailable));
-	TPckgBuf<TUint8> signalsPckg(0);
-	iActiveSocket->GetOpt(KRFCOMMLocalModemStatus, KSolBtRFCOMM, signalsPckg);
-	// Only KRS232SignalDTR and KRS232SignalRTS are accepted.
-	aOutputSignals &= KRS232SignalDTR | KRS232SignalRTS;
-	signalsPckg() ^= aOutputSignals;
-	iActiveSocket->SetOpt(KRFCOMMLocalModemStatus, KSolBtRFCOMM, signalsPckg);
-	TUint8 outputSignals(signalsPckg());
-	return outputSignals;
 	}
 
 // End of File

@@ -16,7 +16,6 @@
 #include <btsdp.h>
 #include <btdevice.h>
 #include "RFtermBtServiceSearcher.h"
-#include "RFtermBtServiceAdvertiser.h"
 #include "RFtermBtObserver.h"
 #include "RFtermConstants.h"
 #include "RFtermBatteryStatus.h"
@@ -31,9 +30,7 @@
 * EGettingConnection connecting to a service on a remote machine
 * EConnected connected to a service on a remote machine
 * ESendingMessage sending a message to the remote machine
-* ESendingFile sending content of a file to the remote machine
 * EWaitingForMessage wainting for message from remote machine
-* EConnecting connecting to remote machine
 * EDisconnecting disconnecting from remote machine
 */
 
@@ -46,23 +43,9 @@ enum TRFtermState
 	EConnected,
 	EDisconnected,
 	ESendingMessage,
-	ESendingFile,
 	EWaitingForMessage,
-	EConnecting,
 	EDisconnecting
 	};
-
-/**
- * RS-232 signals.
- */
-// outputs
-const TUint8 KRS232SignalDTR = KModemSignalRTC;
-const TUint8 KRS232SignalRTS = KModemSignalRTR;
-// inputs
-const TUint8 KRS232SignalDSR = KModemSignalRTC;
-const TUint8 KRS232SignalCTS = KModemSignalRTR;
-const TUint8 KRS232SignalDCD = KModemSignalDV;
-const TUint8 KRS232SignalRI  = KModemSignalIC;
 
 /**
 * CRFtermBt
@@ -123,43 +106,8 @@ public: // New functions
 	* SendMessageL()
 	* Sends a message to a service on a remote machine.
 	* @param aText text to send
-	* @param aDoEcho send aText to observer as received data
 	*/
-	void SendMessageL(const TDesC& aText, const TBool aDoEcho=EFalse);
-
-	/**
-	* SendFileL()
-	* Sends a file to a service on a remote machine.
-	* @param aFileName name of the file to send
-	* @param aDoEcho to send content of file to observer as received data
-	*/
-	void SendFileL(const TDesC& aFileName, const TBool aDoEcho=EFalse);
-
-	/**
-	* StartL()
-	* Start server and waiting for connection.
-	*/
-	void StartL();
-
-	/**
-	* StopL()
-	* Stop server.
-	*/
-	void StopL();
-
-	/**
-	* SetServer()
-	* Set servermode
-	* @param aServerMode ETrue if servermode is used
-	*/
-	void SetServer(TBool aServerMode);
-
-	/**
-	* Server()
-	* Get Servermode
-	* @return servermode
-	*/
-	TBool Server();
+	void SendMessageL(const TDesC& aText);
 
 	/**
 	* SetState()
@@ -190,7 +138,7 @@ public: // New functions
 
 	/**
 	* IsReadyToSend()
-	* @return ETrue if the client can send a message or a file.
+	* @return ETrue if the client can send a message.
 	*/
 	TBool IsReadyToSend();
 
@@ -199,44 +147,6 @@ public: // New functions
 	 * Assing an observer to receive log messages.
 	 */
 	void SetObserver(MRFtermBtObserver* aObserver);
-
-	/**
-	 * GetInputSignals()
-	 * Get RS-232 input signals.
-	 * @return Use bitmask (KRS232SignalDSR, KRS232SignalCTS, KRS232SignalDCD, KRS232SignalRI)
-	 * to get the value of interested signal.
-	 */
-	TUint8 GetInputSignals();
-
-	/**
-	 * GetOutputSignals()
-	 * Get RS-232 ouptut signals.
-	 * @return Use bitmask (KRS232SignalDTR, KRS232SignalRTS)
-	 * to get the value of interested signal.
-	 */
-	TUint8 GetOutputSignals();
-
-	/**
-	 * SetOutputSignals()
-	 * Set RS-232 output signals.
-	 * @param aOutputSignals Combination of KRS232SignalDTR, KRS232SignalRTS masks.
-	 */
-	void SetOutputSignals(TUint8 aOutputSignals);
-
-	/**
-	 * ClearOutputSignals()
-	 * Clear RS-232 output signals.
-	 * @param aOutputSignals Combination of KRS232SignalDTR, KRS232SignalRTS masks.
-	 */
-	void ClearOutputSignals(TUint8 aOutputSignals);
-
-	/**
-	 * ToggleOutputSignals()
-	 * Set RS-232 output signals to opposite state.
-	 * @param aOutputSignals Combination of KRS232SignalDTR, KRS232SignalRTS masks.
-	 * @return State of the output signals after toggling.
-	 */
-	TUint8 ToggleOutputSignals(TUint8 aOutputSignals);
 
 protected: // from CActive
 
@@ -358,11 +268,6 @@ private: // Data
 	TRFtermState iState;
 
 	/**
-	* iServerMode indicates server mode
-	*/
-	TBool iServerMode;
-
-	/**
 	* iServiceSearcher searches for service this
 	* client can connect to.
 	* Owned by CRFtermBt
@@ -374,31 +279,6 @@ private: // Data
 	* Owned by CRFtermBt
 	*/
 	HBufC8* iMessage;
-
-	/**
-	 * iFileSession
-	 * file session for file reading
-	 */
-	RFs iFileSession;
-
-	/**
-	 * iFile
-	 * file to send
-	 */
-	RFile iFile;
-
-	/**
-	 * iFileIsOpenned
-	 * flag to know is iFile opened or not
-	 */
-	TBool iFileIsOpenned;
-
-	/**
-	 * iDoFileEcho
-	 * variable for storing aDoEcho setting of SendFile()
-	 * while sending the file chunks.
-	 */
-	TBool iDoFileEcho;
 
 	/**
 	* iSocketServer
@@ -423,12 +303,6 @@ private: // Data
 	* the buffer to read data to
 	*/
 	TBuf8<KRFtermTextBufLength> iBuffer;
-
-	/**
-	* iAdvertiser used to advertise this service
-	* Owned by CRFtermServer
-	*/
-	CRFtermBtServiceAdvertiser* iAdvertiser;
 
 	/**
 	* iAcceptedSocket
