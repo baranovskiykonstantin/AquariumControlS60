@@ -117,9 +117,9 @@ public:
 	TUint iDayOfWeek;
 
 	// Time
-	TUint iHours;
-	TUint iMinutes;
-	TUint iSeconds;
+	TUint iHour;
+	TUint iMinute;
+	TUint iSecond;
 	TInt  iTimeCorrection;
 
 	// Light
@@ -129,13 +129,13 @@ public:
 	TUint					iLightCurrentLevel;
 	TUint					iLightRise;
 	// Light ON time
-	TUint iLightOnHours;
-	TUint iLightOnMinutes;
-	TUint iLightOnSeconds;
+	TUint iLightOnHour;
+	TUint iLightOnMinute;
+	TUint iLightOnSecond;
 	// Light OFF time
-	TUint iLightOffHours;
-	TUint iLightOffMinutes;
-	TUint iLightOffSeconds;
+	TUint iLightOffHour;
+	TUint iLightOffMinute;
+	TUint iLightOffSecond;
 
 	// Heat
 	TInt					iTemp;

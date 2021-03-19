@@ -170,9 +170,9 @@ intParser.Val(hour);
 
 		// Accept values only if all line
 		// has been parsed successfully.
-		iHours = hour;
-		iMinutes = min;
-		iSeconds = sec;
+		iHour = hour;
+		iMinute = min;
+		iSecond = sec;
 		iTimeCorrection = corr;
 		}
 	else if (parser.MarkedToken() == KTemp)
@@ -373,12 +373,12 @@ intParser.Val(hour);
 		// has been parsed successfully.
 		iLightState = state;
 		iLightMode = mode;
-		iLightOnHours = hourOn;
-		iLightOnMinutes = minOn;
-		iLightOnSeconds = secOn;
-		iLightOffHours = hourOff;
-		iLightOffMinutes = minOff;
-		iLightOffSeconds = secOff;
+		iLightOnHour = hourOn;
+		iLightOnMinute = minOn;
+		iLightOnSecond = secOn;
+		iLightOffHour = hourOff;
+		iLightOffMinute = minOff;
+		iLightOffSecond = secOff;
 		iLightCurrentLevel = curLevel;
 		iLightLevel = topLevel;
 		iLightRise = rise;

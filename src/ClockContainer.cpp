@@ -79,7 +79,7 @@ void CClockContainer::UpdateListBoxL()
 
 		// Time
 		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_TIME);
-		itemValue.Format(KTimeFormat, data->iHours, data->iMinutes, data->iSeconds);
+		itemValue.Format(KTimeFormat, data->iHour, data->iMinute, data->iSecond);
 		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
 		iListBoxItems->AppendL(itemText);
 		CleanupStack::PopAndDestroy(itemTitle);

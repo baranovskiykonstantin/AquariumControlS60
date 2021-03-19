@@ -91,12 +91,12 @@ void CLightContainer::UpdateListBoxL()
 				state = KNullDesC().AllocLC();
 				break;
 			}
-		if (data->iLightState == EOn && data->iLightCurrentLevel < data->iLightLevel)
+		if (data->iLightState == EOn && data->iLightCurrentLevel != data->iLightLevel)
 			{
 			itemValue.Format(KStateFormat, state, data->iLightCurrentLevel);
 			itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
 			}
-		else if (data->iLightState == EOff && data->iLightCurrentLevel > 0)
+		else if (data->iLightState == EOff && data->iLightCurrentLevel != 0)
 			{
 			itemValue.Format(KStateFormat, state, data->iLightCurrentLevel);
 			itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
@@ -129,14 +129,14 @@ void CLightContainer::UpdateListBoxL()
 
 		// Turn on time
 		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_ON_TIME);
-		itemValue.Format(KTimeFormat, data->iLightOnHours, data->iLightOnMinutes, data->iLightOnSeconds);
+		itemValue.Format(KTimeFormat, data->iLightOnHour, data->iLightOnMinute, data->iLightOnSecond);
 		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
 		iListBoxItems->AppendL(itemText);
 		CleanupStack::PopAndDestroy(itemTitle);
 
 		// Turn off time
 		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_OFF_TIME);
-		itemValue.Format(KTimeFormat, data->iLightOffHours, data->iLightOffMinutes, data->iLightOffSeconds);
+		itemValue.Format(KTimeFormat, data->iLightOffHour, data->iLightOffMinute, data->iLightOffSecond);
 		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
 		iListBoxItems->AppendL(itemText);
 		CleanupStack::PopAndDestroy(itemTitle);

@@ -145,6 +145,9 @@ CAquariumControlViewAppUi::~CAquariumControlViewAppUi()
 //
 void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 	{
+	_LIT(KCmdOn, "light on\r");
+	_LIT(KCmdOff, "light off\r");
+	_LIT(KCmdAuto, "light auto\r");
 	PauseUpdating();
 	switch (aCommand)
 		{
@@ -182,13 +185,13 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			switch (iData->iLightState)
 				{
 				case (TAquariumDeviceState) EOn:
-					iData->iLightState = EOff;
+					iBtClient->SendMessageL(KCmdOff);
 					break;
 				case (TAquariumDeviceState) EOff:
-					iData->iLightState = EOn;
+					iBtClient->SendMessageL(KCmdOn);
 					break;
 				default:
-					iData->iLightState = EOff;
+					iBtClient->SendMessageL(KCmdOff);
 					break;
 				}
 			}
@@ -198,13 +201,16 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			switch (iData->iLightMode)
 				{
 				case (TAquariumDeviceMode) EAuto:
-					iData->iLightMode = EManual;
+					if (iData->iLightState == EOn)
+						iBtClient->SendMessageL(KCmdOn);
+					else
+						iBtClient->SendMessageL(KCmdOff);
 					break;
 				case (TAquariumDeviceMode) EManual:
-					iData->iLightMode = EAuto;
+					iBtClient->SendMessageL(KCmdAuto);
 					break;
 				default:
-					iData->iLightMode = EAuto;
+					iBtClient->SendMessageL(KCmdAuto);
 					break;
 				}
 			}
@@ -222,9 +228,13 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			CommandSetLightRise();
 			break;
 		case EAquariumControlSetLightStateOn:
+			iBtClient->SendMessageL(KCmdOn);
+			break;
 		case EAquariumControlSetLightStateOff:
+			iBtClient->SendMessageL(KCmdOff);
+			break;
 		case EAquariumControlSetLightModeAuto:
-			iEikonEnv->InfoMsg(_L("Light toolbar"));
+			iBtClient->SendMessageL(KCmdAuto);
 			break;
 
 		case EAquariumControlWaterTemp:
@@ -274,13 +284,6 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			iEikonEnv->InfoMsg(_L("Heat toolbar"));
 			break;
 
-		case EAbout:
-			{
-			CAknMessageQueryDialog* dlg = new (ELeave) CAknMessageQueryDialog();
-			dlg->ExecuteLD(R_ABOUT_QUERY_DIALOG);
-			}
-			break;
-
 		case EAquariumControlSwitchDisplayMode:
 			{
 			switch (iData->iDisplayMode)
@@ -295,6 +298,13 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 					iData->iDisplayMode = ETime;
 					break;
 				}
+			}
+			break;
+
+		case EAbout:
+			{
+			CAknMessageQueryDialog* dlg = new (ELeave) CAknMessageQueryDialog();
+			dlg->ExecuteLD(R_ABOUT_QUERY_DIALOG);
 			}
 			break;
 
@@ -489,9 +499,9 @@ void CAquariumControlViewAppUi::CommandSetTime()
 			_LIT(KTimeStrFormat, ":%02u%02u%02u.");
 			TBuf<8> timeStr;
 			timeStr.Format(KTimeStrFormat,
-					iData->iHours,
-					iData->iMinutes,
-					iData->iSeconds);
+					iData->iHour,
+					iData->iMinute,
+					iData->iSecond);
 			time.Set(timeStr);
 			CAknTimeQueryDialog* dlg = new (ELeave) CAknTimeQueryDialog(time);
 			answer = dlg->ExecuteLD(R_SETTIME_QUERY_DIALOG);
@@ -619,14 +629,22 @@ void CAquariumControlViewAppUi::CommandSetLightOnTime()
 	{
 	_LIT(KTimeStrFormat, ":%02u%02u%02u.");
 	_LIT(KMinTimeStr, ":000000.");
+	_LIT(KCmdFormat, "light %02u:%02u:%02u-%02u:%02u:%02u\r");
+	TBuf<24> cmd;
 	TInt answer;
 	TTime timeOn;
 	TTime minTime, maxTime;
 	TBuf<8> timeOnStr;
 	TBuf<8> maxTimeStr;
 	HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_ON_TIME);
-	timeOnStr.Format(KTimeStrFormat, iData->iLightOnHours, iData->iLightOnMinutes, iData->iLightOnSeconds);
-	maxTimeStr.Format(KTimeStrFormat, iData->iLightOffHours, iData->iLightOffMinutes, iData->iLightOffSeconds);
+	timeOnStr.Format(KTimeStrFormat,
+			iData->iLightOnHour,
+			iData->iLightOnMinute,
+			iData->iLightOnSecond);
+	maxTimeStr.Format(KTimeStrFormat,
+			iData->iLightOffHour,
+			iData->iLightOffMinute,
+			iData->iLightOffSecond);
 	timeOn.Set(timeOnStr);
 	minTime.Set(KMinTimeStr);
 	maxTime.Set(maxTimeStr);
@@ -639,10 +657,14 @@ void CAquariumControlViewAppUi::CommandSetLightOnTime()
 	CleanupStack::PopAndDestroy(title);
 	if (EAknSoftkeyOk == answer)
 		{
-		iData->iLightOnHours = timeOn.DateTime().Hour();
-		iData->iLightOnMinutes = timeOn.DateTime().Minute();
-		iData->iLightOnSeconds = timeOn.DateTime().Second();
-		iEikonEnv->InfoMsg(_L("Set TimeOn"));
+		cmd.Format(KCmdFormat,
+				timeOn.DateTime().Hour(),
+				timeOn.DateTime().Minute(),
+				timeOn.DateTime().Second(),
+				iData->iLightOffHour,
+				iData->iLightOffMinute,
+				iData->iLightOffSecond);
+		iBtClient->SendMessageL(cmd);
 		}
 	}
 
@@ -655,14 +677,22 @@ void CAquariumControlViewAppUi::CommandSetLightOffTime()
 	{
 	_LIT(KTimeStrFormat, ":%02u%02u%02u.");
 	_LIT(KMaxTimeStr, ":235959.");
+	_LIT(KCmdFormat, "light %02u:%02u:%02u-%02u:%02u:%02u\r");
+	TBuf<24> cmd;
 	TInt answer;
 	TTime timeOff;
 	TTime minTime, maxTime;
 	TBuf<8> timeOffStr;
 	TBuf<8> minTimeStr;
 	HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_OFF_TIME);
-	timeOffStr.Format(KTimeStrFormat, iData->iLightOffHours, iData->iLightOffMinutes, iData->iLightOffSeconds);
-	minTimeStr.Format(KTimeStrFormat, iData->iLightOnHours, iData->iLightOnMinutes, iData->iLightOnSeconds);
+	timeOffStr.Format(KTimeStrFormat,
+			iData->iLightOffHour,
+			iData->iLightOffMinute,
+			iData->iLightOffSecond);
+	minTimeStr.Format(KTimeStrFormat,
+			iData->iLightOnHour,
+			iData->iLightOnMinute,
+			iData->iLightOnSecond);
 	timeOff.Set(timeOffStr);
 	minTime.Set(minTimeStr);
 	maxTime.Set(KMaxTimeStr);
@@ -675,10 +705,14 @@ void CAquariumControlViewAppUi::CommandSetLightOffTime()
 	CleanupStack::PopAndDestroy(title);
 	if (EAknSoftkeyOk == answer)
 		{
-		iData->iLightOffHours = timeOff.DateTime().Hour();
-		iData->iLightOffMinutes = timeOff.DateTime().Minute();
-		iData->iLightOffSeconds = timeOff.DateTime().Second();
-		iEikonEnv->InfoMsg(_L("Set TimeOn"));
+		cmd.Format(KCmdFormat,
+				iData->iLightOnHour,
+				iData->iLightOnMinute,
+				iData->iLightOnSecond,
+				timeOff.DateTime().Hour(),
+				timeOff.DateTime().Minute(),
+				timeOff.DateTime().Second());
+		iBtClient->SendMessageL(cmd);
 		}
 	}
 
@@ -689,6 +723,8 @@ void CAquariumControlViewAppUi::CommandSetLightOffTime()
 //
 void CAquariumControlViewAppUi::CommandSetLightLevel()
 	{
+	_LIT(KCmdFormat, "light level %03u\r");
+	TBuf<16> cmd;
 	TInt answer;
 	TInt level(iData->iLightLevel);
 	HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_LEVEL);
@@ -700,8 +736,8 @@ void CAquariumControlViewAppUi::CommandSetLightLevel()
 	CleanupStack::PopAndDestroy(title);
 	if (EAknSoftkeyOk == answer)
 		{
-		iData->iLightLevel = level;
-		iEikonEnv->InfoMsg(_L("Set Level"));
+		cmd.Format(KCmdFormat, level);
+		iBtClient->SendMessageL(cmd);
 		}
 	}
 
@@ -712,6 +748,8 @@ void CAquariumControlViewAppUi::CommandSetLightLevel()
 //
 void CAquariumControlViewAppUi::CommandSetLightRise()
 	{
+	_LIT(KCmdFormat, "light rise %02u\r");
+	TBuf<14> cmd;
 	TInt answer;
 	TInt rise(iData->iLightRise);
 	HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_RISE);
@@ -723,8 +761,8 @@ void CAquariumControlViewAppUi::CommandSetLightRise()
 	CleanupStack::PopAndDestroy(title);
 	if (EAknSoftkeyOk == answer)
 		{
-		iData->iLightRise = rise;
-		iEikonEnv->InfoMsg(_L("Set Rise"));
+		cmd.Format(KCmdFormat, rise);
+		iBtClient->SendMessageL(cmd);
 		}
 	}
 
