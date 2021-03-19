@@ -1,6 +1,6 @@
 /*
  ============================================================================
- Name        : RFtermBT.cpp
+ Name        : BtClient.cpp
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
  Description : Bluetooth client.
@@ -10,44 +10,44 @@
 // INCLUDE FILES
 #include <StringLoader.h>
 #include <coemain.h>
-#include "RFtermBtServiceSearcher.h"
-#include "RFtermConstants.h"
-#include "Bt.pan"
-#include "RFtermBt.h"
+#include "BtServiceSearcher.h"
+#include "BtClientConstants.h"
+#include "BtClient.pan"
+#include "BtClient.h"
 
 // ============================ MEMBER FUNCTIONS ==============================
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::NewL()
+// CBtClient::NewL()
 // Two-phased constructor.
 // ----------------------------------------------------------------------------
 //
-CRFtermBt* CRFtermBt::NewL()
+CBtClient* CBtClient::NewL()
 	{
-	CRFtermBt* self = NewLC();
+	CBtClient* self = NewLC();
 	CleanupStack::Pop(self);
 	return self;
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::NewLC()
+// CBtClient::NewLC()
 // Two-phased constructor.
 // ----------------------------------------------------------------------------
 //
-CRFtermBt* CRFtermBt::NewLC()
+CBtClient* CBtClient::NewLC()
 	{
-	CRFtermBt* self = new (ELeave) CRFtermBt();
+	CBtClient* self = new (ELeave) CBtClient();
 	CleanupStack::PushL(self);
 	self->ConstructL();
 	return self;
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::CRFtermBt()
+// CBtClient::CBtClient()
 // Constructor.
 // ----------------------------------------------------------------------------
 //
-CRFtermBt::CRFtermBt() :
+CBtClient::CBtClient() :
 	CActive(CActive::EPriorityStandard),
 	iState(EWaitingToGetDevice)
 	{
@@ -55,11 +55,11 @@ CRFtermBt::CRFtermBt() :
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::~CRFtermBt()
+// CBtClient::~CBtClient()
 // Destructor.
 // ----------------------------------------------------------------------------
 //
-CRFtermBt::~CRFtermBt()
+CBtClient::~CBtClient()
 	{
 	// Close() will wait forever for Read to complete
 	if (State() == EConnected)
@@ -91,40 +91,40 @@ CRFtermBt::~CRFtermBt()
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::ConstructL()
+// CBtClient::ConstructL()
 // Perform second phase construction of this object.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBt::ConstructL()
+void CBtClient::ConstructL()
 	{
-	iServiceSearcher = CRFtermBtServiceSearcher::NewL();
+	iServiceSearcher = CBtServiceSearcher::NewL();
 	iServiceSearcher->SetObserver(iObserver);
 	User::LeaveIfError(iSocketServer.Connect());
-	iBatteryStatus = CRFtermBatteryStatus::NewL(this);
+	iBatteryStatus = CBatteryStatus::NewL(this);
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::DoCancel()
+// CBtClient::DoCancel()
 // Cancel any outstanding requests.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBt::DoCancel()
+void CBtClient::DoCancel()
 	{
 	if (iState == EGettingService)
 		{
-		// Interrupt the work of CRFtermBtServiceSearcher.
-		// iStatus of CRFtermBt is used by CRFtermBtServiceSearcher.
+		// Interrupt the work of CBtServiceSearcher.
+		// iStatus of CBtClient is used by CBtServiceSearcher.
 		TRequestStatus* status = &iStatus;
 		User::RequestComplete(status, KErrNotFound);
 		}
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::RunL()
+// CBtClient::RunL()
 // Respond to an event.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBt::RunL()
+void CBtClient::RunL()
 	{
 
 	HBufC* textResource = NULL;
@@ -206,7 +206,7 @@ void CRFtermBt::RunL()
 					NotifyL(*textResource);
 					CleanupStack::PopAndDestroy(textResource);
 
-					Panic(ERFtermUnableToDisconnect);
+					Panic(EBtClientUnableToDisconnect);
 					}
 				break;
 			
@@ -217,7 +217,7 @@ void CRFtermBt::RunL()
 				break;
 				
 			default:
-				Panic(ERFtermInvalidLogicState);
+				Panic(EBtClientInvalidLogicState);
 				break;
 			}
 		}
@@ -286,58 +286,58 @@ void CRFtermBt::RunL()
 				break;
 				
 			default:
-				Panic(ERFtermInvalidLogicState);
+				Panic(EBtClientInvalidLogicState);
 				break;
 			};
 		}
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::SetState()
+// CBtClient::SetState()
 // 
 // ----------------------------------------------------------------------------
 //
-void CRFtermBt::SetState(TRFtermState aState)
+void CBtClient::SetState(TBtClientState aState)
 	{
 	iState = aState;
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::State()
+// CBtClient::State()
 // 
 // ----------------------------------------------------------------------------
 //
-TInt CRFtermBt::State()
+TInt CBtClient::State()
 	{
 	return iState;
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::IsReadyToSend()
+// CBtClient::IsReadyToSend()
 // True if the client can send a message.
 // ----------------------------------------------------------------------------
 //
-TBool CRFtermBt::IsReadyToSend()
+TBool CBtClient::IsReadyToSend()
 	{
 	return (State() == EConnected);
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::IsConnected()
+// CBtClient::IsConnected()
 // ETrue if the client is fully connected to the server.
 // ----------------------------------------------------------------------------
 //
-TBool CRFtermBt::IsConnected()
+TBool CBtClient::IsConnected()
 	{
 	return ((State() == EConnected) || (State() == ESendingMessage));
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::IsConnecting()
+// CBtClient::IsConnecting()
 // True if is establishing a connection.
 // ----------------------------------------------------------------------------
 //
-TBool CRFtermBt::IsConnecting()
+TBool CBtClient::IsConnecting()
 	{
 	return ((State() == EGettingDevice)
 		||
@@ -348,11 +348,11 @@ TBool CRFtermBt::IsConnecting()
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::ConnectL()
+// CBtClient::ConnectL()
 // Connect to a service.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBt::ConnectL()
+void CBtClient::ConnectL()
 	{
 	if (State() == EWaitingToGetDevice && !IsActive())
 		{
@@ -371,11 +371,11 @@ void CRFtermBt::ConnectL()
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::DisconnectL()
+// CBtClient::DisconnectL()
 // Disconnects from the remote machine.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBt::DisconnectL()
+void CBtClient::DisconnectL()
 	{
 	if (IsConnected())
 		{
@@ -392,11 +392,11 @@ void CRFtermBt::DisconnectL()
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::DisconnectFromServerL()
+// CBtClient::DisconnectFromServerL()
 // Disconnects from the service
 // ----------------------------------------------------------------------------
 //
-void CRFtermBt::DisconnectFromServerL()
+void CBtClient::DisconnectFromServerL()
 	{
 	NotifyDeviceIsDisconnectedL();
 
@@ -412,11 +412,11 @@ void CRFtermBt::DisconnectFromServerL()
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::ConnectToServerL()
+// CBtClient::ConnectToServerL()
 // Connect to the server.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBt::ConnectToServerL()
+void CBtClient::ConnectToServerL()
 	{
 	HBufC* strConnecting = StringLoader::LoadLC(R_STR_CONNECTING);
 	NotifyL(*strConnecting);
@@ -441,11 +441,11 @@ void CRFtermBt::ConnectToServerL()
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::SendMessageL()
+// CBtClient::SendMessageL()
 // Send a message to a service on a remote machine.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBt::SendMessageL(const TDesC& aText)
+void CBtClient::SendMessageL(const TDesC& aText)
 	{
 	if (State() != EConnected)
 		{
@@ -483,11 +483,11 @@ void CRFtermBt::SendMessageL(const TDesC& aText)
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::RequestData()
+// CBtClient::RequestData()
 // Request data from the client.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBt::RequestData()
+void CBtClient::RequestData()
 	{
 	if (iActiveSocket)
 		{
@@ -497,21 +497,21 @@ void CRFtermBt::RequestData()
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::SetObserver()
+// CBtClient::SetObserver()
 // Connect an observer for notifications.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBt::SetObserver(MRFtermBtObserver* aObserver)
+void CBtClient::SetObserver(MBtClientObserver* aObserver)
 	{
 	iObserver = aObserver;
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::NotifyL()
+// CBtClient::NotifyL()
 // Send to observer a log message.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBt::NotifyL(const TDesC& aMessage)
+void CBtClient::NotifyL(const TDesC& aMessage)
 	{
 	if (iObserver)
 		{
@@ -520,11 +520,11 @@ void CRFtermBt::NotifyL(const TDesC& aMessage)
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::NotifyDeviceIsConnectedL()
+// CBtClient::NotifyDeviceIsConnectedL()
 // Send to observer information about connected BT device.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBt::NotifyDeviceIsConnectedL()
+void CBtClient::NotifyDeviceIsConnectedL()
 	{
 	if (iObserver)
 		{
@@ -556,11 +556,11 @@ void CRFtermBt::NotifyDeviceIsConnectedL()
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::NotifyDeviceIsDisconnectedL()
+// CBtClient::NotifyDeviceIsDisconnectedL()
 // Send to observer BT device disconnect notify.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBt::NotifyDeviceIsDisconnectedL()
+void CBtClient::NotifyDeviceIsDisconnectedL()
 	{
 	delete iRemoteDevice;
 	iRemoteDevice = NULL;
@@ -571,10 +571,10 @@ void CRFtermBt::NotifyDeviceIsDisconnectedL()
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::AllowLowPowerModes()
+// CBtClient::AllowLowPowerModes()
 // Enable low power modes to save the battery.
 // ----------------------------------------------------------------------------
-void CRFtermBt::AllowLowPowerModes()
+void CBtClient::AllowLowPowerModes()
 	{
 	TInt error = iBTPhysicalLinkAdapter.Open(iSocketServer, *iActiveSocket);
 	if (error == KErrNone)
@@ -585,10 +585,10 @@ void CRFtermBt::AllowLowPowerModes()
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::PreventLowPowerModes()
+// CBtClient::PreventLowPowerModes()
 // Disable low power modes to reach max bandwidth.
 // ----------------------------------------------------------------------------
-void CRFtermBt::PreventLowPowerModes()
+void CBtClient::PreventLowPowerModes()
 	{
 	if (iBatteryStatus->IsOK())
 		{
@@ -602,11 +602,11 @@ void CRFtermBt::PreventLowPowerModes()
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBt::HandleBatteryStatusChangeL()
+// CBtClient::HandleBatteryStatusChangeL()
 // Battery status change notify.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBt::HandleBatteryStatusChangeL()
+void CBtClient::HandleBatteryStatusChangeL()
 	{
 	if (IsConnected())
 		{

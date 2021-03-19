@@ -1,20 +1,20 @@
 /*
  ============================================================================
- Name        : Bt.pan
+ Name        : BtClient.pan
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
  Description : This file contains bluetooth panic codes.
  ============================================================================
  */
 
-#ifndef __BT_PAN__
-#define __BT_PAN__
+#ifndef __BTCLIENT_PAN__
+#define __BTCLIENT_PAN__
 
-/** RFterm application panic codes */
+/** BtClient panic codes */
 enum TBtPanics
 	{
-	ERFtermInvalidLogicState = 1,
-	ERFtermUnableToDisconnect
+	EBtClientInvalidLogicState = 1,
+	EBtClientUnableToDisconnect
 	// add further panics here
 	};
 
@@ -26,6 +26,6 @@ inline void Panic(TBtPanics aReason)
 	User::Panic(KPanicBt, aReason);
 	}
 
-#endif // __BT_PAN__
+#endif // __BTCLIENT_PAN__
 
 // End of File

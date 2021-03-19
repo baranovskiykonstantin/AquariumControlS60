@@ -1,9 +1,9 @@
 /*
 ============================================================================
- Name        : RFterm.l01
+ Name        : BtClient.l01
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
- Description : This is a localisation file for RFterm (EN).
+ Description : This is a localisation file for BtClient (EN).
 				A .rls file is the one and only place where the logical
 				strings to be localised are defined. 
 ============================================================================
@@ -12,8 +12,8 @@
 //  LOCALISATION STRINGS
 
 // Bluetooth
-#define qtn_rfterm_service_name "Serial Port"
-#define qtn_rfterm_service_description "RFterm application"
+#define qtn_btclient_service_name "Serial Port"
+#define qtn_btclient_service_description "Aquarium Control"
 
 // Messages
 #define qtn_str_disconnected "Disconnected"

@@ -210,7 +210,7 @@ RESOURCE NAVI_DECORATOR r_aquariumcontrol_navi_decorator
 
 
 #include "QueryDialogs.rssi"
-#include "Bt.rssi"
+#include "BtClient.rssi"
 
 
 // End of File

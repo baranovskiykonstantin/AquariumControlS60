@@ -1,23 +1,23 @@
 /*
  ============================================================================
- Name        : RFtermBatteryStatus.h
+ Name        : BatteryStatus.h
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
  Description : Battery status notifier.
  ============================================================================
  */
 
-#ifndef __RFTERMBATTERYSTATUS_H__
-#define __RFTERMBATTERYSTATUS_H__
+#ifndef __BATTERYSTATUS_H__
+#define __BATTERYSTATUS_H__
 
 #include <BatteryLevel.h>
 #include <ChargingStatus.h>
 
 /**
- * MRFtermBatteryStatusObserver mixin.
+ * MBatteryStatusObserver mixin.
  * Handles the battery status change.
  */
-class MRFtermBatteryStatusObserver
+class MBatteryStatusObserver
 	{
 
 public:
@@ -33,11 +33,11 @@ public:
 	};
 
 /**
-* CRFtermBatteryStatus
+* CBatteryStatus
 * Checks the battery status and sends the notification of battery status change
-* to MRFtermBatteryStatusObserver.
+* to MBatteryStatusObserver.
 */
-class CRFtermBatteryStatus :
+class CBatteryStatus :
 	public CBase,
 	private MBatteryLevelObserver,
 	private MChargingStatusObserver
@@ -45,12 +45,12 @@ class CRFtermBatteryStatus :
 
 public: // Constructors and destructor
 
-	static CRFtermBatteryStatus* NewL(MRFtermBatteryStatusObserver* aObserver);
-	virtual ~CRFtermBatteryStatus();
+	static CBatteryStatus* NewL(MBatteryStatusObserver* aObserver);
+	virtual ~CBatteryStatus();
 
 private: // Constructors
 
-	CRFtermBatteryStatus(MRFtermBatteryStatusObserver* aObserver);
+	CBatteryStatus(MBatteryStatusObserver* aObserver);
 	void ConstructL();
 
 private: // From MBatteryLevelObserver
@@ -88,10 +88,10 @@ private: // Data
 	 * Handles the battery status change.
 	 * Non-owning pointer.
 	 */
-	MRFtermBatteryStatusObserver* iObserver;
+	MBatteryStatusObserver* iObserver;
 
 	};
 
-#endif /* __RFTERMBATTERYSTATUS_H__ */
+#endif /* __BATTERYSTATUS_H__ */
 
 // End of File

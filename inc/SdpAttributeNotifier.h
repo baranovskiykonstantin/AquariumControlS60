@@ -1,23 +1,23 @@
 /*
  ============================================================================
- Name        : RFtermSdpAttributeNotifier.h
+ Name        : SdpAttributeNotifier.h
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
  Description : Read selected SDP Attributes.
  ============================================================================
  */
 
-#ifndef __RFTERMSDPATTRIBUTENOTIFIER_H__
-#define __RFTERMSDPATTRIBUTENOTIFIER_H__
+#ifndef __SDPATTRIBUTENOTIFIER_H__
+#define __SDPATTRIBUTENOTIFIER_H__
 
 class CSdpAttrValue;
 
 /**
-* MRFtermSdpAttributeNotifier
-* An instance of MRFtermSdpAttributeNotifier is used to read selected SDP Attribute
+* MSdpAttributeNotifier
+* An instance of MSdpAttributeNotifier is used to read selected SDP Attribute
 * elements from an attribute value.
 */
-class MRFtermSdpAttributeNotifier
+class MSdpAttributeNotifier
 	{
 
 public: // New functions
@@ -32,6 +32,6 @@ public: // New functions
 
 	};
 
-#endif // __RFTERMSDPATTRIBUTENOTIFIER_H__
+#endif // __SDPATTRIBUTENOTIFIER_H__
 
 // End of File

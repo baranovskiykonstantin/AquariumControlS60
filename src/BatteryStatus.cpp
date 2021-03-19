@@ -1,6 +1,6 @@
 /*
  ============================================================================
- Name        : RFtermBatteryStatus.h
+ Name        : BatteryStatus.h
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
  Description : Battery status notifier.
@@ -8,16 +8,16 @@
  */
 
 // INCLUDE FILES
-#include "RFtermBatteryStatus.h"
+#include "BatteryStatus.h"
 
 // ============================ MEMBER FUNCTIONS ==============================
 
 // ----------------------------------------------------------------------------
-// CRFtermBatteryStatus::CRFtermBatteryStatus()
+// CBatteryStatus::CBatteryStatus()
 // Constructor.
 // ----------------------------------------------------------------------------
 //
-CRFtermBatteryStatus::CRFtermBatteryStatus(MRFtermBatteryStatusObserver* aObserver) :
+CBatteryStatus::CBatteryStatus(MBatteryStatusObserver* aObserver) :
 	iBatteryLevelValue(EBatteryLevelUnknown),
 	iChargingStatusValue(EChargingStatusNotConnected),
 	iObserver(aObserver)
@@ -25,13 +25,13 @@ CRFtermBatteryStatus::CRFtermBatteryStatus(MRFtermBatteryStatusObserver* aObserv
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBatteryStatus::NewL()
+// CBatteryStatus::NewL()
 // Two-phased constructor.
 // ----------------------------------------------------------------------------
 //
-CRFtermBatteryStatus* CRFtermBatteryStatus::NewL(MRFtermBatteryStatusObserver* aObserver)
+CBatteryStatus* CBatteryStatus::NewL(MBatteryStatusObserver* aObserver)
 	{
-	CRFtermBatteryStatus* self = new(ELeave) CRFtermBatteryStatus(aObserver);
+	CBatteryStatus* self = new(ELeave) CBatteryStatus(aObserver);
 	CleanupStack::PushL(self);
 	self->ConstructL();
 	CleanupStack::Pop(self);
@@ -39,22 +39,22 @@ CRFtermBatteryStatus* CRFtermBatteryStatus::NewL(MRFtermBatteryStatusObserver* a
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBatteryStatus::ConstructL()
+// CBatteryStatus::ConstructL()
 // Perform second phase construction of this object.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBatteryStatus::ConstructL()
+void CBatteryStatus::ConstructL()
 	{
 	iBatteryLevel = CBatteryLevel::NewL(this);
 	iChargingStatus = CChargingStatus::NewL(this);
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBatteryStatus::~CRFtermBatteryStatus()
+// CBatteryStatus::~CBatteryStatus()
 // Destructor.
 // ----------------------------------------------------------------------------
 //
-CRFtermBatteryStatus::~CRFtermBatteryStatus()
+CBatteryStatus::~CBatteryStatus()
 	{
 	delete iChargingStatus;
 	iChargingStatus = NULL;
@@ -64,11 +64,11 @@ CRFtermBatteryStatus::~CRFtermBatteryStatus()
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBatteryStatus::IsOK()
+// CBatteryStatus::IsOK()
 // Get status of the battery.
 // ----------------------------------------------------------------------------
 //
-TBool CRFtermBatteryStatus::IsOK()
+TBool CBatteryStatus::IsOK()
 	{
 	if (iBatteryLevelValue > EBatteryLevelLevel2 || iChargingStatusValue >= EChargingStatusCharging)
 		{
@@ -78,11 +78,11 @@ TBool CRFtermBatteryStatus::IsOK()
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBatteryStatus::HandleBatteryLevelChangeL()
+// CBatteryStatus::HandleBatteryLevelChangeL()
 // Battery level change notify.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBatteryStatus::HandleBatteryLevelChangeL(EPSHWRMBatteryLevel aBatteryLevel)
+void CBatteryStatus::HandleBatteryLevelChangeL(EPSHWRMBatteryLevel aBatteryLevel)
 	{
 	TBool prevStatus = IsOK();
 	iBatteryLevelValue = aBatteryLevel;
@@ -94,11 +94,11 @@ void CRFtermBatteryStatus::HandleBatteryLevelChangeL(EPSHWRMBatteryLevel aBatter
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBatteryStatus::HandleChargingStatusChangeL()
+// CBatteryStatus::HandleChargingStatusChangeL()
 // Charging status change notify.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBatteryStatus::HandleChargingStatusChangeL(EPSHWRMChargingStatus aChargingStatus)
+void CBatteryStatus::HandleChargingStatusChangeL(EPSHWRMChargingStatus aChargingStatus)
 	{
 	TBool prevStatus = IsOK();
 	iChargingStatusValue = aChargingStatus;

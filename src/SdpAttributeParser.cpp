@@ -1,6 +1,6 @@
 /*
  ============================================================================
- Name        : RFtermSdpAttributeParser.cpp
+ Name        : SdpAttributeParser.cpp
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
  Description : Check an SDP attribute value and read selected parts.
@@ -10,20 +10,20 @@
 // INCLUDE FILES
 #include <bt_sock.h>
 
-#include "RFtermSdpAttributeParser.h"
-#include "RFtermSdpAttributeParser.pan"
-#include "RFtermSdpAttributeNotifier.h"
+#include "SdpAttributeParser.h"
+#include "SdpAttributeParser.pan"
+#include "SdpAttributeNotifier.h"
 
 // ============================ MEMBER FUNCTIONS ==============================
 
 // ----------------------------------------------------------------------------
-// TRFtermSdpAttributeParser::TRFtermSdpAttributeParser()
-// Construct a TRFtermSdpAttributeParser.
+// TSdpAttributeParser::TSdpAttributeParser()
+// Construct a TSdpAttributeParser.
 // ----------------------------------------------------------------------------
 //
-TRFtermSdpAttributeParser::TRFtermSdpAttributeParser(
-	RArray<TRFtermSdpAttributeParser::TRFtermSdpAttributeNode>& aNodeList,
-	MRFtermSdpAttributeNotifier& aObserver) :
+TSdpAttributeParser::TSdpAttributeParser(
+	RArray<TSdpAttributeParser::TSdpAttributeNode>& aNodeList,
+	MSdpAttributeNotifier& aObserver) :
 	iObserver(aObserver),
 	iNodeList(aNodeList),
 	iCurrentNodeIndex(0)
@@ -32,31 +32,31 @@ TRFtermSdpAttributeParser::TRFtermSdpAttributeParser(
 	}
 
 // ----------------------------------------------------------------------------
-// TRFtermSdpAttributeParser::~TRFtermSdpAttributeParser()
+// TSdpAttributeParser::~TSdpAttributeParser()
 // Destructor.
 // ----------------------------------------------------------------------------
 //
-TRFtermSdpAttributeParser::~TRFtermSdpAttributeParser()
+TSdpAttributeParser::~TSdpAttributeParser()
 	{
 	// No implementation needed	
 	}
 	
 // ----------------------------------------------------------------------------
-// TRFtermSdpAttributeParser::HasFinished()
+// TSdpAttributeParser::HasFinished()
 // Check if parsing processed the whole list.
 // ----------------------------------------------------------------------------
 //
-TBool TRFtermSdpAttributeParser::HasFinished() const
+TBool TSdpAttributeParser::HasFinished() const
 	{
 	return (iCurrentNode.Command() == EFinished);
 	}
 
 // ----------------------------------------------------------------------------
-// TRFtermSdpAttributeParser::VisitAttributeValueL()
+// TSdpAttributeParser::VisitAttributeValueL()
 // Process a data element.
 // ----------------------------------------------------------------------------
 //
-void TRFtermSdpAttributeParser::VisitAttributeValueL(CSdpAttrValue& aValue,
+void TSdpAttributeParser::VisitAttributeValueL(CSdpAttrValue& aValue,
 	TSdpElementType aType)
 	{
 	switch (iCurrentNode.Command())
@@ -87,28 +87,28 @@ void TRFtermSdpAttributeParser::VisitAttributeValueL(CSdpAttrValue& aValue,
 			return; // value should have ended
 
 		default:
-			Panic(ERFtermSdpAttributeParserInvalidCommand);
+			Panic(ESdpAttributeParserInvalidCommand);
 		}
 
 	AdvanceL();
 	}
 
 // ----------------------------------------------------------------------------
-// TRFtermSdpAttributeParser::StartListL()
+// TSdpAttributeParser::StartListL()
 // Process the start of a data element list.
 // ----------------------------------------------------------------------------
 //
-void TRFtermSdpAttributeParser::StartListL(CSdpAttrValueList& /*aList*/)
+void TSdpAttributeParser::StartListL(CSdpAttrValueList& /*aList*/)
 	{
 	// no checks done here
 	}
 
 // ----------------------------------------------------------------------------
-// TRFtermSdpAttributeParser::EndListL()
+// TSdpAttributeParser::EndListL()
 // Process the end of a data element list.
 // ----------------------------------------------------------------------------
 //
-void TRFtermSdpAttributeParser::EndListL()
+void TSdpAttributeParser::EndListL()
 	{
 	// check we are at the end of a list
 	if (iCurrentNode.Command() != ECheckEnd)
@@ -120,11 +120,11 @@ void TRFtermSdpAttributeParser::EndListL()
 	}
 
 // ----------------------------------------------------------------------------
-// TRFtermSdpAttributeParser::CheckTypeL()
+// TSdpAttributeParser::CheckTypeL()
 // Check the type of the current node is the same as the specified type.
 // ----------------------------------------------------------------------------
 //
-void TRFtermSdpAttributeParser::CheckTypeL(TSdpElementType aElementType) const
+void TSdpAttributeParser::CheckTypeL(TSdpElementType aElementType) const
 	{
 	if (iCurrentNode.Type() != aElementType)
 		{
@@ -133,16 +133,16 @@ void TRFtermSdpAttributeParser::CheckTypeL(TSdpElementType aElementType) const
 	}
 
 // ----------------------------------------------------------------------------
-// TRFtermSdpAttributeParser::CheckValueL()
+// TSdpAttributeParser::CheckValueL()
 // Check the value of the current node is the same as the specified type.
 // ----------------------------------------------------------------------------
 //
-void TRFtermSdpAttributeParser::CheckValueL(CSdpAttrValue& aValue) const
+void TSdpAttributeParser::CheckValueL(CSdpAttrValue& aValue) const
 	{
 	switch (aValue.Type())
 		{
 		case ETypeNil:
-			Panic(ERFtermSdpAttributeParserNoValue);
+			Panic(ESdpAttributeParserNoValue);
 			break;
 
 		case ETypeUint:
@@ -175,31 +175,31 @@ void TRFtermSdpAttributeParser::CheckValueL(CSdpAttrValue& aValue) const
 
 		case ETypeDES:
 		case ETypeDEA:
-			Panic(ERFtermSdpAttributeParserValueIsList);
+			Panic(ESdpAttributeParserValueIsList);
 			break;
 
 		default:
-			Panic(ERFtermSdpAttributeParserValueTypeUnsupported);
+			Panic(ESdpAttributeParserValueTypeUnsupported);
 			break;
 		}
 	}
 
 // ----------------------------------------------------------------------------
-// TRFtermSdpAttributeParser::ReadValueL()
+// TSdpAttributeParser::ReadValueL()
 // Pass the data element value to the observer.
 // ----------------------------------------------------------------------------
 //
-void TRFtermSdpAttributeParser::ReadValueL(CSdpAttrValue& aValue) const
+void TSdpAttributeParser::ReadValueL(CSdpAttrValue& aValue) const
 	{
 	iObserver.FoundElementL(iCurrentNode.Value(), aValue);
 	}
 
 // ----------------------------------------------------------------------------
-// TRFtermSdpAttributeParser::AdvanceL()
+// TSdpAttributeParser::AdvanceL()
 // Advance to the next node.
 // ----------------------------------------------------------------------------
 //
-void TRFtermSdpAttributeParser::AdvanceL()
+void TSdpAttributeParser::AdvanceL()
 	{
 	// check not at end
 	if (iCurrentNode.Command() == EFinished)
@@ -212,81 +212,81 @@ void TRFtermSdpAttributeParser::AdvanceL()
 	}
 
 // ----------------------------------------------------------------------------
-// TRFtermSdpAttributeParser::TRFtermSdpAttributeNode::TRFtermSdpAttributeNode()
+// TSdpAttributeParser::TSdpAttributeNode::TSdpAttributeNode()
 // constructor.
 // ----------------------------------------------------------------------------
 //
-TRFtermSdpAttributeParser::TRFtermSdpAttributeNode::TRFtermSdpAttributeNode()
+TSdpAttributeParser::TSdpAttributeNode::TSdpAttributeNode()
 	{
 	// no implementation needed
 	}
 
 // ----------------------------------------------------------------------------
-// TRFtermSdpAttributeParser::TRFtermSdpAttributeNode::~TRFtermSdpAttributeNode()
+// TSdpAttributeParser::TSdpAttributeNode::~TSdpAttributeNode()
 // destructor.
 // ----------------------------------------------------------------------------
 //
-TRFtermSdpAttributeParser::TRFtermSdpAttributeNode::~TRFtermSdpAttributeNode()
+TSdpAttributeParser::TSdpAttributeNode::~TSdpAttributeNode()
 	{
 	// no implementation needed
 	}
 
 // ----------------------------------------------------------------------------
-// TRFtermSdpAttributeParser::TRFtermSdpAttributeNode::SetCommand(TNodeCommand aCommand)
+// TSdpAttributeParser::TSdpAttributeNode::SetCommand(TNodeCommand aCommand)
 // set iCommand member variable.
 // ----------------------------------------------------------------------------
 //
-void TRFtermSdpAttributeParser::TRFtermSdpAttributeNode::SetCommand(TNodeCommand aCommand)
+void TSdpAttributeParser::TSdpAttributeNode::SetCommand(TNodeCommand aCommand)
 	{
 	iCommand = aCommand;
 	}
 
 // ----------------------------------------------------------------------------
-// TRFtermSdpAttributeParser::TRFtermSdpAttributeNode::SetType(TRFtermSdpElementType aType)
+// TSdpAttributeParser::TSdpAttributeNode::SetType(TSdpElementType aType)
 // set iType member variable.
 // ----------------------------------------------------------------------------
 //
-void TRFtermSdpAttributeParser::TRFtermSdpAttributeNode::SetType(TSdpElementType aType)
+void TSdpAttributeParser::TSdpAttributeNode::SetType(TSdpElementType aType)
 	{
 	iType = aType;
 	}
 
 // ----------------------------------------------------------------------------
-// void TRFtermSdpAttributeParser::TRFtermSdpAttributeNode::SetValue(TInt aValue)
+// void TSdpAttributeParser::TSdpAttributeNode::SetValue(TInt aValue)
 // set iValue member variable.
 // ----------------------------------------------------------------------------
 //
-void TRFtermSdpAttributeParser::TRFtermSdpAttributeNode::SetValue(TInt aValue)
+void TSdpAttributeParser::TSdpAttributeNode::SetValue(TInt aValue)
 	{
 	iValue = aValue;
 	}
 
 // ----------------------------------------------------------------------------
-// TRFtermSdpAttributeParser::TRFtermSdpAttributeNode::Command()
+// TSdpAttributeParser::TSdpAttributeNode::Command()
 // get iCommand member variable value.
 // ----------------------------------------------------------------------------
 //
-TRFtermSdpAttributeParser::TNodeCommand TRFtermSdpAttributeParser::TRFtermSdpAttributeNode::Command() const
+TSdpAttributeParser::TNodeCommand TSdpAttributeParser::TSdpAttributeNode::Command() const
 	{
 	return iCommand;
 	}
 
 // ----------------------------------------------------------------------------
-// TRFtermSdpAttributeParser::TRFtermSdpAttributeNode::Type()
+// TSdpAttributeParser::TSdpAttributeNode::Type()
 // get iType member variable value.
 // ----------------------------------------------------------------------------
 //
-TSdpElementType TRFtermSdpAttributeParser::TRFtermSdpAttributeNode::Type() const
+TSdpElementType TSdpAttributeParser::TSdpAttributeNode::Type() const
 	{
 	return iType;
 	}
 
 // ----------------------------------------------------------------------------
-// TRFtermSdpAttributeParser::TRFtermSdpAttributeNode::Value()
+// TSdpAttributeParser::TSdpAttributeNode::Value()
 // get iValue member variable value.
 // ----------------------------------------------------------------------------
 //
-TInt TRFtermSdpAttributeParser::TRFtermSdpAttributeNode::Value() const
+TInt TSdpAttributeParser::TSdpAttributeNode::Value() const
 	{
 	return iValue;
 	}

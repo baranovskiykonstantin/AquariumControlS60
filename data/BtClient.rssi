@@ -1,15 +1,15 @@
 /*
 ============================================================================
- Name        : Bt.rss
+ Name        : BtClient.rss
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
- Description : This file contains all the resources for the BT.
+ Description : This file contains all the resources for the BtClient.
 ============================================================================
 */
 
 //  INCLUDES
-// #include "Bt.loc"
-#include "Bt.l01"
+// #include "BtClient.loc"
+#include "BtClient.l01"
 
 //  RESOURCE DEFINITIONS
 
@@ -19,8 +19,8 @@
 //
 // -----------------------------------------------------------------------------
 //
-RESOURCE TBUF r_rfterm_service_name { buf=qtn_rfterm_service_name; }
-RESOURCE TBUF r_rfterm_service_description { buf=qtn_rfterm_service_description; }
+RESOURCE TBUF r_btclient_service_name { buf=qtn_btclient_service_name; }
+RESOURCE TBUF r_btclient_service_description { buf=qtn_btclient_service_description; }
 
 RESOURCE TBUF r_str_disconnected { buf=qtn_str_disconnected; }
 RESOURCE TBUF r_str_disconnect_complete { buf=qtn_str_disconnect_complete; }

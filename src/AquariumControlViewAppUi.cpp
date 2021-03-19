@@ -93,7 +93,7 @@ void CAquariumControlViewAppUi::ConstructL()
 	iTimer->Start(tickInterval, tickInterval, TCallBack(TimerCallBack, this));
 
 	// Bluetooth
-	iBtClient = CRFtermBt::NewL();
+	iBtClient = CBtClient::NewL();
 	iBtClient->SetObserver(this);
 	// check whether BT is available or not
 	RSdp sdpSession;

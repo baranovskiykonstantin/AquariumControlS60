@@ -1,57 +1,57 @@
 /*
  ============================================================================
- Name        : RFtermBtServiceSearcher.h
+ Name        : BtServiceSearcher.h
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
  Description : Searching for a service on a remote machine.
  ============================================================================
  */
 
-#ifndef __RFTERMTBTSERVICESEARCHER_H__
-#define __RFTERMTBTSERVICESEARCHER_H__
+#ifndef __TBTSERVICESEARCHER_H__
+#define __TBTSERVICESEARCHER_H__
 
 #include <e32base.h>
 #include <bttypes.h>
 #include <btextnotifiers.h>
-#include "RFtermBtObserver.h"
-#include "RFtermSdpAttributeParser.h"
-#include "RFtermSdpAttributeNotifier.h"
-#include "RFtermConstants.h"
+#include "BtClientObserver.h"
+#include "SdpAttributeParser.h"
+#include "SdpAttributeNotifier.h"
+#include "BtClientConstants.h"
 
 /**
-* CRFtermBtServiceSearcher
+* CBtServiceSearcher
 * Searches for a service on a remote machine
 */
 
-class CRFtermBtServiceSearcher
+class CBtServiceSearcher
 		: public CBase
 		, public MSdpAgentNotifier
-		, public MRFtermSdpAttributeNotifier
+		, public MSdpAttributeNotifier
 	{
 
 public: // Constructors and destructor
 
 	/*
 	* NewL()
-	* Create a CRFtermBtServiceSearcher object
+	* Create a CBtServiceSearcher object
 	* @return a pointer to the created instance of
-	* CRFtermBtServiceSearcher
+	* CBtServiceSearcher
 	*/
-	static CRFtermBtServiceSearcher* NewL();
+	static CBtServiceSearcher* NewL();
 
 	/**
 	* NewLC()
-	* Create a CRFtermBtServiceSearcher object
+	* Create a CBtServiceSearcher object
 	* @return a pointer to the created instance of
-	* CRFtermBtServiceSearcher
+	* CBtServiceSearcher
 	*/
-	static CRFtermBtServiceSearcher* NewLC();
+	static CBtServiceSearcher* NewLC();
 
 	/**
-	* ~CRFtermBtServiceSearcher()
+	* ~CBtServiceSearcher()
 	* Destroy the object and release all memory objects
 	*/
-	virtual ~CRFtermBtServiceSearcher();
+	virtual ~CBtServiceSearcher();
 
 public: // New functions
 
@@ -95,7 +95,7 @@ public: // New functions
 	 * SetObserver()
 	 * Assing an observer to receive log messages.
 	 */
-	void SetObserver(MRFtermBtObserver* aObserver);
+	void SetObserver(MBtClientObserver* aObserver);
 
 protected: // New functions
 
@@ -137,15 +137,15 @@ protected: // New functions
 	* ProtocolList()
 	* @return the attribute list.
 	*/
-	RArray<TRFtermSdpAttributeParser::TRFtermSdpAttributeNode>& ProtocolList();
+	RArray<TSdpAttributeParser::TSdpAttributeNode>& ProtocolList();
 
 private: // Constructors
 
 	/**
-	* CRFtermBtServiceSearcher()
+	* CBtServiceSearcher()
 	* Constructs this object
 	*/
-	CRFtermBtServiceSearcher();
+	CBtServiceSearcher();
 
 	/**
 	* ConstructL()
@@ -233,7 +233,7 @@ private: // data
 
 	/**
 	* iStatusObserver pointer to the request status observer
-	* Not owned by CRFtermBtServiceSearcher
+	* Not owned by CBtServiceSearcher
 	*/
 	TRequestStatus* iStatusObserver;
 
@@ -262,13 +262,13 @@ private: // data
 	TBTDeviceSelectionParamsPckg iSelectionFilter;
 	/**
 	* iAgent a connetction to the SDP client
-	* Owned by CRFtermBtServiceSearcher
+	* Owned by CBtServiceSearcher
 	*/
 	CSdpAgent* iAgent;
 
 	/**
 	* iSdpSearchPattern a search pattern
-	* Owned by CRFtermBtServiceSearcher
+	* Owned by CBtServiceSearcher
 	*/
 	CSdpSearchPattern* iSdpSearchPattern;
 
@@ -293,15 +293,15 @@ private: // data
 	* iProtocolArray
 	* the attribute list
 	*/
-	RArray<TRFtermSdpAttributeParser::TRFtermSdpAttributeNode> iProtocolArray;
+	RArray<TSdpAttributeParser::TSdpAttributeNode> iProtocolArray;
 
 	/**
 	* iObserver the handler of log messages
 	*/
-	MRFtermBtObserver* iObserver;
+	MBtClientObserver* iObserver;
 
 	};
 
-#endif // __RFTERMTBTSERVICESEARCHER_H__
+#endif // __TBTSERVICESEARCHER_H__
 
 // End of File

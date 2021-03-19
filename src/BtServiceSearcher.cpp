@@ -1,6 +1,6 @@
 /*
  ============================================================================
- Name        : RFtermBtServiceSearcher.cpp
+ Name        : BtServiceSearcher.cpp
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
  Description : Searching for a service on a remote machine.
@@ -9,43 +9,43 @@
 
 #include <bt_sock.h>
 #include <StringLoader.h>
-#include "RFtermConstants.h"
-#include "RFtermBtServiceSearcher.h"
-#include "RFtermBtServiceSearcher.pan"
+#include "BtClientConstants.h"
+#include "BtServiceSearcher.h"
+#include "BtServiceSearcher.pan"
 
 // ============================ MEMBER FUNCTIONS ==============================
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::NewL()
+// CBtServiceSearcher::NewL()
 // Two-phased constructor.
 // ----------------------------------------------------------------------------
 //
-CRFtermBtServiceSearcher* CRFtermBtServiceSearcher::NewL()
+CBtServiceSearcher* CBtServiceSearcher::NewL()
 	{
-	CRFtermBtServiceSearcher* self = CRFtermBtServiceSearcher::NewLC();
+	CBtServiceSearcher* self = CBtServiceSearcher::NewLC();
 	CleanupStack::Pop(self);
 	return self;
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::NewLC()
+// CBtServiceSearcher::NewLC()
 // Two-phased constructor.
 // ----------------------------------------------------------------------------
 //
-CRFtermBtServiceSearcher* CRFtermBtServiceSearcher::NewLC()
+CBtServiceSearcher* CBtServiceSearcher::NewLC()
 	{
-	CRFtermBtServiceSearcher* self = new (ELeave) CRFtermBtServiceSearcher();
+	CBtServiceSearcher* self = new (ELeave) CBtServiceSearcher();
 	CleanupStack::PushL(self);
 	self->ConstructL();
 	return self;
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::CRFtermBtServiceSearcher()
+// CBtServiceSearcher::CBtServiceSearcher()
 // Constructor.
 // ----------------------------------------------------------------------------
 //
-CRFtermBtServiceSearcher::CRFtermBtServiceSearcher()
+CBtServiceSearcher::CBtServiceSearcher()
 	: iIsDeviceSelectorConnected(EFalse),
 	iServiceClass(KServiceClass),
 	iPort(-1)
@@ -53,11 +53,11 @@ CRFtermBtServiceSearcher::CRFtermBtServiceSearcher()
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::~CRFtermBtServiceSearcher()
+// CBtServiceSearcher::~CBtServiceSearcher()
 // Destructor.
 // ----------------------------------------------------------------------------
 //
-CRFtermBtServiceSearcher::~CRFtermBtServiceSearcher()
+CBtServiceSearcher::~CBtServiceSearcher()
 	{
 	iProtocolArray.Close();
 
@@ -74,21 +74,21 @@ CRFtermBtServiceSearcher::~CRFtermBtServiceSearcher()
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::ConstructL()
+// CBtServiceSearcher::ConstructL()
 // Symbian 2nd phase constructor can leave.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBtServiceSearcher::ConstructL()
+void CBtServiceSearcher::ConstructL()
 	{
 	// no implementation required
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::SelectDeviceByDiscoveryL()
+// CBtServiceSearcher::SelectDeviceByDiscoveryL()
 // Select a device.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBtServiceSearcher::SelectDeviceByDiscoveryL(
+void CBtServiceSearcher::SelectDeviceByDiscoveryL(
 	TRequestStatus& aObserverRequestStatus)
 	{
 	if (iIsDeviceSelectorConnected)
@@ -111,11 +111,11 @@ void CRFtermBtServiceSearcher::SelectDeviceByDiscoveryL(
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::FindServiceL()
+// CBtServiceSearcher::FindServiceL()
 // Find a service on the specified device.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBtServiceSearcher::FindServiceL(TRequestStatus& aObserverRequestStatus)
+void CBtServiceSearcher::FindServiceL(TRequestStatus& aObserverRequestStatus)
 	{
 	if (!iResponse().IsValidBDAddr())
 		{
@@ -146,11 +146,11 @@ void CRFtermBtServiceSearcher::FindServiceL(TRequestStatus& aObserverRequestStat
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::NextRecordRequestComplete()
+// CBtServiceSearcher::NextRecordRequestComplete()
 // Process the result of the next record request.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBtServiceSearcher::NextRecordRequestComplete(
+void CBtServiceSearcher::NextRecordRequestComplete(
 	TInt aError,
 	TSdpServRecordHandle aHandle,
 	TInt aTotalRecordsCount)
@@ -160,16 +160,16 @@ void CRFtermBtServiceSearcher::NextRecordRequestComplete(
 
 	if (error != KErrNone)
 		{
-		Panic(ERFtermBtServiceSearcherNextRecordRequestComplete);
+		Panic(EBtServiceSearcherNextRecordRequestComplete);
 		}
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::NextRecordRequestCompleteL()
+// CBtServiceSearcher::NextRecordRequestCompleteL()
 // Process the result of the next record request.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBtServiceSearcher::NextRecordRequestCompleteL(
+void CBtServiceSearcher::NextRecordRequestCompleteL(
 	TInt aError,
 	TSdpServRecordHandle aHandle,
 	TInt aTotalRecordsCount)
@@ -206,11 +206,11 @@ void CRFtermBtServiceSearcher::NextRecordRequestCompleteL(
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::AttributeRequestResult()
+// CBtServiceSearcher::AttributeRequestResult()
 // Process the next attribute requested.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBtServiceSearcher::AttributeRequestResult(
+void CBtServiceSearcher::AttributeRequestResult(
 	TSdpServRecordHandle aHandle,
 	TSdpAttributeID aAttrID,
 	CSdpAttrValue* aAttrValue)
@@ -218,7 +218,7 @@ void CRFtermBtServiceSearcher::AttributeRequestResult(
 	TRAPD(error, AttributeRequestResultL(aHandle, aAttrID, aAttrValue));
 	if (error != KErrNone)
 		{
-		Panic(ERFtermBtServiceSearcherAttributeRequestResult);
+		Panic(EBtServiceSearcherAttributeRequestResult);
 		}
 	// Delete obsolete local atribute pointer.
 	delete aAttrValue;
@@ -226,18 +226,18 @@ void CRFtermBtServiceSearcher::AttributeRequestResult(
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::AttributeRequestResultL()
+// CBtServiceSearcher::AttributeRequestResultL()
 // Process the next attribute requested.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBtServiceSearcher::AttributeRequestResultL(
+void CBtServiceSearcher::AttributeRequestResultL(
 	TSdpServRecordHandle /*aHandle*/,
 	TSdpAttributeID aAttrID,
 	CSdpAttrValue* aAttrValue)
 	{
 	__ASSERT_ALWAYS(aAttrID == KSdpAttrIdProtocolDescriptorList,
 					User::Leave(KErrNotFound));
-	TRFtermSdpAttributeParser parser(ProtocolList(), *this);
+	TSdpAttributeParser parser(ProtocolList(), *this);
 
 	// Validate the attribute value, and extract the RFCOMM channel
 	aAttrValue->AcceptVisitorL(parser);
@@ -250,26 +250,26 @@ void CRFtermBtServiceSearcher::AttributeRequestResultL(
 	}
 
 // -----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::AttributeRequestComplete()
+// CBtServiceSearcher::AttributeRequestComplete()
 // Process the attribute request completion.
 // -----------------------------------------------------------------------------
 //
-void CRFtermBtServiceSearcher::AttributeRequestComplete(TSdpServRecordHandle aHandle,
+void CBtServiceSearcher::AttributeRequestComplete(TSdpServRecordHandle aHandle,
 	TInt aError)
 	{
 	TRAPD(error, AttributeRequestCompleteL(aHandle, aError));
 	if (error != KErrNone)
 		{
-		Panic(ERFtermBtServiceSearcherAttributeRequestComplete);
+		Panic(EBtServiceSearcherAttributeRequestComplete);
 		}
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::AttributeRequestCompleteL()
+// CBtServiceSearcher::AttributeRequestCompleteL()
 // Process the attribute request completion.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBtServiceSearcher::AttributeRequestCompleteL(
+void CBtServiceSearcher::AttributeRequestCompleteL(
 	TSdpServRecordHandle /*aHandle*/,
 	TInt aError)
 	{
@@ -297,12 +297,12 @@ void CRFtermBtServiceSearcher::AttributeRequestCompleteL(
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::Finished()
+// CBtServiceSearcher::Finished()
 // The search has finished and notify the observer
 // that the process is complete.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBtServiceSearcher::Finished(TInt aError /* default = KErrNone */)
+void CBtServiceSearcher::Finished(TInt aError /* default = KErrNone */)
 	{
 	if (aError == KErrNone && !HasFoundService())
 		{
@@ -312,144 +312,144 @@ void CRFtermBtServiceSearcher::Finished(TInt aError /* default = KErrNone */)
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::HasFinishedSearching()
+// CBtServiceSearcher::HasFinishedSearching()
 // Is the instance still wanting to search.
 // ----------------------------------------------------------------------------
 //
-TBool CRFtermBtServiceSearcher::HasFinishedSearching() const
+TBool CBtServiceSearcher::HasFinishedSearching() const
 	{
 	return EFalse;
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::BTDevAddr()
+// CBtServiceSearcher::BTDevAddr()
 // Returns the bluetooth device address.
 // ----------------------------------------------------------------------------
 //
-const TBTDevAddr& CRFtermBtServiceSearcher::BTDevAddr()
+const TBTDevAddr& CBtServiceSearcher::BTDevAddr()
 	{
 	return iResponse().BDAddr();
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::ResponseParams()
+// CBtServiceSearcher::ResponseParams()
 // Returns information about the device selected by the user.
 // ----------------------------------------------------------------------------
 //
-const TBTDeviceResponseParams& CRFtermBtServiceSearcher::ResponseParams()
+const TBTDeviceResponseParams& CBtServiceSearcher::ResponseParams()
 	{
 	return iResponse();
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::HasFoundService()
+// CBtServiceSearcher::HasFoundService()
 // True if a service has been found.
 // ----------------------------------------------------------------------------
 //
-TBool CRFtermBtServiceSearcher::HasFoundService() const
+TBool CBtServiceSearcher::HasFoundService() const
 	{
 	return iHasFoundService;
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::ServiceClass()
+// CBtServiceSearcher::ServiceClass()
 // The service class to search.
 // ----------------------------------------------------------------------------
 //
-const TUUID& CRFtermBtServiceSearcher::ServiceClass() const
+const TUUID& CBtServiceSearcher::ServiceClass() const
 	{
 	return iServiceClass;
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::ProtocolList()
+// CBtServiceSearcher::ProtocolList()
 // The list of Protocols required by the service.
 // ----------------------------------------------------------------------------
 //
- RArray <TRFtermSdpAttributeParser::TRFtermSdpAttributeNode>& CRFtermBtServiceSearcher
+ RArray <TSdpAttributeParser::TSdpAttributeNode>& CBtServiceSearcher
 ::ProtocolList()
 	{
-	TRFtermSdpAttributeParser::TRFtermSdpAttributeNode attrib;
-	attrib.SetCommand(TRFtermSdpAttributeParser::ECheckType);
+	TSdpAttributeParser::TSdpAttributeNode attrib;
+	attrib.SetCommand(TSdpAttributeParser::ECheckType);
 	attrib.SetType(ETypeDES);
 	iProtocolArray.Append(attrib);
 
-	attrib.SetCommand(TRFtermSdpAttributeParser::ECheckType);
+	attrib.SetCommand(TSdpAttributeParser::ECheckType);
 	attrib.SetType(ETypeDES);
 	iProtocolArray.Append(attrib);
 
-	attrib.SetCommand(TRFtermSdpAttributeParser::ECheckValue);
+	attrib.SetCommand(TSdpAttributeParser::ECheckValue);
 	attrib.SetType(ETypeUUID);
 	attrib.SetValue(KL2CAP);
 	iProtocolArray.Append(attrib);
 
-	attrib.SetCommand(TRFtermSdpAttributeParser::ECheckEnd);
+	attrib.SetCommand(TSdpAttributeParser::ECheckEnd);
 	iProtocolArray.Append(attrib);
 
-	attrib.SetCommand(TRFtermSdpAttributeParser::ECheckType);
+	attrib.SetCommand(TSdpAttributeParser::ECheckType);
 	attrib.SetType(ETypeDES);
 	iProtocolArray.Append(attrib);
 
-	attrib.SetCommand(TRFtermSdpAttributeParser::ECheckValue);
+	attrib.SetCommand(TSdpAttributeParser::ECheckValue);
 	attrib.SetType(ETypeUUID);
 	attrib.SetValue(KRFCOMM);
 	iProtocolArray.Append(attrib);
 
-	attrib.SetCommand(TRFtermSdpAttributeParser::EReadValue);
+	attrib.SetCommand(TSdpAttributeParser::EReadValue);
 	attrib.SetType(ETypeUint);
 	attrib.SetValue(KRfcommChannel);
 	iProtocolArray.Append(attrib);
 
-	attrib.SetCommand(TRFtermSdpAttributeParser::ECheckEnd);
+	attrib.SetCommand(TSdpAttributeParser::ECheckEnd);
 	iProtocolArray.Append(attrib);
 
-	attrib.SetCommand(TRFtermSdpAttributeParser::ECheckEnd);
+	attrib.SetCommand(TSdpAttributeParser::ECheckEnd);
 	iProtocolArray.Append(attrib);
 
-	attrib.SetCommand(TRFtermSdpAttributeParser::EFinished);
+	attrib.SetCommand(TSdpAttributeParser::EFinished);
 	iProtocolArray.Append(attrib);
 
 	return iProtocolArray;
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::FoundElementL()
+// CBtServiceSearcher::FoundElementL()
 // Read the data element.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBtServiceSearcher::FoundElementL(TInt aKey, CSdpAttrValue& aValue)
+void CBtServiceSearcher::FoundElementL(TInt aKey, CSdpAttrValue& aValue)
 	{
 	__ASSERT_ALWAYS(aKey == static_cast<TInt>(KRfcommChannel),
-		Panic(ERFtermBtServiceSearcherProtocolRead));
+		Panic(EBtServiceSearcherProtocolRead));
 	iPort = aValue.Uint();
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::Port()
+// CBtServiceSearcher::Port()
 // Port connection on the remote machine.
 // ----------------------------------------------------------------------------
 //
-TInt CRFtermBtServiceSearcher::Port()
+TInt CBtServiceSearcher::Port()
 	{
 	return iPort;
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::SetObserver()
+// CBtServiceSearcher::SetObserver()
 // Connect an observer for notifications.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBtServiceSearcher::SetObserver(MRFtermBtObserver* aObserver)
+void CBtServiceSearcher::SetObserver(MBtClientObserver* aObserver)
 	{
 	iObserver = aObserver;
 	}
 
 // ----------------------------------------------------------------------------
-// CRFtermBtServiceSearcher::NotifyL()
+// CBtServiceSearcher::NotifyL()
 // Send to observer a log message.
 // ----------------------------------------------------------------------------
 //
-void CRFtermBtServiceSearcher::NotifyL(const TDesC& aMessage)
+void CBtServiceSearcher::NotifyL(const TDesC& aMessage)
 	{
 	if (iObserver)
 		{

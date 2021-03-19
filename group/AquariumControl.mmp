@@ -25,10 +25,10 @@ SOURCE			HeatContainer.cpp
 SOURCE			DisplayContainer.cpp
 SOURCE			BatteryLevel.cpp
 SOURCE			ChargingStatus.cpp
-SOURCE			RFtermBatteryStatus.cpp
-SOURCE			RFtermBt.cpp
-SOURCE			RFtermBtServiceSearcher.cpp
-SOURCE			RFtermSdpAttributeParser.cpp
+SOURCE			BatteryStatus.cpp
+SOURCE			BtClient.cpp
+SOURCE			BtServiceSearcher.cpp
+SOURCE			SdpAttributeParser.cpp
 
 SOURCEPATH		..\data
 

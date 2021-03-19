@@ -1,25 +1,25 @@
 /*
  ============================================================================
- Name        : RFtermSdpAttributeParser.h
+ Name        : SdpAttributeParser.h
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
  Description : Check an SDP attribute value and read selected parts.
  ============================================================================
  */
 
-#ifndef __RFTERMSDPATTRIBUTEPARSER_H__
-#define __RFTERMSDPATTRIBUTEPARSER_H__
+#ifndef __SDPATTRIBUTEPARSER_H__
+#define __SDPATTRIBUTEPARSER_H__
 
 #include <btsdp.h>
 
-class MRFtermSdpAttributeNotifier;
+class MSdpAttributeNotifier;
 
 /**
-* TRFtermSdpAttributeParser
-* An instance of TRFtermSdpAttributeParser is used to check an SDP
+* TSdpAttributeParser
+* An instance of TSdpAttributeParser is used to check an SDP
 * attribute value, and read selected parts
 */
-class TRFtermSdpAttributeParser : public MSdpAttributeValueVisitor
+class TSdpAttributeParser : public MSdpAttributeValueVisitor
 	{
 
 public: // Enumerations
@@ -45,26 +45,26 @@ public: // Enumerations
 		};
 
 	/**
-	* TRFtermSdpAttributeNode
-	* An instance of TRFtermSdpAttributeNode is used to determine how
+	* TSdpAttributeNode
+	* An instance of TSdpAttributeNode is used to determine how
 	* to parse an SDP attribute value data element
 	*/
-	class TRFtermSdpAttributeNode
+	class TSdpAttributeNode
 		{
 
 	public:
 
 		/**
-		* TRFtermSdpAttributeNode
-		* Construct a TRFtermSdpAttributeNode
+		* TSdpAttributeNode
+		* Construct a TSdpAttributeNode
 		*/
-		TRFtermSdpAttributeNode();
+		TSdpAttributeNode();
 
 		/**
-		* ~TRFtermSdpAttributeNode
+		* ~TSdpAttributeNode
 		* destructor
 		*/
-		~TRFtermSdpAttributeNode();
+		~TSdpAttributeNode();
 
 		/**
 		* SetCommand
@@ -134,20 +134,20 @@ public: // Enumerations
 
 
 	/**
-	* TRFtermSdpAttributeParser
-	* Construct a TRFtermSdpAttributeParser
+	* TSdpAttributeParser
+	* Construct a TSdpAttributeParser
 	* @param aNodeList the list of expected nodes
 	* @param aObserver an observer to read specified node values
 	*/
-	TRFtermSdpAttributeParser(
-		RArray<TRFtermSdpAttributeParser::TRFtermSdpAttributeNode>& aNodeList,
-		MRFtermSdpAttributeNotifier& aObserver);
+	TSdpAttributeParser(
+		RArray<TSdpAttributeParser::TSdpAttributeNode>& aNodeList,
+		MSdpAttributeNotifier& aObserver);
 
 	/**
-	* ~TRFtermSdpAttributeParser
+	* ~TSdpAttributeParser
 	* Destructor
 	*/
-	virtual ~TRFtermSdpAttributeParser();
+	virtual ~TSdpAttributeParser();
 
 	/**
 	* HasFinished
@@ -216,13 +216,13 @@ private: // data
 	/**
 	* iObserver the observer to read values
 	*/
-	MRFtermSdpAttributeNotifier& iObserver;
+	MSdpAttributeNotifier& iObserver;
 
 	/**
 	* iNodeList a list defining the expected
 	* structure of the value
 	*/
-	RArray<TRFtermSdpAttributeParser::TRFtermSdpAttributeNode>& iNodeList;
+	RArray<TSdpAttributeParser::TSdpAttributeNode>& iNodeList;
 
 	/**
 	* iCurrentNodeIndex the index of the current node in iNodeList
@@ -232,10 +232,10 @@ private: // data
 	/**
 	* iCurrentNode the current node
 	*/
-	TRFtermSdpAttributeNode iCurrentNode;
+	TSdpAttributeNode iCurrentNode;
 
 	};
 
-#endif // __RFTERMSDPATTRIBUTEPARSER_H__
+#endif // __SDPATTRIBUTEPARSER_H__
 
 // End of File

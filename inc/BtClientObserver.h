@@ -1,23 +1,23 @@
 /*
  ============================================================================
- Name        : RFtermBtObserver.h
+ Name        : BtClientObserver.h
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
- Description : RFterm's bluetooth client observer.
+ Description : Bluetooth client observer.
  ============================================================================
  */
 
-#ifndef RFTERMBTOBSERVER_H
-#define RFTERMBTOBSERVER_H
+#ifndef __BTCLIENTOBSERVER_H__
+#define __BTCLIENTOBSERVER_H__
 
 #include <btdevice.h>
 
 /**
- * MRFtermBtObserver mixin.
+ * MBtClientObserver mixin.
  * All information from BT client is sent
  * to observer using this interface.
  */
-class MRFtermBtObserver
+class MBtClientObserver
 	{
 
 public:
@@ -54,6 +54,6 @@ public:
 
 	};
 
-#endif /* RFTERMBTOBSERVER_H */
+#endif /* __BTCLIENTOBSERVER_H__ */
 
 // End of File

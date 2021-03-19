@@ -1,27 +1,27 @@
 /*
  ============================================================================
- Name        : RFtermBt.h
+ Name        : BtClient.h
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
  Description : Bluetooth client.
  ============================================================================
  */
 
-#ifndef __RFTERMBT_H__
-#define __RFTERMBT_H__
+#ifndef __BTCLIENT_H__
+#define __BTCLIENT_H__
 
 #include <es_sock.h>
 #include <bt_sock.h>
 #include <btextnotifiers.h>
 #include <btsdp.h>
 #include <btdevice.h>
-#include "RFtermBtServiceSearcher.h"
-#include "RFtermBtObserver.h"
-#include "RFtermConstants.h"
-#include "RFtermBatteryStatus.h"
+#include "BtServiceSearcher.h"
+#include "BtClientObserver.h"
+#include "BtClientConstants.h"
+#include "BatteryStatus.h"
 
 /**
-* TRFtermState
+* TBtClientState
 * The state of the active object, determines behaviour within
 * the RunL method.
 * EWaitingToGetDevice waiting for the user to select a device
@@ -34,7 +34,7 @@
 * EDisconnecting disconnecting from remote machine
 */
 
-enum TRFtermState
+enum TBtClientState
 	{
 	EWaitingToGetDevice,
 	EGettingDevice,
@@ -48,45 +48,45 @@ enum TRFtermState
 	};
 
 /**
-* CRFtermBt
+* CBtClient
 * Connects and sends messages to a remote machine using bluetooth
 */
-class CRFtermBt :
+class CBtClient :
 	public CActive,
-	public MRFtermBatteryStatusObserver
+	public MBatteryStatusObserver
 	{
 
 public: // Constructors and destructor
 
 	/**
 	* NewL()
-	* Construct a CRFtermClient
+	* Construct a CBtClient
 	* @param aLog the log to send output to
-	* @return a pointer to the created instance of CRFtermClient
+	* @return a pointer to the created instance of CBtClient
 	*/
-	static CRFtermBt* NewL();
+	static CBtClient* NewL();
 
 	/**
 	* NewLC()
-	* Construct a CRFtermClient
+	* Construct a CBtClient
 	* @param aLog the log to send output to
-	* @return a pointer to the created instance of CRFtermClient
+	* @return a pointer to the created instance of CBtClient
 	*/
-	static CRFtermBt* NewLC();
+	static CBtClient* NewLC();
 
 	/**
-	* CRFtermBt()
+	* CBtClient()
 	* Constructs this object
 	* @param aLog the log to send output to
 	*/
-	CRFtermBt();
+	CBtClient();
 
 	/**
-	* ~CRFtermBt()
+	* ~CBtClient()
 	* Destroy the object and release all memory objects.
 	* Close any open sockets.
 	*/
-	virtual ~CRFtermBt();
+	virtual ~CBtClient();
 
 public: // New functions
 
@@ -114,7 +114,7 @@ public: // New functions
 	* Set state
 	* @param aState the state of the engine
 	*/
-	void SetState(TRFtermState aState);
+	void SetState(TBtClientState aState);
 
 	/**
 	* State()
@@ -146,7 +146,7 @@ public: // New functions
 	 * SetObserver()
 	 * Assing an observer to receive log messages.
 	 */
-	void SetObserver(MRFtermBtObserver* aObserver);
+	void SetObserver(MBtClientObserver* aObserver);
 
 protected: // from CActive
 
@@ -170,7 +170,7 @@ private: // Functions from base classes
 	*/
 	void ConstructL();
 
-private: // From MRFtermBatteryStatusObserver
+private: // From MBatteryStatusObserver
 
 	/**
 	 * HandleBatteryStatusChangeL()
@@ -265,18 +265,18 @@ private: // Data
 	/**
 	* iState the current state of the client
 	*/
-	TRFtermState iState;
+	TBtClientState iState;
 
 	/**
 	* iServiceSearcher searches for service this
 	* client can connect to.
-	* Owned by CRFtermBt
+	* Owned by CBtClient
 	*/
-	CRFtermBtServiceSearcher* iServiceSearcher;
+	CBtServiceSearcher* iServiceSearcher;
 
 	/**
 	* iMessage a copy of the message to send
-	* Owned by CRFtermBt
+	* Owned by CBtClient
 	*/
 	HBufC8* iMessage;
 
@@ -302,7 +302,7 @@ private: // Data
 	* iBuffer
 	* the buffer to read data to
 	*/
-	TBuf8<KRFtermTextBufLength> iBuffer;
+	TBuf8<KBtTextBufLength> iBuffer;
 
 	/**
 	* iAcceptedSocket
@@ -331,13 +331,13 @@ private: // Data
 	/**
 	* iObserver the handler of log messages
 	*/
-	MRFtermBtObserver* iObserver;
+	MBtClientObserver* iObserver;
 
 	/**
 	 * iBatteryStatus
 	 * the battery status checker
 	 */
-	CRFtermBatteryStatus* iBatteryStatus;
+	CBatteryStatus* iBatteryStatus;
 
 	/**
 	 * iBTPhysicalLinkAdapter
@@ -347,6 +347,6 @@ private: // Data
 
 	};
 
-#endif /* __RFTERMBT_H__ */
+#endif /* __BTCLIENT_H__ */
 
 // End of File

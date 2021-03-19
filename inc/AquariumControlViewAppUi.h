@@ -15,8 +15,8 @@
 #include <aknviewappui.h>
 #include <akntabgrp.h>
 #include <aknnavide.h>
-#include "RFtermBt.h"
-#include "RFtermBtObserver.h"
+#include "BtClient.h"
+#include "BtClientObserver.h"
 
 // FORWARD DECLARATIONS
 class CAquariumControlData;
@@ -27,7 +27,7 @@ class CAquariumControlData;
  * Interacts with the user through the UI and request message processing
  * from the handler class
  */
-class CAquariumControlViewAppUi : public CAknViewAppUi, MRFtermBtObserver
+class CAquariumControlViewAppUi : public CAknViewAppUi, MBtClientObserver
 	{
 public:
 	// Constructors and destructor
@@ -132,7 +132,7 @@ private:
 	void ShowBTNotAvailableNoteL();
 
 	/**
-	 * From MRFtermBtObserver
+	 * From MBtClientObserver
 	 */
 	void HandleBtDeviceChangeL(CBTDevice* aRemoteDevice);
 	void HandleBtNotifyL(const TDesC& aMessage);
@@ -166,7 +166,7 @@ private:
 	 * the BT engine 
 	 * Owned by ViewAppUi
 	 */
-	CRFtermBt* iBtClient;
+	CBtClient* iBtClient;
 
 	/**
 	 * iBtAvailable, ETrue if an SDP session can be opened, EFalse otherwise.
