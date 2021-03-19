@@ -151,6 +151,8 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 	_LIT(KCmdHeatOn, "heat on\r");
 	_LIT(KCmdHeatOff, "heat off\r");
 	_LIT(KCmdHeatAuto, "heat auto\r");
+	_LIT(KCmdDisplayTime, "display time\r");
+	_LIT(KCmdDisplayTemp, "display temp\r");
 	PauseUpdating();
 	switch (aCommand)
 		{
@@ -299,13 +301,13 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			switch (iData->iDisplayMode)
 				{
 				case (TAquariumDispalyMode) ETime:
-					iData->iDisplayMode = ETemperature;
+					iBtClient->SendMessageL(KCmdDisplayTemp);
 					break;
 				case (TAquariumDispalyMode) ETemperature:
-					iData->iDisplayMode = ETime;
+					iBtClient->SendMessageL(KCmdDisplayTime);
 					break;
 				default:
-					iData->iDisplayMode = ETime;
+					iBtClient->SendMessageL(KCmdDisplayTime);
 					break;
 				}
 			}
