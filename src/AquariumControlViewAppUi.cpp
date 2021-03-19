@@ -145,9 +145,12 @@ CAquariumControlViewAppUi::~CAquariumControlViewAppUi()
 //
 void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 	{
-	_LIT(KCmdOn, "light on\r");
-	_LIT(KCmdOff, "light off\r");
-	_LIT(KCmdAuto, "light auto\r");
+	_LIT(KCmdLightOn, "light on\r");
+	_LIT(KCmdLightOff, "light off\r");
+	_LIT(KCmdLightAuto, "light auto\r");
+	_LIT(KCmdHeatOn, "heat on\r");
+	_LIT(KCmdHeatOff, "heat off\r");
+	_LIT(KCmdHeatAuto, "heat auto\r");
 	PauseUpdating();
 	switch (aCommand)
 		{
@@ -185,13 +188,13 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			switch (iData->iLightState)
 				{
 				case (TAquariumDeviceState) EOn:
-					iBtClient->SendMessageL(KCmdOff);
+					iBtClient->SendMessageL(KCmdLightOff);
 					break;
 				case (TAquariumDeviceState) EOff:
-					iBtClient->SendMessageL(KCmdOn);
+					iBtClient->SendMessageL(KCmdLightOn);
 					break;
 				default:
-					iBtClient->SendMessageL(KCmdOff);
+					iBtClient->SendMessageL(KCmdLightOff);
 					break;
 				}
 			}
@@ -202,15 +205,15 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 				{
 				case (TAquariumDeviceMode) EAuto:
 					if (iData->iLightState == EOn)
-						iBtClient->SendMessageL(KCmdOn);
+						iBtClient->SendMessageL(KCmdLightOn);
 					else
-						iBtClient->SendMessageL(KCmdOff);
+						iBtClient->SendMessageL(KCmdLightOff);
 					break;
 				case (TAquariumDeviceMode) EManual:
-					iBtClient->SendMessageL(KCmdAuto);
+					iBtClient->SendMessageL(KCmdLightAuto);
 					break;
 				default:
-					iBtClient->SendMessageL(KCmdAuto);
+					iBtClient->SendMessageL(KCmdLightAuto);
 					break;
 				}
 			}
@@ -228,13 +231,13 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			CommandSetLightRise();
 			break;
 		case EAquariumControlSetLightStateOn:
-			iBtClient->SendMessageL(KCmdOn);
+			iBtClient->SendMessageL(KCmdLightOn);
 			break;
 		case EAquariumControlSetLightStateOff:
-			iBtClient->SendMessageL(KCmdOff);
+			iBtClient->SendMessageL(KCmdLightOff);
 			break;
 		case EAquariumControlSetLightModeAuto:
-			iBtClient->SendMessageL(KCmdAuto);
+			iBtClient->SendMessageL(KCmdLightAuto);
 			break;
 
 		case EAquariumControlWaterTemp:
@@ -245,13 +248,13 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			switch (iData->iHeatState)
 				{
 				case (TAquariumDeviceState) EOn:
-					iData->iHeatState = EOff;
+					iBtClient->SendMessageL(KCmdHeatOff);
 					break;
 				case (TAquariumDeviceState) EOff:
-					iData->iHeatState = EOn;
+					iBtClient->SendMessageL(KCmdHeatOn);
 					break;
 				default:
-					iData->iHeatState = EOff;
+					iBtClient->SendMessageL(KCmdHeatOff);
 					break;
 				}
 			}
@@ -261,13 +264,16 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			switch (iData->iHeatMode)
 				{
 				case (TAquariumDeviceMode) EAuto:
-					iData->iHeatMode = EManual;
+					if (iData->iHeatState == EOn)
+						iBtClient->SendMessageL(KCmdHeatOn);
+					else
+						iBtClient->SendMessageL(KCmdHeatOff);
 					break;
 				case (TAquariumDeviceMode) EManual:
-					iData->iHeatMode = EAuto;
+					iBtClient->SendMessageL(KCmdHeatAuto);
 					break;
 				default:
-					iData->iHeatMode = EAuto;
+					iBtClient->SendMessageL(KCmdHeatAuto);
 					break;
 				}
 			}
@@ -279,9 +285,13 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			CommandSetHeatHigh();
 			break;
 		case EAquariumControlSetHeatStateOn:
+			iBtClient->SendMessageL(KCmdHeatOn);
+			break;
 		case EAquariumControlSetHeatStateOff:
+			iBtClient->SendMessageL(KCmdHeatOff);
+			break;
 		case EAquariumControlSetHeatModeAuto:
-			iEikonEnv->InfoMsg(_L("Heat toolbar"));
+			iBtClient->SendMessageL(KCmdHeatAuto);
 			break;
 
 		case EAquariumControlSwitchDisplayMode:
@@ -773,6 +783,8 @@ void CAquariumControlViewAppUi::CommandSetLightRise()
 //
 void CAquariumControlViewAppUi::CommandSetHeatLow()
 	{
+	_LIT(KCmdFormat, "heat %02u-%02u\r");
+	TBuf<11> cmd;
 	TInt answer;
 	TInt low(iData->iHeatLow);
 	HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_HEAT_LO);
@@ -784,8 +796,8 @@ void CAquariumControlViewAppUi::CommandSetHeatLow()
 	CleanupStack::PopAndDestroy(title);
 	if (EAknSoftkeyOk == answer)
 		{
-		iData->iHeatLow = low;
-		iEikonEnv->InfoMsg(_L("Set HeatLow"));
+		cmd.Format(KCmdFormat, low, iData->iHeatHigh);
+		iBtClient->SendMessageL(cmd);
 		}
 	}
 
@@ -796,6 +808,8 @@ void CAquariumControlViewAppUi::CommandSetHeatLow()
 //
 void CAquariumControlViewAppUi::CommandSetHeatHigh()
 	{
+	_LIT(KCmdFormat, "heat %02u-%02u\r");
+	TBuf<11> cmd;
 	TInt answer;
 	TInt high(iData->iHeatHigh);
 	HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_HEAT_HI);
@@ -807,8 +821,8 @@ void CAquariumControlViewAppUi::CommandSetHeatHigh()
 	CleanupStack::PopAndDestroy(title);
 	if (EAknSoftkeyOk == answer)
 		{
-		iData->iHeatHigh = high;
-		iEikonEnv->InfoMsg(_L("Set HeatHigh"));
+		cmd.Format(KCmdFormat, iData->iHeatLow, high);
+		iBtClient->SendMessageL(cmd);
 		}
 	}
 
