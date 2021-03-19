@@ -39,8 +39,9 @@ public:
 	 * Derived classes provide the implementation.
 	 * 
 	 * @param aMessage Message from BT client.
+	 * @param aIsError ETrue if message of error.
 	 */
-	virtual void HandleBtNotifyL(const TDesC& aMessage) = 0;
+	virtual void HandleBtNotifyL(const TDesC& aMessage, TBool aIsError=EFalse) = 0;
 
 	/**
 	 * HandleBtDataL()

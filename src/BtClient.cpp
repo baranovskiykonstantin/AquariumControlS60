@@ -133,10 +133,8 @@ void CBtClient::RunL()
 		// this error happens if connected server
 		// sudently loses link (powered down for example)
 		{
-		textResource = StringLoader::LoadLC(R_ERR_LOST_CONNECTION);
-		NotifyL(*textResource);
-		CleanupStack::PopAndDestroy(textResource);
-		if (State() != EDisconnected)
+		NotifyL(R_ERR_LOST_CONNECTION, ETrue);
+		if (IsConnecting() || IsConnected())
 			{
 			NotifyDeviceIsDisconnectedL();
 			
@@ -154,39 +152,29 @@ void CBtClient::RunL()
 			case EGettingDevice:
 				if (iStatus == KErrCancel)
 					{
-					textResource = StringLoader::LoadLC(R_ERR_NO_DEVICE_SELECTED);
-					NotifyL(*textResource);
-					CleanupStack::PopAndDestroy(textResource);
+					NotifyL(R_ERR_NO_DEVICE_SELECTED, ETrue);
 					}
 				else
 					{
-					textResource = StringLoader::LoadLC(R_ERR_CANT_GET_DEVICE_LIST);
-					NotifyL(*textResource);
-					CleanupStack::PopAndDestroy(textResource);
+					NotifyL(R_ERR_CANT_GET_DEVICE_LIST, ETrue);
 					}
 				SetState(EWaitingToGetDevice);
 				break;
 				
 			case EGettingService:
 			case EGettingConnection:
-				textResource = StringLoader::LoadLC(R_ERR_CONNECTION_ERROR);
-				NotifyL(*textResource);
-				CleanupStack::PopAndDestroy(textResource);
+				NotifyL(R_ERR_CONNECTION_ERROR, ETrue);
 				SetState(EWaitingToGetDevice);
 				break;
 				
 			case EConnected:
-				textResource = StringLoader::LoadLC(R_ERR_LOST_CONNECTION);
-				NotifyL(*textResource);
+				NotifyL(R_ERR_LOST_CONNECTION, ETrue);
 				DisconnectFromServerL();
-				CleanupStack::PopAndDestroy(textResource);
 				SetState(EDisconnecting);
 				break;
 				
 			case ESendingMessage:
-				textResource = StringLoader::LoadLC(R_ERR_MESSAGE_FAILED);
-				NotifyL(*textResource);
-				CleanupStack::PopAndDestroy(textResource);
+				NotifyL(R_ERR_MESSAGE_FAILED, ETrue);
 				DisconnectFromServerL();
 				SetState(EDisconnecting);
 				break;
@@ -194,26 +182,18 @@ void CBtClient::RunL()
 			case EDisconnecting:
 				if (iStatus == KErrDisconnected)
 					{
-					textResource = StringLoader::LoadLC(R_STR_DISCONNECT_COMPLETE);
-					NotifyL(*textResource);
-					CleanupStack::PopAndDestroy(textResource);
-
+					NotifyL(R_STR_DISCONNECT_COMPLETE);
 					SetState(EWaitingToGetDevice);
 					}
 				else
 					{
-					textResource = StringLoader::LoadLC(R_ERR_FAILED_TO_DISCONNECT);
-					NotifyL(*textResource);
-					CleanupStack::PopAndDestroy(textResource);
-
+					NotifyL(R_ERR_FAILED_TO_DISCONNECT, ETrue);
 					Panic(EBtClientUnableToDisconnect);
 					}
 				break;
 			
 			case EWaitingToGetDevice:
-				textResource = StringLoader::LoadLC(R_STR_DISCONNECTED);
-				NotifyL(*textResource);
-				CleanupStack::PopAndDestroy(textResource);
+				NotifyL(R_STR_DISCONNECTED);
 				break;
 				
 			default:
@@ -239,18 +219,13 @@ void CBtClient::RunL()
 				break;
 				
 			case EGettingService:
-				textResource = StringLoader::LoadLC(R_STR_FOUND_SERVICE);
-				NotifyL(*textResource);
-				CleanupStack::PopAndDestroy(textResource);
+				NotifyL(R_STR_FOUND_SERVICE);
 				SetState(EGettingConnection);
 				ConnectToServerL();
 				break;
 				
 			case EGettingConnection:
-				textResource = StringLoader::LoadLC(R_STR_CONNECTED);
-				NotifyL(*textResource);
-				CleanupStack::PopAndDestroy(textResource);
-
+				NotifyL(R_STR_CONNECTED);
 				SetState(EConnected);
 				PreventLowPowerModes();
 				RequestData();
@@ -275,9 +250,7 @@ void CBtClient::RunL()
 				break;
 				
 			case EDisconnecting:
-				textResource = StringLoader::LoadLC(R_STR_DISCONNECT_COMPLETE);
-				NotifyL(*textResource);
-				CleanupStack::PopAndDestroy (textResource);
+				NotifyL(R_STR_DISCONNECT_COMPLETE);
 				iSocket.Close();
 				SetState(EWaitingToGetDevice);
 				break;
@@ -362,10 +335,7 @@ void CBtClient::ConnectL()
 		}
 	else
 		{
-		HBufC* errClientBusy = StringLoader::LoadLC(R_STR_CLIENT_BUSY);
-		NotifyL(*errClientBusy);
-		CleanupStack::PopAndDestroy(errClientBusy);
-		
+		NotifyL(R_STR_CLIENT_BUSY, ETrue);
 		User::Leave(KErrInUse);
 		}
 	}
@@ -384,9 +354,7 @@ void CBtClient::DisconnectL()
 		}
 	else
 		{
-		HBufC* errNoConn = StringLoader::LoadLC(R_ERR_NO_CONN);
-		NotifyL(*errNoConn);
-		CleanupStack::PopAndDestroy(errNoConn);
+		NotifyL(R_ERR_NO_CONN, ETrue);
 		User::Leave(KErrDisconnected);
 		}
 	}
@@ -404,9 +372,7 @@ void CBtClient::DisconnectFromServerL()
 	iSocket.CancelAll();
 	Cancel();
 
-	HBufC* strReleasingConn = StringLoader::LoadLC(R_STR_RELEASING_CONN);
-	NotifyL(*strReleasingConn);
-	CleanupStack::PopAndDestroy(strReleasingConn);
+	NotifyL(R_STR_RELEASING_CONN);
 	iSocket.Shutdown(RSocket::ENormal, iStatus);
 	SetActive();
 	}
@@ -418,9 +384,7 @@ void CBtClient::DisconnectFromServerL()
 //
 void CBtClient::ConnectToServerL()
 	{
-	HBufC* strConnecting = StringLoader::LoadLC(R_STR_CONNECTING);
-	NotifyL(*strConnecting);
-	CleanupStack::PopAndDestroy(strConnecting);
+	NotifyL(R_STR_CONNECTING);
 
 	User::LeaveIfError(iSocket.Open(iSocketServer, KStrRFCOMM));
 
@@ -511,12 +475,18 @@ void CBtClient::SetObserver(MBtClientObserver* aObserver)
 // Send to observer a log message.
 // ----------------------------------------------------------------------------
 //
-void CBtClient::NotifyL(const TDesC& aMessage)
+void CBtClient::NotifyL(const TDesC& aMessage, TBool aIsError)
 	{
 	if (iObserver)
 		{
-		iObserver->HandleBtNotifyL(aMessage);
+		iObserver->HandleBtNotifyL(aMessage, aIsError);
 		}
+	}
+void CBtClient::NotifyL(TInt aMessageResourceId, TBool aIsError)
+	{
+	HBufC* textResource = StringLoader::LoadLC(aMessageResourceId);
+	NotifyL(*textResource, aIsError);
+	CleanupStack::PopAndDestroy(textResource);
 	}
 
 // ----------------------------------------------------------------------------

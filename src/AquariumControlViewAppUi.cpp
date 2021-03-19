@@ -866,10 +866,13 @@ void CAquariumControlViewAppUi::HandleBtDeviceChangeL(CBTDevice* aRemoteDevice)
 // Show log message from BT client.
 // -----------------------------------------------------------------------------
 //
-void CAquariumControlViewAppUi::HandleBtNotifyL(const TDesC& aMessage)
+void CAquariumControlViewAppUi::HandleBtNotifyL(const TDesC& aMessage, TBool aIsError)
 	{
-	//CAknInformationNote* errorNote = new (ELeave) CAknInformationNote;
-	//errorNote->ExecuteLD(aMessage);
+	if (aIsError)
+		{
+		CAknErrorNote* errorNote = new (ELeave) CAknErrorNote;
+		errorNote->ExecuteLD(aMessage);
+		}
 	}
 
 // -----------------------------------------------------------------------------

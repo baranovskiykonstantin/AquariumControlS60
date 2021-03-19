@@ -135,7 +135,7 @@ private:
 	 * From MBtClientObserver
 	 */
 	void HandleBtDeviceChangeL(CBTDevice* aRemoteDevice);
-	void HandleBtNotifyL(const TDesC& aMessage);
+	void HandleBtNotifyL(const TDesC& aMessage, TBool aIsError);
 	void HandleBtDataL(const TDesC& aData);
 
 private:

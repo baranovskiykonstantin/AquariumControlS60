@@ -159,7 +159,8 @@ private: // New functions
 	 * NotifyL()
 	 * Send log message to observer.
 	 */
-	void NotifyL(const TDesC& aMessage);
+	void NotifyL(TInt aErrorResourceId);
+	void NotifyL(const TDesC& aError);
 
 public: // from MSdpAgentNotifier
 

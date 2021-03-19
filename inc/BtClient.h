@@ -41,7 +41,6 @@ enum TBtClientState
 	EGettingService,
 	EGettingConnection,
 	EConnected,
-	EDisconnected,
 	ESendingMessage,
 	EWaitingForMessage,
 	EDisconnecting
@@ -234,7 +233,8 @@ private: // New private functions
 	 * NotifyL()
 	 * Send log message to observer.
 	 */
-	void NotifyL(const TDesC& aMessage);
+	void NotifyL(TInt aMessageResourceId, TBool aIsError=EFalse);
+	void NotifyL(const TDesC& aMessage, TBool aIsError=EFalse);
 
 	/**
 	 * NotifyDeviceIsConnectedL()

@@ -186,6 +186,8 @@ void CBtServiceSearcher::NextRecordRequestCompleteL(
 		errorStr.Num(aError);
 		HBufC* errNRRC = StringLoader::LoadLC(R_ERR_NRRC_ERROR);
 		HBufC* errFull = HBufC::NewLC(errNRRC->Length() + errorStr.Length());
+		errFull->Des().Copy(*errNRRC);
+		errFull->Des().Append(errorStr);
 		NotifyL(*errFull);
 		CleanupStack::PopAndDestroy(2); // errNRRC, errFull
 		Finished(aError);
@@ -194,9 +196,7 @@ void CBtServiceSearcher::NextRecordRequestCompleteL(
 
 	if (aTotalRecordsCount == 0)
 		{
-		HBufC* errNRRCNoRecords = StringLoader::LoadLC(R_ERR_NRRC_NO_RECORDS);
-		NotifyL(*errNRRCNoRecords);
-		CleanupStack::PopAndDestroy(errNRRCNoRecords);
+		NotifyL(R_ERR_NRRC_NO_RECORDS);
 		Finished(KErrNotFound);
 		return;
 		}
@@ -279,6 +279,8 @@ void CBtServiceSearcher::AttributeRequestCompleteL(
 		TBuf<6> errorStr;
 		errorStr.Num(aError);
 		HBufC* errFull = HBufC::NewLC(errCantGetAttribute->Length() + errorStr.Length());
+		errFull->Des().Copy(*errCantGetAttribute);
+		errFull->Des().Append(errorStr);
 		NotifyL(*errFull);
 		CleanupStack::PopAndDestroy(2); // errCantGetAttribute, errFull
 		}
@@ -289,9 +291,7 @@ void CBtServiceSearcher::AttributeRequestCompleteL(
 		}
 	else
 		{
-		HBufC* errAttrReqCom = StringLoader::LoadLC(R_ERR_ATTR_REQ_COM);
-		NotifyL(*errAttrReqCom);
-		CleanupStack::PopAndDestroy(errAttrReqCom);
+		NotifyL(R_ERR_ATTR_REQ_COM);
 		Finished();
 		}
 	}
@@ -453,8 +453,14 @@ void CBtServiceSearcher::NotifyL(const TDesC& aMessage)
 	{
 	if (iObserver)
 		{
-		iObserver->HandleBtNotifyL(aMessage);
+		iObserver->HandleBtNotifyL(aMessage, ETrue);
 		}
+	}
+void CBtServiceSearcher::NotifyL(TInt aErrorResourceId)
+	{
+	HBufC* textResource = StringLoader::LoadLC(aErrorResourceId);
+	NotifyL(*textResource);
+	CleanupStack::PopAndDestroy(textResource);
 	}
 
 // End of File
