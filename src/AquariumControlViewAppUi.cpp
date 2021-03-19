@@ -145,7 +145,6 @@ CAquariumControlViewAppUi::~CAquariumControlViewAppUi()
 //
 void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 	{
-	TBool updatingIsNeeded(EFalse);
 	PauseUpdating();
 	switch (aCommand)
 		{
@@ -166,16 +165,16 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			break;
 
 		case EAquariumControlSetTime:
-			updatingIsNeeded = CommandSetTime();
+			CommandSetTime();
 			break;
 		case EAquariumControlSetTimeCorrection:
-			updatingIsNeeded = CommandSetTimeCor();
+			CommandSetTimeCor();
 			break;
 		case EAquariumControlSetDate:
-			updatingIsNeeded = CommandSetDate();
+			CommandSetDate();
 			break;
 		case EAquariumControlSetDayOfWeek:
-			updatingIsNeeded = CommandSetDayOfWeek();
+			CommandSetDayOfWeek();
 			break;
 
 		case EAquariumControlSwitchLightState:
@@ -193,7 +192,6 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 					break;
 				}
 			}
-			updatingIsNeeded = ETrue;
 			break;
 		case EAquariumControlSwitchLightMode:
 			{
@@ -210,19 +208,18 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 					break;
 				}
 			}
-			updatingIsNeeded = ETrue;
 			break;
 		case EAquariumControlSetLightOnTime:
-			updatingIsNeeded = CommandSetLightOnTime();
+			CommandSetLightOnTime();
 			break;
 		case EAquariumControlSetLightOffTime:
-			updatingIsNeeded = CommandSetLightOffTime();
+			CommandSetLightOffTime();
 			break;
 		case EAquariumControlSetLightLevel:
-			updatingIsNeeded = CommandSetLightLevel();
+			CommandSetLightLevel();
 			break;
 		case EAquariumControlSetLightRise:
-			updatingIsNeeded = CommandSetLightRise();
+			CommandSetLightRise();
 			break;
 		case EAquariumControlSetLightStateOn:
 		case EAquariumControlSetLightStateOff:
@@ -248,7 +245,6 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 					break;
 				}
 			}
-			updatingIsNeeded = ETrue;
 			break;
 		case EAquariumControlSwitchHeatMode:
 			{
@@ -265,13 +261,12 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 					break;
 				}
 			}
-			updatingIsNeeded = ETrue;
 			break;
 		case EAquariumControlSetHeatLow:
-			updatingIsNeeded = CommandSetHeatLow();
+			CommandSetHeatLow();
 			break;
 		case EAquariumControlSetHeatHigh:
-			updatingIsNeeded = CommandSetHeatHigh();
+			CommandSetHeatHigh();
 			break;
 		case EAquariumControlSetHeatStateOn:
 		case EAquariumControlSetHeatStateOff:
@@ -301,7 +296,6 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 					break;
 				}
 			}
-			updatingIsNeeded = ETrue;
 			break;
 
 		default:
@@ -309,8 +303,6 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			break;
 		}
 	ResumeUpdating();
-	if (updatingIsNeeded)
-		UpdateViewsL();
 	}
 
 // ------------------------------------------------------------------------------
@@ -472,7 +464,7 @@ void CAquariumControlViewAppUi::ResumeUpdating()
 // SetTime command handler.
 // ----------------------------------------------------------------------------
 //
-TBool CAquariumControlViewAppUi::CommandSetTime()
+void CAquariumControlViewAppUi::CommandSetTime()
 	{
 	_LIT(KCmdFormat, "time %02u:%02u:%02u\r");
 	TBuf<14> cmd;
@@ -491,7 +483,6 @@ TBool CAquariumControlViewAppUi::CommandSetTime()
 					time.DateTime().Minute(),
 					time.DateTime().Second());
 			iBtClient->SendMessageL(cmd);
-			return ETrue;
 			}
 		else if (variant == 1)
 			{
@@ -511,11 +502,9 @@ TBool CAquariumControlViewAppUi::CommandSetTime()
 						time.DateTime().Minute(),
 						time.DateTime().Second());
 				iBtClient->SendMessageL(cmd);
-				return ETrue;
 				}
 			}
 		}
-	return EFalse;
 	}
 
 // ----------------------------------------------------------------------------
@@ -523,7 +512,7 @@ TBool CAquariumControlViewAppUi::CommandSetTime()
 // SetTimeCor command handler.
 // ----------------------------------------------------------------------------
 //
-TBool CAquariumControlViewAppUi::CommandSetTimeCor()
+void CAquariumControlViewAppUi::CommandSetTimeCor()
 	{
 	_LIT(KCmdFormatP, "time +%02i\r");
 	_LIT(KCmdFormatN, "time -%02i\r");
@@ -544,9 +533,7 @@ TBool CAquariumControlViewAppUi::CommandSetTimeCor()
 		else
 			cmd.Format(KCmdFormatP, timeCorr);
 		iBtClient->SendMessageL(cmd);
-		return ETrue;
 		}
-	return EFalse;
 	}
 
 // ----------------------------------------------------------------------------
@@ -554,7 +541,7 @@ TBool CAquariumControlViewAppUi::CommandSetTimeCor()
 // SetDate command handler.
 // ----------------------------------------------------------------------------
 //
-TBool CAquariumControlViewAppUi::CommandSetDate()
+void CAquariumControlViewAppUi::CommandSetDate()
 	{
 	_LIT(KCmdFormat, "date %02u.%02u.%02u %1u\r");
 	TBuf<16> cmd;
@@ -574,7 +561,6 @@ TBool CAquariumControlViewAppUi::CommandSetDate()
 					date.DateTime().Year() - 2000,
 					iData->iDayOfWeek);
 			iBtClient->SendMessageL(cmd);
-			return ETrue;
 			}
 		else if (variant == 1)
 			{
@@ -595,11 +581,9 @@ TBool CAquariumControlViewAppUi::CommandSetDate()
 						date.DateTime().Year() - 2000,
 						iData->iDayOfWeek);
 				iBtClient->SendMessageL(cmd);
-				return ETrue;
 				}
 			}
 		}
-	return EFalse;
 	}
 
 // ----------------------------------------------------------------------------
@@ -607,7 +591,7 @@ TBool CAquariumControlViewAppUi::CommandSetDate()
 // SetDayOfWeek command handler.
 // ----------------------------------------------------------------------------
 //
-TBool CAquariumControlViewAppUi::CommandSetDayOfWeek()
+void CAquariumControlViewAppUi::CommandSetDayOfWeek()
 	{
 	_LIT(KCmdFormat, "date %02u.%02u.%02u %1u\r");
 	TBuf<16> cmd;
@@ -623,9 +607,7 @@ TBool CAquariumControlViewAppUi::CommandSetDayOfWeek()
 				iData->iYear,
 				dayOfWeek + 1);
 		iBtClient->SendMessageL(cmd);
-		return ETrue;
 		}
-	return EFalse;
 	}
 
 // ----------------------------------------------------------------------------
@@ -633,7 +615,7 @@ TBool CAquariumControlViewAppUi::CommandSetDayOfWeek()
 // SetLightOnTime command handler.
 // ----------------------------------------------------------------------------
 //
-TBool CAquariumControlViewAppUi::CommandSetLightOnTime()
+void CAquariumControlViewAppUi::CommandSetLightOnTime()
 	{
 	_LIT(KTimeStrFormat, ":%02u%02u%02u.");
 	_LIT(KMinTimeStr, ":000000.");
@@ -661,9 +643,7 @@ TBool CAquariumControlViewAppUi::CommandSetLightOnTime()
 		iData->iLightOnMinutes = timeOn.DateTime().Minute();
 		iData->iLightOnSeconds = timeOn.DateTime().Second();
 		iEikonEnv->InfoMsg(_L("Set TimeOn"));
-		return ETrue;
 		}
-	return EFalse;
 	}
 
 // ----------------------------------------------------------------------------
@@ -671,7 +651,7 @@ TBool CAquariumControlViewAppUi::CommandSetLightOnTime()
 // SetLightOffTime command handler.
 // ----------------------------------------------------------------------------
 //
-TBool CAquariumControlViewAppUi::CommandSetLightOffTime()
+void CAquariumControlViewAppUi::CommandSetLightOffTime()
 	{
 	_LIT(KTimeStrFormat, ":%02u%02u%02u.");
 	_LIT(KMaxTimeStr, ":235959.");
@@ -699,9 +679,7 @@ TBool CAquariumControlViewAppUi::CommandSetLightOffTime()
 		iData->iLightOffMinutes = timeOff.DateTime().Minute();
 		iData->iLightOffSeconds = timeOff.DateTime().Second();
 		iEikonEnv->InfoMsg(_L("Set TimeOn"));
-		return ETrue;
 		}
-	return EFalse;
 	}
 
 // ----------------------------------------------------------------------------
@@ -709,7 +687,7 @@ TBool CAquariumControlViewAppUi::CommandSetLightOffTime()
 // SetLightLevel command handler.
 // ----------------------------------------------------------------------------
 //
-TBool CAquariumControlViewAppUi::CommandSetLightLevel()
+void CAquariumControlViewAppUi::CommandSetLightLevel()
 	{
 	TInt answer;
 	TInt level(iData->iLightLevel);
@@ -724,9 +702,7 @@ TBool CAquariumControlViewAppUi::CommandSetLightLevel()
 		{
 		iData->iLightLevel = level;
 		iEikonEnv->InfoMsg(_L("Set Level"));
-		return ETrue;
 		}
-	return EFalse;
 	}
 
 // ----------------------------------------------------------------------------
@@ -734,7 +710,7 @@ TBool CAquariumControlViewAppUi::CommandSetLightLevel()
 // SetLightRise command handler.
 // ----------------------------------------------------------------------------
 //
-TBool CAquariumControlViewAppUi::CommandSetLightRise()
+void CAquariumControlViewAppUi::CommandSetLightRise()
 	{
 	TInt answer;
 	TInt rise(iData->iLightRise);
@@ -749,9 +725,7 @@ TBool CAquariumControlViewAppUi::CommandSetLightRise()
 		{
 		iData->iLightRise = rise;
 		iEikonEnv->InfoMsg(_L("Set Rise"));
-		return ETrue;
 		}
-	return EFalse;
 	}
 
 // ----------------------------------------------------------------------------
@@ -759,7 +733,7 @@ TBool CAquariumControlViewAppUi::CommandSetLightRise()
 // SetHeatLow command handler.
 // ----------------------------------------------------------------------------
 //
-TBool CAquariumControlViewAppUi::CommandSetHeatLow()
+void CAquariumControlViewAppUi::CommandSetHeatLow()
 	{
 	TInt answer;
 	TInt low(iData->iHeatLow);
@@ -774,9 +748,7 @@ TBool CAquariumControlViewAppUi::CommandSetHeatLow()
 		{
 		iData->iHeatLow = low;
 		iEikonEnv->InfoMsg(_L("Set HeatLow"));
-		return ETrue;
 		}
-	return EFalse;
 	}
 
 // ----------------------------------------------------------------------------
@@ -784,7 +756,7 @@ TBool CAquariumControlViewAppUi::CommandSetHeatLow()
 // SetHeatHigh command handler.
 // ----------------------------------------------------------------------------
 //
-TBool CAquariumControlViewAppUi::CommandSetHeatHigh()
+void CAquariumControlViewAppUi::CommandSetHeatHigh()
 	{
 	TInt answer;
 	TInt high(iData->iHeatHigh);
@@ -799,9 +771,7 @@ TBool CAquariumControlViewAppUi::CommandSetHeatHigh()
 		{
 		iData->iHeatHigh = high;
 		iEikonEnv->InfoMsg(_L("Set HeatHigh"));
-		return ETrue;
 		}
-	return EFalse;
 	}
 
 // -----------------------------------------------------------------------------

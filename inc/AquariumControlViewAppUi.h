@@ -114,16 +114,16 @@ private:
 	 * Command handlers.
 	 * @return EFalse if command canceled by user, ETrue otherwise.
 	 */
-	TBool CommandSetTime();
-	TBool CommandSetTimeCor();
-	TBool CommandSetDate();
-	TBool CommandSetDayOfWeek();
-	TBool CommandSetLightOnTime();
-	TBool CommandSetLightOffTime();
-	TBool CommandSetLightLevel();
-	TBool CommandSetLightRise();
-	TBool CommandSetHeatLow();
-	TBool CommandSetHeatHigh();
+	void CommandSetTime();
+	void CommandSetTimeCor();
+	void CommandSetDate();
+	void CommandSetDayOfWeek();
+	void CommandSetLightOnTime();
+	void CommandSetLightOffTime();
+	void CommandSetLightLevel();
+	void CommandSetLightRise();
+	void CommandSetHeatLow();
+	void CommandSetHeatHigh();
 
 	/**
 	* ShowBTNotAvailableNoteL.
