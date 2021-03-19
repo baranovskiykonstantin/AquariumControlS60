@@ -25,7 +25,7 @@
 #include "AquariumControlViewAppUi.h"
 
 // CONSTANTS
-_LIT(KStatusCmd, "status\n");
+_LIT(KStatusCmd, "status\r");
 
 // ============================ MEMBER FUNCTIONS ===============================
 
@@ -109,19 +109,6 @@ void CAquariumControlViewAppUi::ConstructL()
 
 	// Empty by default
 	iBtDataTail = HBufC::New(0);
-
-	// TEST
-/*
-	HandleBtDataL(_L("Date: 01.02.17 Friday\r\nTime: 13:29:59 (-3 sec at 12:00:00)\r\nTemp: 21\r\nHeat: OFF"));
-	HandleBtDataL(_L(" auto (20-22)\r\nLight: ON manual (10:00:00-20:00:00) 43/50% 10min\r\nDisplay: time\r\n"));
-
-	iData->ParseLineL(_L8("Date: 01.02.17 Friday"));
-	iData->ParseLineL(_L8("Time: 13:29:59 (-3 sec at 12:00:00)"));
-	iData->ParseLineL(_L8("Temp: 21"));
-	iData->ParseLineL(_L8("Heat: OFF auto (20-22)"));
-	iData->ParseLineL(_L8("Light: ON manual (10:00:00-20:00:00) 43/50% 10min"));
-	iData->ParseLineL(_L8("Display: time"));
-*/
 	}
 // -----------------------------------------------------------------------------
 // CAquariumControlViewAppUi::CAquariumControlViewAppUi()
@@ -487,6 +474,8 @@ void CAquariumControlViewAppUi::ResumeUpdating()
 //
 TBool CAquariumControlViewAppUi::CommandSetTime()
 	{
+	_LIT(KCmdFormat, "time %02u:%02u:%02u\r");
+	TBuf<14> cmd;
 	TInt variant;
 	TInt answer;
 	CAknListQueryDialog* dlg = new (ELeave) CAknListQueryDialog(&variant);
@@ -497,26 +486,31 @@ TBool CAquariumControlViewAppUi::CommandSetTime()
 		if (variant == 0)
 			{
 			time.HomeTime();
-			iData->iHours = time.DateTime().Hour();
-			iData->iMinutes = time.DateTime().Minute();
-			iData->iSeconds = time.DateTime().Second();
-			iEikonEnv->InfoMsg(_L("Set current"));
+			cmd.Format(KCmdFormat,
+					time.DateTime().Hour(),
+					time.DateTime().Minute(),
+					time.DateTime().Second());
+			iBtClient->SendMessageL(cmd);
 			return ETrue;
 			}
 		else if (variant == 1)
 			{
 			_LIT(KTimeStrFormat, ":%02u%02u%02u.");
 			TBuf<8> timeStr;
-			timeStr.Format(KTimeStrFormat, iData->iHours, iData->iMinutes, iData->iSeconds);
+			timeStr.Format(KTimeStrFormat,
+					iData->iHours,
+					iData->iMinutes,
+					iData->iSeconds);
 			time.Set(timeStr);
 			CAknTimeQueryDialog* dlg = new (ELeave) CAknTimeQueryDialog(time);
 			answer = dlg->ExecuteLD(R_SETTIME_QUERY_DIALOG);
 			if (EAknSoftkeyOk == answer)
 				{
-				iData->iHours = time.DateTime().Hour();
-				iData->iMinutes = time.DateTime().Minute();
-				iData->iSeconds = time.DateTime().Second();
-				iEikonEnv->InfoMsg(_L("Set custom"));
+				cmd.Format(KCmdFormat,
+						time.DateTime().Hour(),
+						time.DateTime().Minute(),
+						time.DateTime().Second());
+				iBtClient->SendMessageL(cmd);
 				return ETrue;
 				}
 			}
@@ -531,6 +525,9 @@ TBool CAquariumControlViewAppUi::CommandSetTime()
 //
 TBool CAquariumControlViewAppUi::CommandSetTimeCor()
 	{
+	_LIT(KCmdFormatP, "time +%02i\r");
+	_LIT(KCmdFormatN, "time -%02i\r");
+	TBuf<9> cmd;
 	TInt answer;
 	TInt timeCorr(iData->iTimeCorrection);
 	HBufC* title = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_TIMECOR);
@@ -542,8 +539,11 @@ TBool CAquariumControlViewAppUi::CommandSetTimeCor()
 	CleanupStack::PopAndDestroy(title);
 	if (EAknSoftkeyOk == answer)
 		{
-		iData->iTimeCorrection = timeCorr;
-		iEikonEnv->InfoMsg(_L("Set TimeCorr"));
+		if (timeCorr < 0)
+			cmd.Format(KCmdFormatN, -timeCorr);
+		else
+			cmd.Format(KCmdFormatP, timeCorr);
+		iBtClient->SendMessageL(cmd);
 		return ETrue;
 		}
 	return EFalse;
@@ -556,6 +556,8 @@ TBool CAquariumControlViewAppUi::CommandSetTimeCor()
 //
 TBool CAquariumControlViewAppUi::CommandSetDate()
 	{
+	_LIT(KCmdFormat, "date %02u.%02u.%02u %1u\r");
+	TBuf<16> cmd;
 	TInt variant;
 	TInt answer;
 	CAknListQueryDialog* dlg = new (ELeave) CAknListQueryDialog(&variant);
@@ -566,26 +568,33 @@ TBool CAquariumControlViewAppUi::CommandSetDate()
 		if (variant == 0)
 			{
 			date.HomeTime();
-			iData->iDay = date.DateTime().Day() + 1;
-			iData->iMonth = date.DateTime().Month() + 1;
-			iData->iYear = date.DateTime().Year() - 2000;
-			iEikonEnv->InfoMsg(_L("Set current"));
+			cmd.Format(KCmdFormat,
+					date.DateTime().Day() + 1,
+					date.DateTime().Month() + 1,
+					date.DateTime().Year() - 2000,
+					iData->iDayOfWeek);
+			iBtClient->SendMessageL(cmd);
 			return ETrue;
 			}
 		else if (variant == 1)
 			{
 			_LIT(KTimeStrFormat, "20%02u%02u%02u:.");
 			TBuf<10> dateStr;
-			dateStr.Format(KTimeStrFormat, iData->iYear, iData->iMonth - 1 , iData->iDay - 1);
+			dateStr.Format(KTimeStrFormat,
+					iData->iYear,
+					iData->iMonth - 1,
+					iData->iDay - 1);
 			date.Set(dateStr);
 			CAknTimeQueryDialog* dlg = new (ELeave) CAknTimeQueryDialog(date);
 			answer = dlg->ExecuteLD(R_SETDATE_QUERY_DIALOG);
 			if (EAknSoftkeyOk == answer)
 				{
-				iData->iDay = date.DateTime().Day() + 1;
-				iData->iMonth = date.DateTime().Month() + 1;
-				iData->iYear = date.DateTime().Year() - 2000;
-				iEikonEnv->InfoMsg(_L("Set custom"));
+				cmd.Format(KCmdFormat,
+						date.DateTime().Day() + 1,
+						date.DateTime().Month() + 1,
+						date.DateTime().Year() - 2000,
+						iData->iDayOfWeek);
+				iBtClient->SendMessageL(cmd);
 				return ETrue;
 				}
 			}
@@ -600,14 +609,20 @@ TBool CAquariumControlViewAppUi::CommandSetDate()
 //
 TBool CAquariumControlViewAppUi::CommandSetDayOfWeek()
 	{
+	_LIT(KCmdFormat, "date %02u.%02u.%02u %1u\r");
+	TBuf<16> cmd;
 	TInt dayOfWeek;
 	TInt answer;
 	CAknListQueryDialog* dlg = new (ELeave) CAknListQueryDialog(&dayOfWeek);
 	answer = dlg->ExecuteLD(R_SETDAYOFWEEK_QUERY_DIALOG);
 	if (EAknSoftkeyOk == answer)
 		{
-		iData->iDayOfWeek = dayOfWeek + 1;
-		iEikonEnv->InfoMsg(_L("Set DayOfWeek"));
+		cmd.Format(KCmdFormat,
+				iData->iDay,
+				iData->iMonth,
+				iData->iYear,
+				dayOfWeek + 1);
+		iBtClient->SendMessageL(cmd);
 		return ETrue;
 		}
 	return EFalse;
@@ -829,8 +844,8 @@ void CAquariumControlViewAppUi::HandleBtDeviceChangeL(CBTDevice* aRemoteDevice)
 //
 void CAquariumControlViewAppUi::HandleBtNotifyL(const TDesC& aMessage)
 	{
-	CAknInformationNote* errorNote = new (ELeave) CAknInformationNote;
-	errorNote->ExecuteLD(aMessage);
+	//CAknInformationNote* errorNote = new (ELeave) CAknInformationNote;
+	//errorNote->ExecuteLD(aMessage);
 	}
 
 // -----------------------------------------------------------------------------
@@ -847,16 +862,6 @@ void CAquariumControlViewAppUi::HandleBtDataL(const TDesC& aData)
 
 	TPtrC unprocessed(*fullData);
 	TPtrC line;
-
-	// skip command echo
-	line.Set(unprocessed.Left(KStatusCmd().Length()));
-	if (line == KStatusCmd)
-		{
-		// Echo has additional '\r' character. Skit it too.
-		TInt dataLength = unprocessed.Length() - KStatusCmd().Length() - 1;
-		unprocessed.Set(unprocessed.Right(dataLength));
-		}
-
 	TInt rnPos = unprocessed.Find(KNewLineMark);
 	while (KErrNotFound != rnPos)
 		{
