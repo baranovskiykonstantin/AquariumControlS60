@@ -22,6 +22,8 @@
 RESOURCE TBUF r_btclient_service_name { buf=qtn_btclient_service_name; }
 RESOURCE TBUF r_btclient_service_description { buf=qtn_btclient_service_description; }
 
+RESOURCE TBUF r_waitdialog_connecting_to { buf=qtn_waitdialog_connecting_to; }
+
 RESOURCE TBUF r_str_disconnected { buf=qtn_str_disconnected; }
 RESOURCE TBUF r_str_disconnect_complete { buf=qtn_str_disconnect_complete; }
 RESOURCE TBUF r_str_connected { buf=qtn_str_connected; }
@@ -29,8 +31,6 @@ RESOURCE TBUF r_str_found_service { buf=qtn_str_found_service; }
 RESOURCE TBUF r_str_client_busy { buf=qtn_str_client_busy; }
 RESOURCE TBUF r_str_releasing_conn { buf=qtn_str_releasing_conn; }
 RESOURCE TBUF r_str_connecting { buf=qtn_str_connecting; }
-RESOURCE TBUF r_str_waiting_conn { buf=qtn_str_waiting_conn; }
-RESOURCE TBUF r_str_port_number { buf=qtn_str_port_number; }
 //RESOURCE TBUF r_str_ { buf=qtn_str_; }
 
 RESOURCE TBUF r_err_no_bt { buf=qtn_err_no_bt; }
@@ -48,5 +48,38 @@ RESOURCE TBUF r_err_cant_get_attribute { buf=qtn_err_cant_get_attribute; }
 RESOURCE TBUF r_err_attr_req_com { buf=qtn_err_attr_req_com; }
 RESOURCE TBUF r_err_registry { buf=qtn_err_registry; }
 //RESOURCE TBUF r_err_ { buf=qtn_err_; }
+
+
+//  RESOURCE DEFINITIONS
+//----------------------------------------------------
+//
+//    r_wait_dialog
+//    Resource definition for wait note
+//
+//----------------------------------------------------
+//
+RESOURCE DIALOG r_wait_dialog
+	{
+	flags = EAknWaitNoteFlags;
+	buttons = R_AVKON_SOFTKEYS_CANCEL;
+	items =
+		{
+		DLG_LINE
+			{
+			type = EAknCtNote;
+			id = EGeneralNote;
+			control = AVKON_NOTE
+				{
+				layout = EWaitLayout;
+				singular_label = qtn_waitdialog_connecting;
+				imagefile = "z:\\system\data\avkon.mbm";
+				imageid = EMbmAvkonQgn_note_progress;
+				imagemask = EMbmAvkonQgn_note_progress_mask;
+				animation = R_QGN_GRAF_WAIT_BAR_ANIM;
+				};
+			}
+		};
+	}
+
 
 // End of File

@@ -88,6 +88,8 @@ CBtClient::~CBtClient()
 
 	delete iRemoteDevice;
 	iRemoteDevice = NULL;
+
+	HideWaitDialog();
 	}
 
 // ----------------------------------------------------------------------------
@@ -207,6 +209,22 @@ void CBtClient::RunL()
 		switch (State())
 			{
 			case EGettingDevice:
+				{
+				_LIT(KPrepend, "\n(");
+				_LIT(KByteSeparator, ":");
+				_LIT(KAppend, ")");
+				TBuf<20> addr;
+				iServiceSearcher->ResponseParams().BDAddr().GetReadable(addr, KPrepend, KByteSeparator, KAppend);
+				addr.UpperCase();
+
+				HBufC* conTo = StringLoader::LoadLC(R_WAITDIALOG_CONNECTING_TO);
+				HBufC* label = HBufC::NewLC(conTo->Length() + iServiceSearcher->ResponseParams().DeviceName().Length() + addr.Length());
+				label->Des().Copy(*conTo);
+				label->Des().Append(iServiceSearcher->ResponseParams().DeviceName());
+				label->Des().Append(addr);
+				SetWaitDialogLabel(*label);
+				CleanupStack::PopAndDestroy(2); // label, conTo
+
 				// found a device now search for a suitable service
 				NotifyL(iServiceSearcher->ResponseParams().DeviceName());
 				SetState(EGettingService);
@@ -216,6 +234,7 @@ void CBtClient::RunL()
 											// to iStatus
 				iServiceSearcher->FindServiceL(iStatus);
 				SetActive();
+				}
 				break;
 				
 			case EGettingService:
@@ -327,6 +346,7 @@ TBool CBtClient::IsConnecting()
 //
 void CBtClient::ConnectL()
 	{
+	ShowWaitDialog();
 	if (State() == EWaitingToGetDevice && !IsActive())
 		{
 		SetState(EGettingDevice);
@@ -477,6 +497,9 @@ void CBtClient::SetObserver(MBtClientObserver* aObserver)
 //
 void CBtClient::NotifyL(const TDesC& aMessage, TBool aIsError)
 	{
+	if (aIsError)
+		HideWaitDialog();
+
 	if (iObserver)
 		{
 		iObserver->HandleBtNotifyL(aMessage, aIsError);
@@ -496,6 +519,7 @@ void CBtClient::NotifyL(TInt aMessageResourceId, TBool aIsError)
 //
 void CBtClient::NotifyDeviceIsConnectedL()
 	{
+	HideWaitDialog();
 	if (iObserver)
 		{
 		RHostResolver hostResolver;
@@ -532,6 +556,7 @@ void CBtClient::NotifyDeviceIsConnectedL()
 //
 void CBtClient::NotifyDeviceIsDisconnectedL()
 	{
+	HideWaitDialog();
 	delete iRemoteDevice;
 	iRemoteDevice = NULL;
 	if (iObserver)
@@ -588,6 +613,62 @@ void CBtClient::HandleBatteryStatusChangeL()
 			{
 			AllowLowPowerModes();
 			}
+		}
+	}
+
+// ----------------------------------------------------------------------------
+// CBtClient::ShowWaitDialog()
+// Hide connection notification.
+// ----------------------------------------------------------------------------
+//
+void CBtClient::ShowWaitDialog()
+	{
+	if(iWaitDialog)
+		iWaitDialog->ProcessFinishedL();
+	iWaitDialog = new(ELeave)CAknWaitDialog((REINTERPRET_CAST(CEikDialog**,&iWaitDialog)));
+	iWaitDialog->SetCallback(this);
+	iWaitDialog->ExecuteLD(R_WAIT_DIALOG);
+	}
+
+// ----------------------------------------------------------------------------
+// CBtClient::SetWaitDialogLabel()
+// Hide connection notification.
+// ----------------------------------------------------------------------------
+//
+void CBtClient::SetWaitDialogLabel(const TDesC& aLabel)
+	{
+	if(iWaitDialog)
+		{
+		iWaitDialog->SetTextL(aLabel);
+		}
+	}
+
+// ----------------------------------------------------------------------------
+// CBtClient::HideWaitDialog()
+// Hide connection notification.
+// ----------------------------------------------------------------------------
+//
+void CBtClient::HideWaitDialog()
+	{
+	if(iWaitDialog)
+		{
+		iWaitDialog->ProcessFinishedL();
+		iWaitDialog = NULL;
+		}
+	}
+
+// ----------------------------------------------------------------------------
+// CBtClient::DialogDismissedL()
+// Callback method Gets called when a wait dialog is dismissed.
+// ----------------------------------------------------------------------------
+//
+void CBtClient::DialogDismissedL(TInt aButtonId)
+	{
+	if (EAknSoftkeyCancel == aButtonId)
+		{
+		iSocket.Close();
+		Cancel();
+		SetState(EWaitingToGetDevice);
 		}
 	}
 

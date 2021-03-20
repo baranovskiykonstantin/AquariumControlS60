@@ -155,6 +155,10 @@ void CBtServiceSearcher::NextRecordRequestComplete(
 	TSdpServRecordHandle aHandle,
 	TInt aTotalRecordsCount)
 	{
+	// Canceled by BtClient. Quit.
+	if (*iStatusObserver != KRequestPending)
+		return;
+
 	TRAPD(error,
 		NextRecordRequestCompleteL(aError, aHandle, aTotalRecordsCount));
 
@@ -215,6 +219,10 @@ void CBtServiceSearcher::AttributeRequestResult(
 	TSdpAttributeID aAttrID,
 	CSdpAttrValue* aAttrValue)
 	{
+	// Canceled by BtClient. Quit.
+	if (*iStatusObserver != KRequestPending)
+		return;
+
 	TRAPD(error, AttributeRequestResultL(aHandle, aAttrID, aAttrValue));
 	if (error != KErrNone)
 		{
@@ -257,6 +265,10 @@ void CBtServiceSearcher::AttributeRequestResultL(
 void CBtServiceSearcher::AttributeRequestComplete(TSdpServRecordHandle aHandle,
 	TInt aError)
 	{
+	// Canceled by BtClient. Quit.
+	if (*iStatusObserver != KRequestPending)
+		return;
+
 	TRAPD(error, AttributeRequestCompleteL(aHandle, aError));
 	if (error != KErrNone)
 		{
@@ -308,7 +320,9 @@ void CBtServiceSearcher::Finished(TInt aError /* default = KErrNone */)
 		{
 		aError = KErrNotFound;
 		}
-	User::RequestComplete(iStatusObserver, aError);
+	// if != KRequestPending -> canceled by BtClient
+	if (*iStatusObserver == KRequestPending)
+		User::RequestComplete(iStatusObserver, aError);
 	}
 
 // ----------------------------------------------------------------------------
@@ -318,7 +332,7 @@ void CBtServiceSearcher::Finished(TInt aError /* default = KErrNone */)
 //
 TBool CBtServiceSearcher::HasFinishedSearching() const
 	{
-	return EFalse;
+	return (*iStatusObserver != KRequestPending);
 	}
 
 // ----------------------------------------------------------------------------

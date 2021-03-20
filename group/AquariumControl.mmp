@@ -65,6 +65,7 @@ LIBRARY			esock.lib
 LIBRARY			efsrv.lib
 LIBRARY			sdpagent.lib
 LIBRARY			sdpdatabase.lib
+LIBRARY			eikcdlg.lib
 
 LANG SC
 

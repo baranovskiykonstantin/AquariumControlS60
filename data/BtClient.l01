@@ -15,6 +15,10 @@
 #define qtn_btclient_service_name "Serial Port"
 #define qtn_btclient_service_description "Aquarium Control"
 
+// Wait dialog
+#define qtn_waitdialog_connecting "Connecting..."
+#define qtn_waitdialog_connecting_to "Connecting to\n"
+
 // Messages
 #define qtn_str_disconnected "Disconnected"
 #define qtn_str_disconnect_complete "Disconnect complete"
@@ -23,8 +27,6 @@
 #define qtn_str_client_busy "Client busy"
 #define qtn_str_releasing_conn "Releasing connection"
 #define qtn_str_connecting "Connecting to service"
-#define qtn_str_waiting_conn "Waiting connection"
-#define qtn_str_port_number "Channel "
 //#define qtn_str_
 
 #define qtn_err_no_bt "Bluetooth unavailable."

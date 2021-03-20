@@ -15,6 +15,10 @@ CHARACTER_SET UTF8
 #define qtn_btclient_service_name "Serial Port"
 #define qtn_btclient_service_description "Aquarium Control"
 
+// Wait dialog
+#define qtn_waitdialog_connecting "З’єднання..."
+#define qtn_waitdialog_connecting_to "З’єднання з\n"
+
 // Messages
 #define qtn_str_disconnected "Роз’єднаний"
 #define qtn_str_disconnect_complete "Від’єднання завершено"
@@ -23,8 +27,6 @@ CHARACTER_SET UTF8
 #define qtn_str_client_busy "Клієнт зайнятий"
 #define qtn_str_releasing_conn "Звільнення з’єднання"
 #define qtn_str_connecting "З’єднання з сервісом"
-#define qtn_str_waiting_conn "Очікування під’єднання"
-#define qtn_str_port_number "Канал "
 //#define qtn_str_
 
 #define qtn_err_no_bt "Bluetooth недоступний."

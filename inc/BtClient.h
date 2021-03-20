@@ -15,6 +15,7 @@
 #include <btextnotifiers.h>
 #include <btsdp.h>
 #include <btdevice.h>
+#include <aknwaitdialog.h>
 #include "BtServiceSearcher.h"
 #include "BtClientObserver.h"
 #include "BtClientConstants.h"
@@ -52,7 +53,8 @@ enum TBtClientState
 */
 class CBtClient :
 	public CActive,
-	public MBatteryStatusObserver
+	public MBatteryStatusObserver,
+	MProgressDialogCallback
 	{
 
 public: // Constructors and destructor
@@ -260,6 +262,20 @@ private: // New private functions
 	 */
 	void PreventLowPowerModes();
 
+	/**
+	 * Wait dialog
+	 */
+	void ShowWaitDialog();
+	void SetWaitDialogLabel(const TDesC& aLabel);
+	void HideWaitDialog();
+
+	/**
+	 * From MProgressDialogCallback
+	 * DialogDismissedL()
+	 * Callback method Gets called when a wait dialog is dismissed.
+	 */
+	void DialogDismissedL(TInt aButtonId);
+
 private: // Data
 
 	/**
@@ -344,6 +360,12 @@ private: // Data
 	 * enable/disable low power modes.
 	 */
 	RBTPhysicalLinkAdapter iBTPhysicalLinkAdapter;
+
+	/**
+	 * iWaitDialog
+	 * displays connection stage.
+	 */
+	CAknWaitDialog* iWaitDialog;
 
 	};
 
