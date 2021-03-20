@@ -12,7 +12,8 @@
 CAquariumControlData::CAquariumControlData() :
 		iConnectionStatus(EStatusDisconnected),
 		iDayOfWeek(1),
-		iTemp(KUnknownTemp)
+		iTemp(KUnknownTemp),
+		iProcessedLine(EStatusLineNULL)
 	{
 	}
 
@@ -119,6 +120,8 @@ void CAquariumControlData::ParseLineL(const TDesC& aLine)
 		iMonth = month;
 		iYear = year;
 		iDayOfWeek = dayOfWeek;
+		if (EStatusLineNULL == iProcessedLine)
+			iProcessedLine = EStatusLineDate;
 		}
 	else if (parser.MarkedToken() == KTime)
 		{
@@ -174,6 +177,8 @@ intParser.Val(hour);
 		iMinute = min;
 		iSecond = sec;
 		iTimeCorrection = corr;
+		if (EStatusLineDate == iProcessedLine)
+			iProcessedLine = EStatusLineTime;
 		}
 	else if (parser.MarkedToken() == KTemp)
 		{
@@ -211,6 +216,8 @@ intParser.Val(hour);
 		// Accept values only if all line
 		// has been parsed successfully.
 		iTemp = temp;
+		if (EStatusLineTime == iProcessedLine)
+			iProcessedLine = EStatusLineTemp;
 		}
 	else if (parser.MarkedToken() == KHeat)
 		{
@@ -263,6 +270,8 @@ intParser.Val(hour);
 		iHeatMode = mode;
 		iHeatLow = low;
 		iHeatHigh = high;
+		if (EStatusLineTemp == iProcessedLine)
+			iProcessedLine = EStatusLineHeat;
 		}
 	else if (parser.MarkedToken() == KLight)
 		{
@@ -382,6 +391,8 @@ intParser.Val(hour);
 		iLightCurrentLevel = curLevel;
 		iLightLevel = topLevel;
 		iLightRise = rise;
+		if (EStatusLineHeat == iProcessedLine)
+			iProcessedLine = EStatusLineLight;
 		}
 	else if (parser.MarkedToken() == KDisplay)
 		{
@@ -403,6 +414,17 @@ intParser.Val(hour);
 		// Accept values only if all line
 		// has been parsed successfully.
 		iDisplayMode = mode;
+		if (EStatusLineLight == iProcessedLine)
+			iProcessedLine = EStatusLineDisplay;
 		}
 	}
 
+TBool CAquariumControlData::IsStatusOk()
+	{
+	if (EStatusLineDisplay == iProcessedLine)
+		{
+		iProcessedLine = EStatusLineNULL;
+		return ETrue;
+		}
+	return EFalse;
+	}

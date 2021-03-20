@@ -126,10 +126,11 @@ private:
 	void CommandSetHeatHigh();
 
 	/**
-	* ShowBTNotAvailableNoteL.
-	* Show note if BT is not available
+	* ShowErrorNoteL.
+	* Show note with error message.
+	* @param aMessageResourceId Resource ID of the error message
 	*/
-	void ShowBTNotAvailableNoteL();
+	void ShowErrorNoteL(TInt aMessageResourceId);
 
 	/**
 	 * From MBtClientObserver

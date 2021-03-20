@@ -163,7 +163,7 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 
 		case EAquariumControlConnect:
 			if (!iBtAvailable)
-				ShowBTNotAvailableNoteL();
+				ShowErrorNoteL(R_ERR_NO_BT);
 			else
 				iBtClient->ConnectL();
 			break;
@@ -450,10 +450,24 @@ inline void CAquariumControlViewAppUi::UpdateViewsL()
 //
 TInt CAquariumControlViewAppUi::TimerCallBack(TAny* aObject)
 	{
+	static TUint failCount(0);
 	CAquariumControlViewAppUi* self = static_cast<CAquariumControlViewAppUi*> (aObject);
 	TInt error(KErrNone);
 	if (self->iData->iConnectionStatus == EStatusConnected)
 		{
+		if (self->iData->IsStatusOk())
+			{
+			failCount = 0;
+			}
+		else
+			{
+			if (++failCount > 3)
+				{
+				TRAP(error, self->ShowErrorNoteL(R_NO_ANSWER));
+				TRAP(error, self->iBtClient->DisconnectL());
+				return error;
+				}
+			}
 		TRAP(error, self->iBtClient->SendMessageL(KStatusCmd));
 		}
 	return error;
@@ -829,13 +843,13 @@ void CAquariumControlViewAppUi::CommandSetHeatHigh()
 	}
 
 // -----------------------------------------------------------------------------
-// CAquariumControlViewAppUi::ShowBTNotAvailableNoteL()
-// Show note if BT is not available 
+// CAquariumControlViewAppUi::ShowErrorNoteL()
+// Show note with error message.
 // -----------------------------------------------------------------------------
 //
-void CAquariumControlViewAppUi::ShowBTNotAvailableNoteL()
+void CAquariumControlViewAppUi::ShowErrorNoteL(TInt aMessageResourceId)
 	{
-	HBufC* textResource = StringLoader::LoadLC(R_ERR_NO_BT);
+	HBufC* textResource = StringLoader::LoadLC(aMessageResourceId);
 	CAknErrorNote* errorNote = new (ELeave) CAknErrorNote;
 	errorNote->ExecuteLD(*textResource);
 	CleanupStack::PopAndDestroy(textResource);

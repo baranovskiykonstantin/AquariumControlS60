@@ -59,6 +59,17 @@ enum TAquariumDispalyMode {
  */
 class CAquariumControlData : public CBase
 	{
+private: // Flags to track the status integrity.
+	enum TStatusLine {
+		EStatusLineNULL,
+		EStatusLineDate,
+		EStatusLineTime,
+		EStatusLineTemp,
+		EStatusLineHeat,
+		EStatusLineLight,
+		EStatusLineDisplay
+	};
+
 public:
 	// Constructors and destructor
 
@@ -90,9 +101,15 @@ public:
 	 *     Heat: OFF auto (20-22)
 	 *     Light: ON manual (10:00:00-20:00:00) 43/50% 10min
 	 *     Display: time
-	 * @param aLine A text line from status message.
+	 * @param aLine A text line from the status message.
 	 */
 	void ParseLineL(const TDesC& aLine);
+
+	/**
+	 * Check if the status has been processed fully.
+	 * @return ETrue if all lines of the status were parsed.
+	 */
+	TBool IsStatusOk();
 
 private:
 
@@ -146,6 +163,9 @@ public:
 
 	// Display
 	TAquariumDispalyMode	iDisplayMode;
+
+	// Flag to track the status integrity.
+	TStatusLine iProcessedLine;
 	};
 
 #endif // __AQUARIUMCONTROLDATA_H__

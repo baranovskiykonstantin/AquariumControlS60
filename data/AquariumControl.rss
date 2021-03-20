@@ -69,6 +69,7 @@ RESOURCE TBUF r_state_on { buf=qtn_state_on; }
 RESOURCE TBUF r_listbox_item_mode { buf=qtn_listbox_item_mode; }
 RESOURCE TBUF r_mode_auto { buf=qtn_mode_auto; }
 RESOURCE TBUF r_mode_manual { buf=qtn_mode_manual; }
+RESOURCE TBUF r_no_answer { buf=qtn_no_answer; }
 
 
 //----------------------------------------------------

@@ -28,6 +28,7 @@
 #define qtn_listbox_item_mode "Mode"
 #define qtn_mode_auto "Automatic"
 #define qtn_mode_manual "Manual"
+#define qtn_no_answer "Aquarium does not answer!\nDisconnecting..."
 
 #define qtn_loc_resource_file_1 "\\resource\\apps\\AquariumControl_0xa291b5a5"
 
