@@ -850,7 +850,8 @@ void CAquariumControlViewAppUi::CommandSetHeatHigh()
 void CAquariumControlViewAppUi::ShowErrorNoteL(TInt aMessageResourceId)
 	{
 	HBufC* textResource = StringLoader::LoadLC(aMessageResourceId);
-	CAknErrorNote* errorNote = new (ELeave) CAknErrorNote;
+	CAknErrorNote* errorNote = new (ELeave) CAknErrorNote();
+	errorNote->SetTimeout(CAknErrorNote::EUndefinedTimeout);
 	errorNote->ExecuteLD(*textResource);
 	CleanupStack::PopAndDestroy(textResource);
 	}
@@ -884,7 +885,8 @@ void CAquariumControlViewAppUi::HandleBtNotifyL(const TDesC& aMessage, TBool aIs
 	{
 	if (aIsError)
 		{
-		CAknErrorNote* errorNote = new (ELeave) CAknErrorNote;
+		CAknErrorNote* errorNote = new (ELeave) CAknErrorNote();
+		errorNote->SetTimeout(CAknErrorNote::EUndefinedTimeout);
 		errorNote->ExecuteLD(aMessage);
 		}
 	}
