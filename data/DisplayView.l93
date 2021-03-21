@@ -1,0 +1,23 @@
+/*
+============================================================================
+ Name        : DisplayView.l93
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for DisplayView (UK)
+============================================================================
+*/
+
+CHARACTER_SET UTF8
+
+//  LOCALISATION STRINGS
+
+// Tab
+#define qtn_display_tab_name "Дисплей"
+
+// Listbox items
+#define qtn_listbox_item_display "Відображати"
+#define qtn_listbox_item_display_time "Поточний час"
+#define qtn_listbox_item_display_temp "Температуру води"
+
+// End of File
+

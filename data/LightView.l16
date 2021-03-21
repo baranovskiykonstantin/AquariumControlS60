@@ -1,0 +1,30 @@
+/*
+============================================================================
+ Name        : LightView.l16
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for LightView (RU)
+============================================================================
+*/
+
+CHARACTER_SET UTF8
+
+//  LOCALISATION STRINGS
+
+// Tab
+#define qtn_light_tab_name "Свет"
+
+// Listbox items
+#define qtn_listbox_item_light_on_time "Включить в"
+#define qtn_listbox_item_light_off_time "Выключить в"
+#define qtn_listbox_item_light_level "Яркость"
+#define qtn_listbox_item_light_rise "Время нарастания"
+#define qtn_listbox_item_light_rise_units "минут"
+
+// Toolbar
+#define qtn_light_toolbar_on "Вкл"
+#define qtn_light_toolbar_off "Выкл"
+#define qtn_light_toolbar_auto "Авто"
+
+// End of File
+

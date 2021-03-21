@@ -8,7 +8,7 @@
 */
 
 //  INCLUDES
-#include "DisplayView.rls"
+#include "DisplayView.loc"
 
 // -----------------------------------------------------------------------------
 //
@@ -38,3 +38,4 @@ RESOURCE AVKON_VIEW r_display_view
 
 
 // End of File
+

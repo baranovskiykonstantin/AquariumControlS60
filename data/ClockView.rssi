@@ -8,7 +8,7 @@
 */
 
 //  INCLUDES
-#include "ClockView.rls"
+#include "ClockView.loc"
 
 // -----------------------------------------------------------------------------
 //
@@ -40,3 +40,4 @@ RESOURCE AVKON_VIEW r_clock_view
 
 
 // End of File
+

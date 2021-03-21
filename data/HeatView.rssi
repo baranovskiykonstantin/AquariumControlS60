@@ -8,7 +8,7 @@
 */
 
 //  INCLUDES
-#include "HeatView.rls"
+#include "HeatView.loc"
 
 // -----------------------------------------------------------------------------
 //
@@ -104,3 +104,4 @@ RESOURCE AVKON_TOOLBAR r_heat_toolbar
 
 
 // End of File
+

@@ -1,23 +1,23 @@
 /*
 ============================================================================
- Name        : BtClient.loc
+ Name        : LightView.loc
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
- Description : This is a localisation file for Bluetooth client.
+ Description : This is a localisation file for LightView.
 ============================================================================
 */
-#ifndef __BTCLIENT_LOC__
-#define __BTCLIENT_LOC__
+#ifndef __LIGHTVIEW_LOC__
+#define __LIGHTVIEW_LOC__
 
 #ifdef LANGUAGE_01
-#include "BtClient.l01"
+#include "LightView.l01"
 #elif LANGUAGE_16
-#include "BtClient.l16"
+#include "LightView.l16"
 #elif LANGUAGE_93
-#include "BtClient.l93"
+#include "LightView.l93"
 #else
-#include "BtClient.l01" // default
+#include "LightView.l01" // default
 #endif
 
-#endif /* __BTCLIENT_LOC__ */
+#endif /* __LIGHTVIEW_LOC__ */
 

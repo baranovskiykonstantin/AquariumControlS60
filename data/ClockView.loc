@@ -1,23 +1,23 @@
 /*
 ============================================================================
- Name        : BtClient.loc
+ Name        : ClockView.loc
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
- Description : This is a localisation file for Bluetooth client.
+ Description : This is a localisation file for ClockView.
 ============================================================================
 */
-#ifndef __BTCLIENT_LOC__
-#define __BTCLIENT_LOC__
+#ifndef __CLOCKVIEW_LOC__
+#define __CLOCKVIEW_LOC__
 
 #ifdef LANGUAGE_01
-#include "BtClient.l01"
+#include "ClockView.l01"
 #elif LANGUAGE_16
-#include "BtClient.l16"
+#include "ClockView.l16"
 #elif LANGUAGE_93
-#include "BtClient.l93"
+#include "ClockView.l93"
 #else
-#include "BtClient.l01" // default
+#include "ClockView.l01" // default
 #endif
 
-#endif /* __BTCLIENT_LOC__ */
+#endif /* __CLOCKVIEW_LOC__ */
 

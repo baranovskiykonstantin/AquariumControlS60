@@ -1,11 +1,9 @@
 /*
 ============================================================================
- Name        : LightView.rls
+ Name        : LightView.l01
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
- Description : This is a localisation file for LightView
-               A .rls file is the one and only place where the logical
-               strings to be localised are defined.
+ Description : This is a localisation file for LightView (EN)
 ============================================================================
 */
 
@@ -27,3 +25,4 @@
 #define qtn_light_toolbar_auto "Auto"
 
 // End of File
+

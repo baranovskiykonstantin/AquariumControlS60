@@ -1,11 +1,9 @@
 /*
 ============================================================================
- Name        : HeatView.rls
+ Name        : HeatView.l01
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
- Description : This is a localisation file for HeatView
-               A .rls file is the one and only place where the logical
-               strings to be localised are defined.
+ Description : This is a localisation file for HeatView (EN)
 ============================================================================
 */
 
@@ -26,3 +24,4 @@
 #define qtn_heat_toolbar_auto "Auto"
 
 // End of File
+

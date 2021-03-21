@@ -1,11 +1,9 @@
 /*
 ============================================================================
- Name        : ClockView.rls
+ Name        : ClockView.l01
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
- Description : This is a localisation file for ClockView
-               A .rls file is the one and only place where the logical
-               strings to be localised are defined.
+ Description : This is a localisation file for ClockView (EN)
 ============================================================================
 */
 
@@ -22,3 +20,4 @@
 #define qtn_listbox_item_dayofweek "Day of week"
 
 // End of File
+

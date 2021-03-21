@@ -8,7 +8,7 @@
 */
 
 #include "AquariumControl.hrh"
-#include "AquariumControl.rls"
+#include "AquariumControl.loc"
 #include <appinfo.rh>
 #include <aquariumcontrol_0xa291b5a5.rsg>
 

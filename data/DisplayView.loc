@@ -1,0 +1,23 @@
+/*
+============================================================================
+ Name        : DisplayView.loc
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for DisplayView.
+============================================================================
+*/
+#ifndef __DISPLAYVIEW_LOC__
+#define __DISPLAYVIEW_LOC__
+
+#ifdef LANGUAGE_01
+#include "DisplayView.l01"
+#elif LANGUAGE_16
+#include "DisplayView.l16"
+#elif LANGUAGE_93
+#include "DisplayView.l93"
+#else
+#include "DisplayView.l01" // default
+#endif
+
+#endif /* __DISPLAYVIEW_LOC__ */
+

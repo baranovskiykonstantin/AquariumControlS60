@@ -1,0 +1,36 @@
+/*
+============================================================================
+ Name        : AquariumControl.l93
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for AquariumControl (UK)
+============================================================================
+*/
+
+CHARACTER_SET UTF8
+
+//  LOCALISATION STRINGS
+
+// Caption string for app.
+#define qtn_caption_string "Aquarium Control"
+
+// Menu
+#define qtn_connect "З'єднатись"
+#define qtn_disconnect "Роз'єднатись"
+#define qtn_about "Про програму"
+#define qtn_exit "Вийти"
+
+// Common strings
+#define qtn_disconnected "(роз'єднано)"
+#define qtn_listbox_item_state "Стан"
+#define qtn_state_off "Вимкнено"
+#define qtn_state_on "Ввімкнено"
+#define qtn_listbox_item_mode "Режим"
+#define qtn_mode_auto "Автоматичний"
+#define qtn_mode_manual "Ручний"
+#define qtn_no_answer "Акваріум не відповідає!\nРоз'єднання..."
+
+#define qtn_loc_resource_file_1 "\\resource\\apps\\AquariumControl_0xa291b5a5"
+
+// End of File
+

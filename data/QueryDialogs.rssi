@@ -8,7 +8,7 @@
 */
 
 //  INCLUDES
-#include "QueryDialogs.rls"
+#include "QueryDialogs.loc"
 
 // -----------------------------------------------------------------------------
 //
@@ -286,3 +286,4 @@ RESOURCE ARRAY r_setdayofweek_dialog_items
 
 
 // End of File
+

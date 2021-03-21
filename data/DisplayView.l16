@@ -1,0 +1,23 @@
+/*
+============================================================================
+ Name        : DisplayView.l16
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for DisplayView (RU)
+============================================================================
+*/
+
+CHARACTER_SET UTF8
+
+//  LOCALISATION STRINGS
+
+// Tab
+#define qtn_display_tab_name "Дисплей"
+
+// Listbox items
+#define qtn_listbox_item_display "Отображать"
+#define qtn_listbox_item_display_time "Текущее время"
+#define qtn_listbox_item_display_temp "Температуру воды"
+
+// End of File
+

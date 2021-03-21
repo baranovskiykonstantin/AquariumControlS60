@@ -1,11 +1,9 @@
 /*
 ============================================================================
- Name        : AquariumControl.rls
+ Name        : AquariumControl.l01
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
- Description : This is a localisation file for AquariumControl
-               A .rls file is the one and only place where the logical
-               strings to be localised are defined.
+ Description : This is a localisation file for AquariumControl (EN)
 ============================================================================
 */
 
@@ -33,3 +31,4 @@
 #define qtn_loc_resource_file_1 "\\resource\\apps\\AquariumControl_0xa291b5a5"
 
 // End of File
+

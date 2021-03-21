@@ -1,0 +1,25 @@
+/*
+============================================================================
+ Name        : ClockView.l93
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for ClockView (UK)
+============================================================================
+*/
+
+CHARACTER_SET UTF8
+
+//  LOCALISATION STRINGS
+
+// Tab
+#define qtn_clock_tab_name "Годинник"
+
+// Listbox items
+#define qtn_listbox_item_time "Час"
+#define qtn_listbox_item_timecor "Корекція часу"
+#define qtn_listbox_item_timecorunits "секунд за добу"
+#define qtn_listbox_item_date "Дата"
+#define qtn_listbox_item_dayofweek "День тижня"
+
+// End of File
+

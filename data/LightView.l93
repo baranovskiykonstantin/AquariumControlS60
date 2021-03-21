@@ -1,0 +1,30 @@
+/*
+============================================================================
+ Name        : LightView.l93
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for LightView (UK)
+============================================================================
+*/
+
+CHARACTER_SET UTF8
+
+//  LOCALISATION STRINGS
+
+// Tab
+#define qtn_light_tab_name "Світло"
+
+// Listbox items
+#define qtn_listbox_item_light_on_time "Включити о"
+#define qtn_listbox_item_light_off_time "Виключити о"
+#define qtn_listbox_item_light_level "Яскравість"
+#define qtn_listbox_item_light_rise "Час наростання"
+#define qtn_listbox_item_light_rise_units "хвилин"
+
+// Toolbar
+#define qtn_light_toolbar_on "Вкл"
+#define qtn_light_toolbar_off "Викл"
+#define qtn_light_toolbar_auto "Авто"
+
+// End of File
+

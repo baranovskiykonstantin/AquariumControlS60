@@ -1,0 +1,36 @@
+/*
+============================================================================
+ Name        : AquariumControl.l16
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for AquariumControl (RU)
+============================================================================
+*/
+
+CHARACTER_SET UTF8
+
+//  LOCALISATION STRINGS
+
+// Caption string for app.
+#define qtn_caption_string "Aquarium Control"
+
+// Menu
+#define qtn_connect "Подключиться"
+#define qtn_disconnect "Отключиться"
+#define qtn_about "О программе"
+#define qtn_exit "Выйти"
+
+// Common strings
+#define qtn_disconnected "(отключено)"
+#define qtn_listbox_item_state "Состояние"
+#define qtn_state_off "Выключено"
+#define qtn_state_on "Включено"
+#define qtn_listbox_item_mode "Режим"
+#define qtn_mode_auto "Автоматический"
+#define qtn_mode_manual "Ручной"
+#define qtn_no_answer "Аквариум не отвечает!\nОтключение..."
+
+#define qtn_loc_resource_file_1 "\\resource\\apps\\AquariumControl_0xa291b5a5"
+
+// End of File
+

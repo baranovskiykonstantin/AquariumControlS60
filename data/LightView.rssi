@@ -8,7 +8,7 @@
 */
 
 //  INCLUDES
-#include "LightView.rls"
+#include "LightView.loc"
 
 // -----------------------------------------------------------------------------
 //
@@ -105,3 +105,4 @@ RESOURCE AVKON_TOOLBAR r_light_toolbar
 
 
 // End of File
+

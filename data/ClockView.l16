@@ -1,0 +1,25 @@
+/*
+============================================================================
+ Name        : ClockView.l16
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for ClockView (RU)
+============================================================================
+*/
+
+CHARACTER_SET UTF8
+
+//  LOCALISATION STRINGS
+
+// Tab
+#define qtn_clock_tab_name "Часы"
+
+// Listbox items
+#define qtn_listbox_item_time "Время"
+#define qtn_listbox_item_timecor "Коррекция времени"
+#define qtn_listbox_item_timecorunits "секунд в сутки"
+#define qtn_listbox_item_date "Дата"
+#define qtn_listbox_item_dayofweek "День недели"
+
+// End of File
+

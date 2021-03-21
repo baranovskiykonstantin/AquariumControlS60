@@ -1,0 +1,45 @@
+/*
+============================================================================
+ Name        : QueryDialogs.l93
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for query dialogs (UK)
+============================================================================
+*/
+
+CHARACTER_SET UTF8
+
+//  LOCALISATION STRINGS
+
+// About dialog
+#define qtn_about_dialog_title "Про програму"
+#define qtn_about_dialog_text "Aquarium Control 1.0\n\nЦей додаток розроблено для налаштовування контролеру акваріума, описаного тут:\nhttps://github.com/baranovskiykonstantin/aquarium\n\nАвтор: Барановський Костянтин\n\nПідтримка: baranovskiykonstantin@gmail.com\n\n(c) GPLv3"
+
+// SetTimeVariants
+#define qtn_settimevariangs_dialog_title "Встановити час"
+#define qtn_settimevariangs_dialog_variant1 "Поточний"
+#define qtn_settimevariangs_dialog_variant2 "Інший..."
+
+// SetTimeVariants
+#define qtn_setdatevariangs_dialog_title "Встановити дату"
+#define qtn_setdatevariangs_dialog_variant1 "Поточну"
+#define qtn_setdatevariangs_dialog_variant2 "Іншу..."
+
+// SetTime
+#define qtn_settime_dialog_title "Встановити час"
+
+// SetDate
+#define qtn_setdate_dialog_title "Встановити дату"
+
+// SetDayOfWeek
+#define qtn_setdayofweek_dialog_title "День тижня"
+#define qtn_setdayofweek_dialog_day1 "Понеділок"
+#define qtn_setdayofweek_dialog_day2 "Вівторок"
+#define qtn_setdayofweek_dialog_day3 "Середа"
+#define qtn_setdayofweek_dialog_day4 "Четвер"
+#define qtn_setdayofweek_dialog_day5 "П'ятниця"
+#define qtn_setdayofweek_dialog_day6 "Субота"
+#define qtn_setdayofweek_dialog_day7 "Неділя"
+
+// End of File
+

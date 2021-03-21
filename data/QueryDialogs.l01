@@ -1,11 +1,9 @@
 /*
 ============================================================================
- Name        : QueryDialogs.rls
+ Name        : QueryDialogs.l01
  Author      : Konstantin Baranovskiy
  Copyright   : GPLv3
- Description : This is a localisation file for query dialogs
-               A .rls file is the one and only place where the logical
-               strings to be localised are defined.
+ Description : This is a localisation file for query dialogs (EN)
 ============================================================================
 */
 
@@ -42,3 +40,4 @@
 #define qtn_setdayofweek_dialog_day7 "Sunday"
 
 // End of File
+

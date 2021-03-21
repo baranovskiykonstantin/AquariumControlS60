@@ -1,0 +1,29 @@
+/*
+============================================================================
+ Name        : HeatView.l93
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for HeatView (UK)
+============================================================================
+*/
+
+CHARACTER_SET UTF8
+
+//  LOCALISATION STRINGS
+
+// Tab
+#define qtn_heat_tab_name "Підігрів"
+
+// Listbox items
+#define qtn_listbox_item_heat_temp "Температура води"
+#define qtn_listbox_item_heat_temp_unknown "невідома"
+#define qtn_listbox_item_heat_lo "Мін. температура"
+#define qtn_listbox_item_heat_hi "Макс. температура"
+
+// Toolbar
+#define qtn_heat_toolbar_on "Вкл"
+#define qtn_heat_toolbar_off "Викл"
+#define qtn_heat_toolbar_auto "Авто"
+
+// End of File
+

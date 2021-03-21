@@ -17,7 +17,7 @@ NAME AQUA	// 4 letter ID
 #include <avkon.mbg>
 #include <appinfo.rh>
 #include "AquariumControl.hrh"
-#include "AquariumControl.rls"
+#include "AquariumControl.loc"
 
 //  RESOURCE DEFINITIONS
 // -----------------------------------------------------------------------------
@@ -216,3 +216,4 @@ RESOURCE NAVI_DECORATOR r_aquariumcontrol_navi_decorator
 
 
 // End of File
+

@@ -8,8 +8,7 @@
 */
 
 //  INCLUDES
-// #include "BtClient.loc"
-#include "BtClient.l01"
+#include "BtClient.loc"
 
 //  RESOURCE DEFINITIONS
 
@@ -83,3 +82,4 @@ RESOURCE DIALOG r_wait_dialog
 
 
 // End of File
+
