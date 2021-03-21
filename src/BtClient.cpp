@@ -168,7 +168,7 @@ void CBtClient::RunL()
 			case EGettingDevice:
 				if (iStatus == KErrCancel)
 					{
-					NotifyL(R_ERR_NO_DEVICE_SELECTED, ETrue);
+					NotifyL(R_ERR_NO_DEVICE_SELECTED);
 					}
 				else
 					{
@@ -224,6 +224,8 @@ void CBtClient::RunL()
 			{
 			case EGettingDevice:
 				{
+				ShowWaitDialog();
+
 				_LIT(KPrepend, "\n(");
 				_LIT(KByteSeparator, ":");
 				_LIT(KAppend, ")");
@@ -360,7 +362,6 @@ TBool CBtClient::IsConnecting()
 //
 void CBtClient::ConnectL()
 	{
-	ShowWaitDialog();
 	if (State() == EWaitingToGetDevice && !IsActive())
 		{
 		SetState(EGettingDevice);
@@ -638,7 +639,7 @@ void CBtClient::HandleBatteryStatusChangeL()
 void CBtClient::ShowWaitDialog()
 	{
 	if(iWaitDialog)
-		iWaitDialog->ProcessFinishedL();
+		return;
 	iWaitDialog = new(ELeave)CAknWaitDialog((REINTERPRET_CAST(CEikDialog**,&iWaitDialog)));
 	iWaitDialog->SetCallback(this);
 	iWaitDialog->ExecuteLD(R_WAIT_DIALOG);
