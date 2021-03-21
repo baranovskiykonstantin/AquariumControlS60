@@ -92,10 +92,7 @@ void CAquariumControlViewAppUi::ConstructL()
 	const TInt tickInterval = 1000000;
 	iTimer->Start(tickInterval, tickInterval, TCallBack(TimerCallBack, this));
 
-	// Bluetooth
-	iBtClient = CBtClient::NewL();
-	iBtClient->SetObserver(this);
-	// check whether BT is available or not
+	// Check whether BT is available or not
 	RSdp sdpSession;
 	if (sdpSession.Connect() == KErrNone)
 		{
@@ -106,9 +103,11 @@ void CAquariumControlViewAppUi::ConstructL()
 		{
 		iBtAvailable = EFalse;
 		}
-
 	// Empty by default
 	iBtDataTail = HBufC::New(0);
+	// Bluetooth
+	iBtClient = CBtClient::NewL();
+	iBtClient->SetObserver(this);
 	}
 // -----------------------------------------------------------------------------
 // CAquariumControlViewAppUi::CAquariumControlViewAppUi()

@@ -97,6 +97,19 @@ public: // New functions
 	 */
 	void SetObserver(MBtClientObserver* aObserver);
 
+	/**
+	 * LoadBtDeviceInfoL()
+	 * Restore BT device info from the previous session.
+	 * @return ETrue if BT device info restored successfylly.
+	 */
+	TBool LoadBtDeviceInfoL();
+
+	/**
+	 * SaveBtDeviceInfoL()
+	 * Save BT device info to file for the next session.
+	 */
+	void SaveBtDeviceInfoL();
+
 protected: // New functions
 
 	/**

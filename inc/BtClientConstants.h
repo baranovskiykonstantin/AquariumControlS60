@@ -26,6 +26,8 @@ const TInt KBtTextBufLength = 128;
 
 const TInt KBtTimeOut = 20000000; // 20 seconds time-out
 
+_LIT(KBtDeviceFile, "btdevice.bin");
+
 #endif /* __BTCLIENTCONSTANTS_H__ */
 
 // End of File

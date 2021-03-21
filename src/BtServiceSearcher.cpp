@@ -8,6 +8,9 @@
  */
 
 #include <bt_sock.h>
+#include <f32file.h>
+#include <s32file.h>
+#include <s32strm.h>
 #include <StringLoader.h>
 #include "BtClientConstants.h"
 #include "BtServiceSearcher.h"
@@ -475,6 +478,89 @@ void CBtServiceSearcher::NotifyL(TInt aErrorResourceId)
 	HBufC* textResource = StringLoader::LoadLC(aErrorResourceId);
 	NotifyL(*textResource);
 	CleanupStack::PopAndDestroy(textResource);
+	}
+
+// -----------------------------------------------------------------------------
+// CBtServiceSearcher::LoadBtDeviceInfoL()
+// Restore BT device info from the previous session.
+// -----------------------------------------------------------------------------
+//
+TBool CBtServiceSearcher::LoadBtDeviceInfoL()
+	{
+	TBTDevAddr bdAddr;
+	TBuf8<6> bdAddrStr;
+	TBuf<KMaxBluetoothNameLen> deviceName;
+	TBTDeviceClass deviceClass;
+
+	TFileName fileName;
+	RFs fs;
+	RFileReadStream readStream;
+	User::LeaveIfError(fs.Connect());
+	CleanupClosePushL(fs);
+	// Prepare private path
+	User::LeaveIfError(fs.CreatePrivatePath(EDriveC));
+	User::LeaveIfError(fs.PrivatePath(fileName));
+	fileName += KBtDeviceFile;
+	// Read from stream
+	TInt fsError = readStream.Open(fs, fileName, EFileRead);
+	TInt loadingError = KErrNone;
+	// If file existed, try to read it.
+	if (KErrNone == fsError)
+		{
+		TRAP(loadingError, readStream >> bdAddrStr);
+		if (KErrNone == loadingError)
+			TRAP(loadingError, readStream >> deviceName);
+		if (KErrNone == loadingError)
+			TRAP(loadingError, readStream >> deviceClass);
+		if (KErrNone == loadingError)
+			{
+			bdAddr = TBTDevAddr(bdAddrStr);
+			iResponse().SetDeviceAddress(bdAddr);
+			iResponse().SetDeviceName(deviceName);
+			iResponse().SetDeviceClass(deviceClass);
+			}
+		}
+	else
+		{
+		loadingError = fsError;
+		}
+	readStream.Release();
+	// Use file only once.
+	fs.Delete(fileName);
+	CleanupStack::PopAndDestroy(); // fs
+	return (KErrNone == loadingError);
+	}
+
+// -----------------------------------------------------------------------------
+// CBtServiceSearcher::SaveBtDeviceInfoL()
+// Save BT device info to file for the next session.
+// -----------------------------------------------------------------------------
+//
+void CBtServiceSearcher::SaveBtDeviceInfoL()
+	{
+	TFileName fileName;
+	RFs fs;
+	RFileWriteStream writeStream;
+	User::LeaveIfError(fs.Connect());
+	CleanupClosePushL(fs);
+	// Prepare private path
+	User::LeaveIfError(fs.CreatePrivatePath(EDriveC));
+	User::LeaveIfError(fs.PrivatePath(fileName));
+	fileName += KBtDeviceFile;
+	TInt error = writeStream.Open(fs, fileName, EFileWrite);
+	// Setting file did not exist, create one.
+	if (error != KErrNone)
+		{
+		User::LeaveIfError(writeStream.Create(fs, fileName, EFileWrite));
+		}
+	writeStream.PushL();
+	writeStream << iResponse().BDAddr().Des();
+	writeStream << iResponse().DeviceName();
+	writeStream << iResponse().DeviceClass();
+	writeStream.CommitL();
+	writeStream.Pop();
+	writeStream.Release();
+	CleanupStack::PopAndDestroy(); // fs
 	}
 
 // End of File

@@ -66,6 +66,7 @@ LIBRARY			efsrv.lib
 LIBRARY			sdpagent.lib
 LIBRARY			sdpdatabase.lib
 LIBRARY			eikcdlg.lib
+LIBRARY			estor.lib
 
 LANG SC
 

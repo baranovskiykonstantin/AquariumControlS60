@@ -64,6 +64,8 @@ CBtClient::~CBtClient()
 	// Close() will wait forever for Read to complete
 	if (State() == EConnected)
 		{
+		// Try to save, ignore error
+		TRAPD(error, iServiceSearcher->SaveBtDeviceInfoL());
 		if (iActiveSocket)
 			{
 			iActiveSocket->CancelRead();
@@ -103,6 +105,18 @@ void CBtClient::ConstructL()
 	iServiceSearcher->SetObserver(iObserver);
 	User::LeaveIfError(iSocketServer.Connect());
 	iBatteryStatus = CBatteryStatus::NewL(this);
+	// Try to restore connection with
+	// the previously used BT device
+	if (iServiceSearcher->LoadBtDeviceInfoL())
+		{
+		ShowWaitDialog();
+		SetState(EGettingDevice);
+		SetActive();
+		// Device is gotten from the previous session,
+		// go to getting service
+		TRequestStatus* status = &iStatus;
+		User::RequestComplete(status, KErrNone);
+		}
 	}
 
 // ----------------------------------------------------------------------------
