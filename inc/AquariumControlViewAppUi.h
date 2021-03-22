@@ -114,16 +114,16 @@ private:
 	 * Command handlers.
 	 * @return EFalse if command canceled by user, ETrue otherwise.
 	 */
-	void CommandSetTime();
-	void CommandSetTimeCor();
-	void CommandSetDate();
-	void CommandSetDayOfWeek();
-	void CommandSetLightOnTime();
-	void CommandSetLightOffTime();
-	void CommandSetLightLevel();
-	void CommandSetLightRise();
-	void CommandSetHeatLow();
-	void CommandSetHeatHigh();
+	void CommandSetTimeL();
+	void CommandSetTimeCorL();
+	void CommandSetDateL();
+	void CommandSetDayOfWeekL();
+	void CommandSetLightOnTimeL();
+	void CommandSetLightOffTimeL();
+	void CommandSetLightLevelL();
+	void CommandSetLightRiseL();
+	void CommandSetHeatLowL();
+	void CommandSetHeatHighL();
 
 	/**
 	* ShowErrorNoteL.

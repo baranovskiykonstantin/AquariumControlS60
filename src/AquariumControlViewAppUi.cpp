@@ -172,16 +172,16 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			break;
 
 		case EAquariumControlSetTime:
-			CommandSetTime();
+			CommandSetTimeL();
 			break;
 		case EAquariumControlSetTimeCorrection:
-			CommandSetTimeCor();
+			CommandSetTimeCorL();
 			break;
 		case EAquariumControlSetDate:
-			CommandSetDate();
+			CommandSetDateL();
 			break;
 		case EAquariumControlSetDayOfWeek:
-			CommandSetDayOfWeek();
+			CommandSetDayOfWeekL();
 			break;
 
 		case EAquariumControlSwitchLightState:
@@ -220,16 +220,16 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			}
 			break;
 		case EAquariumControlSetLightOnTime:
-			CommandSetLightOnTime();
+			CommandSetLightOnTimeL();
 			break;
 		case EAquariumControlSetLightOffTime:
-			CommandSetLightOffTime();
+			CommandSetLightOffTimeL();
 			break;
 		case EAquariumControlSetLightLevel:
-			CommandSetLightLevel();
+			CommandSetLightLevelL();
 			break;
 		case EAquariumControlSetLightRise:
-			CommandSetLightRise();
+			CommandSetLightRiseL();
 			break;
 		case EAquariumControlSetLightStateOn:
 			iBtClient->SendMessageL(KCmdLightOn);
@@ -280,10 +280,10 @@ void CAquariumControlViewAppUi::HandleCommandL(TInt aCommand)
 			}
 			break;
 		case EAquariumControlSetHeatLow:
-			CommandSetHeatLow();
+			CommandSetHeatLowL();
 			break;
 		case EAquariumControlSetHeatHigh:
-			CommandSetHeatHigh();
+			CommandSetHeatHighL();
 			break;
 		case EAquariumControlSetHeatStateOn:
 			iBtClient->SendMessageL(KCmdHeatOn);
@@ -495,11 +495,11 @@ void CAquariumControlViewAppUi::ResumeUpdating()
 	}
 
 // ----------------------------------------------------------------------------
-// CAquariumControlViewAppUi::CommandSetTime()
+// CAquariumControlViewAppUi::CommandSetTimeL()
 // SetTime command handler.
 // ----------------------------------------------------------------------------
 //
-void CAquariumControlViewAppUi::CommandSetTime()
+void CAquariumControlViewAppUi::CommandSetTimeL()
 	{
 	_LIT(KCmdFormat, "time %02u:%02u:%02u\r");
 	TBuf<14> cmd;
@@ -543,11 +543,11 @@ void CAquariumControlViewAppUi::CommandSetTime()
 	}
 
 // ----------------------------------------------------------------------------
-// CAquariumControlViewAppUi::CommandSetTimeCor()
+// CAquariumControlViewAppUi::CommandSetTimeCorL()
 // SetTimeCor command handler.
 // ----------------------------------------------------------------------------
 //
-void CAquariumControlViewAppUi::CommandSetTimeCor()
+void CAquariumControlViewAppUi::CommandSetTimeCorL()
 	{
 	_LIT(KCmdFormatP, "time +%02i\r");
 	_LIT(KCmdFormatN, "time -%02i\r");
@@ -572,11 +572,11 @@ void CAquariumControlViewAppUi::CommandSetTimeCor()
 	}
 
 // ----------------------------------------------------------------------------
-// CAquariumControlViewAppUi::CommandSetDate()
+// CAquariumControlViewAppUi::CommandSetDateL()
 // SetDate command handler.
 // ----------------------------------------------------------------------------
 //
-void CAquariumControlViewAppUi::CommandSetDate()
+void CAquariumControlViewAppUi::CommandSetDateL()
 	{
 	_LIT(KCmdFormat, "date %02u.%02u.%02u %1u\r");
 	TBuf<16> cmd;
@@ -622,11 +622,11 @@ void CAquariumControlViewAppUi::CommandSetDate()
 	}
 
 // ----------------------------------------------------------------------------
-// CAquariumControlViewAppUi::CommandSetDayOfWeek()
+// CAquariumControlViewAppUi::CommandSetDayOfWeekL()
 // SetDayOfWeek command handler.
 // ----------------------------------------------------------------------------
 //
-void CAquariumControlViewAppUi::CommandSetDayOfWeek()
+void CAquariumControlViewAppUi::CommandSetDayOfWeekL()
 	{
 	_LIT(KCmdFormat, "date %02u.%02u.%02u %1u\r");
 	TBuf<16> cmd;
@@ -646,11 +646,11 @@ void CAquariumControlViewAppUi::CommandSetDayOfWeek()
 	}
 
 // ----------------------------------------------------------------------------
-// CAquariumControlViewAppUi::CommandSetLightOnTime()
+// CAquariumControlViewAppUi::CommandSetLightOnTimeL()
 // SetLightOnTime command handler.
 // ----------------------------------------------------------------------------
 //
-void CAquariumControlViewAppUi::CommandSetLightOnTime()
+void CAquariumControlViewAppUi::CommandSetLightOnTimeL()
 	{
 	_LIT(KTimeStrFormat, ":%02u%02u%02u.");
 	_LIT(KMinTimeStr, ":000000.");
@@ -694,11 +694,11 @@ void CAquariumControlViewAppUi::CommandSetLightOnTime()
 	}
 
 // ----------------------------------------------------------------------------
-// CAquariumControlViewAppUi::CommandSetLightOffTime()
+// CAquariumControlViewAppUi::CommandSetLightOffTimeL()
 // SetLightOffTime command handler.
 // ----------------------------------------------------------------------------
 //
-void CAquariumControlViewAppUi::CommandSetLightOffTime()
+void CAquariumControlViewAppUi::CommandSetLightOffTimeL()
 	{
 	_LIT(KTimeStrFormat, ":%02u%02u%02u.");
 	_LIT(KMaxTimeStr, ":235959.");
@@ -742,11 +742,11 @@ void CAquariumControlViewAppUi::CommandSetLightOffTime()
 	}
 
 // ----------------------------------------------------------------------------
-// CAquariumControlViewAppUi::CommandSetLightLevel()
+// CAquariumControlViewAppUi::CommandSetLightLevelL()
 // SetLightLevel command handler.
 // ----------------------------------------------------------------------------
 //
-void CAquariumControlViewAppUi::CommandSetLightLevel()
+void CAquariumControlViewAppUi::CommandSetLightLevelL()
 	{
 	_LIT(KCmdFormat, "light level %03u\r");
 	TBuf<16> cmd;
@@ -767,11 +767,11 @@ void CAquariumControlViewAppUi::CommandSetLightLevel()
 	}
 
 // ----------------------------------------------------------------------------
-// CAquariumControlViewAppUi::CommandSetLightRise()
+// CAquariumControlViewAppUi::CommandSetLightRiseL()
 // SetLightRise command handler.
 // ----------------------------------------------------------------------------
 //
-void CAquariumControlViewAppUi::CommandSetLightRise()
+void CAquariumControlViewAppUi::CommandSetLightRiseL()
 	{
 	_LIT(KCmdFormat, "light rise %02u\r");
 	TBuf<14> cmd;
@@ -792,11 +792,11 @@ void CAquariumControlViewAppUi::CommandSetLightRise()
 	}
 
 // ----------------------------------------------------------------------------
-// CAquariumControlViewAppUi::CommandSetHeatLow()
+// CAquariumControlViewAppUi::CommandSetHeatLowL()
 // SetHeatLow command handler.
 // ----------------------------------------------------------------------------
 //
-void CAquariumControlViewAppUi::CommandSetHeatLow()
+void CAquariumControlViewAppUi::CommandSetHeatLowL()
 	{
 	_LIT(KCmdFormat, "heat %02u-%02u\r");
 	TBuf<11> cmd;
@@ -817,11 +817,11 @@ void CAquariumControlViewAppUi::CommandSetHeatLow()
 	}
 
 // ----------------------------------------------------------------------------
-// CAquariumControlViewAppUi::CommandSetHeatHigh()
+// CAquariumControlViewAppUi::CommandSetHeatHighL()
 // SetHeatHigh command handler.
 // ----------------------------------------------------------------------------
 //
-void CAquariumControlViewAppUi::CommandSetHeatHigh()
+void CAquariumControlViewAppUi::CommandSetHeatHighL()
 	{
 	_LIT(KCmdFormat, "heat %02u-%02u\r");
 	TBuf<11> cmd;
