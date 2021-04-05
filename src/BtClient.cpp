@@ -64,8 +64,7 @@ CBtClient::~CBtClient()
 	// Close() will wait forever for Read to complete
 	if (State() == EConnected)
 		{
-		// Try to save, ignore error
-		TRAPD(error, iServiceSearcher->SaveBtDeviceInfoL());
+		TRAP_IGNORE(iServiceSearcher->SaveBtDeviceInfoL());
 		if (iActiveSocket)
 			{
 			iActiveSocket->CancelRead();

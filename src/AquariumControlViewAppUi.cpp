@@ -462,7 +462,7 @@ TInt CAquariumControlViewAppUi::TimerCallBack(TAny* aObject)
 			{
 			if (++failCount > 3)
 				{
-				TRAP(error, self->ShowErrorNoteL(R_NO_ANSWER));
+				TRAP_IGNORE(self->ShowErrorNoteL(R_NO_ANSWER));
 				TRAP(error, self->iBtClient->DisconnectL());
 				return error;
 				}
