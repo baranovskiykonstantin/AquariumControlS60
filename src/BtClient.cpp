@@ -8,7 +8,7 @@
  */
 
 // INCLUDE FILES
-#include <StringLoader.h>
+#include <stringloader.h>
 #include <coemain.h>
 #include "BtServiceSearcher.h"
 #include "BtClientConstants.h"
