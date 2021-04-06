@@ -59,12 +59,10 @@ void CClockContainer::UpdateListBoxL()
 	if (data->iConnectionStatus == EStatusPaused)
 		return;
 
-	// Remove all items
-	iListBoxItems->Reset();
-
 	if (data->iConnectionStatus == EStatusConnected)
 		{
-		// Create items again
+		// Create/update items
+		TBool isItemAddition = (iListBoxItems->Count() == 0);
 		TBuf<64> itemText;
 		HBufC* itemTitle;
 		TBuf<32> itemValue;
@@ -81,7 +79,7 @@ void CClockContainer::UpdateListBoxL()
 		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_TIME);
 		itemValue.Format(KTimeFormat, data->iHour, data->iMinute, data->iSecond);
 		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
-		iListBoxItems->AppendL(itemText);
+		UpdateListBoxItemL(0, itemText);
 		CleanupStack::PopAndDestroy(itemTitle);
 
 		// Time correction
@@ -91,7 +89,7 @@ void CClockContainer::UpdateListBoxL()
 		if (data->iTimeCorrection >= 0)
 			itemValue.Insert(0, KSignPlus);
 		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
-		iListBoxItems->AppendL(itemText);
+		UpdateListBoxItemL(1, itemText);
 		CleanupStack::PopAndDestroy(timeCorUnits);
 		CleanupStack::PopAndDestroy(itemTitle);
 
@@ -99,7 +97,7 @@ void CClockContainer::UpdateListBoxL()
 		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_DATE);
 		itemValue.Format(KDateFormat, data->iDay, data->iMonth, data->iYear);
 		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
-		iListBoxItems->AppendL(itemText);
+		UpdateListBoxItemL(2, itemText);
 		CleanupStack::PopAndDestroy(itemTitle);
 
 		// Day of week
@@ -113,12 +111,24 @@ void CClockContainer::UpdateListBoxL()
 			{
 			itemText.Format(KListBoxItemFormat, itemTitle, &KNullDesC);
 			}
-		iListBoxItems->AppendL(itemText);
+		UpdateListBoxItemL(3, itemText);
 		CleanupStack::PopAndDestroy(itemTitle);
 
+		if (isItemAddition)
+			iListBox->HandleItemAdditionL();
+		else
+			iListBox->DrawDeferred();
 		}
-
-	iListBox->HandleItemAdditionL();
+	else
+		{
+		// Remove all items
+		if (iListBoxItems->Count() > 0)
+			{
+			iListBoxItems->Reset();
+			iListBox->HandleItemRemovalL();
+			iListBox->DrawNow();
+			}
+		}
 	}
 
 // -----------------------------------------------------------------------------

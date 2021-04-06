@@ -60,12 +60,10 @@ void CLightContainer::UpdateListBoxL()
 	if (data->iConnectionStatus == EStatusPaused)
 		return;
 
-	// Remove all items
-	iListBoxItems->Reset();
-
 	if (data->iConnectionStatus == EStatusConnected)
 		{
-		// Create items again
+		// Create/update items
+		TBool isItemAddition = (iListBoxItems->Count() == 0);
 		TBuf<64> itemText;
 		HBufC* itemTitle;
 		TBuf<32> itemValue;
@@ -105,7 +103,7 @@ void CLightContainer::UpdateListBoxL()
 			{
 			itemText.Format(KListBoxItemFormat, itemTitle, state);
 			}
-		iListBoxItems->AppendL(itemText);
+		UpdateListBoxItemL(0, itemText);
 		CleanupStack::PopAndDestroy(state);
 		CleanupStack::PopAndDestroy(itemTitle);
 
@@ -124,28 +122,28 @@ void CLightContainer::UpdateListBoxL()
 				break;
 			}
 		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
-		iListBoxItems->AppendL(itemText);
+		UpdateListBoxItemL(1, itemText);
 		CleanupStack::PopAndDestroy(itemTitle);
 
 		// Turn on time
 		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_ON_TIME);
 		itemValue.Format(KTimeFormat, data->iLightOnHour, data->iLightOnMinute, data->iLightOnSecond);
 		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
-		iListBoxItems->AppendL(itemText);
+		UpdateListBoxItemL(2, itemText);
 		CleanupStack::PopAndDestroy(itemTitle);
 
 		// Turn off time
 		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_OFF_TIME);
 		itemValue.Format(KTimeFormat, data->iLightOffHour, data->iLightOffMinute, data->iLightOffSecond);
 		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
-		iListBoxItems->AppendL(itemText);
+		UpdateListBoxItemL(3, itemText);
 		CleanupStack::PopAndDestroy(itemTitle);
 
 		// Brightness
 		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_LEVEL);
 		itemValue.Format(KLevelFormat, data->iLightLevel);
 		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
-		iListBoxItems->AppendL(itemText);
+		UpdateListBoxItemL(4, itemText);
 		CleanupStack::PopAndDestroy(itemTitle);
 
 		// Rise time
@@ -153,13 +151,25 @@ void CLightContainer::UpdateListBoxL()
 		HBufC* riseUnits = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_LIGHT_RISE_UNITS);
 		itemValue.Format(KRiseFormat, data->iLightRise, riseUnits);
 		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
-		iListBoxItems->AppendL(itemText);
+		UpdateListBoxItemL(5, itemText);
 		CleanupStack::PopAndDestroy(riseUnits);
 		CleanupStack::PopAndDestroy(itemTitle);
 
+		if (isItemAddition)
+			iListBox->HandleItemAdditionL();
+		else
+			iListBox->DrawDeferred();
 		}
-
-	iListBox->HandleItemAdditionL();
+	else
+		{
+		// Remove all items
+		if (iListBoxItems->Count() > 0)
+			{
+			iListBoxItems->Reset();
+			iListBox->HandleItemRemovalL();
+			iListBox->DrawNow();
+			}
+		}
 	}
 
 // -----------------------------------------------------------------------------

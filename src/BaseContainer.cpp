@@ -166,4 +166,22 @@ void CBaseContainer::HandleListBoxEventL(CEikListBox* /*aListBox*/, TListBoxEven
 		}
 	}
 
+// -----------------------------------------------------------------------------
+// CBaseContainer::UpdateListBoxItemL()
+// Append/update listbox item.
+// -----------------------------------------------------------------------------
+//
+void CBaseContainer::UpdateListBoxItemL(TInt aIndex, const TDesC& aValue)
+	{
+	if (iListBoxItems->Count() < aIndex + 1)
+		{
+		iListBoxItems->AppendL(aValue);
+		}
+	else
+		{
+		iListBoxItems->Delete(aIndex);
+		iListBoxItems->InsertL(aIndex, aValue);
+		}
+	}
+
 // End of File

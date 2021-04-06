@@ -59,12 +59,10 @@ void CDisplayContainer::UpdateListBoxL()
 	if (data->iConnectionStatus == EStatusPaused)
 		return;
 
-	// Remove all items
-	iListBoxItems->Reset();
-
 	if (data->iConnectionStatus == EStatusConnected)
 		{
-		// Create items again
+		// Create/update items
+		TBool isItemAddition = (iListBoxItems->Count() == 0);
 		TBuf<64> itemText;
 		HBufC* itemTitle;
 		HBufC* itemValue;
@@ -84,13 +82,25 @@ void CDisplayContainer::UpdateListBoxL()
 				break;
 			}
 		itemText.Format(KListBoxItemFormat, itemTitle, itemValue);
-		iListBoxItems->AppendL(itemText);
+		UpdateListBoxItemL(0, itemText);
 		CleanupStack::PopAndDestroy(itemValue);
 		CleanupStack::PopAndDestroy(itemTitle);
 
+		if (isItemAddition)
+			iListBox->HandleItemAdditionL();
+		else
+			iListBox->DrawDeferred();
 		}
-
-	iListBox->HandleItemAdditionL();
+	else
+		{
+		// Remove all items
+		if (iListBoxItems->Count() > 0)
+			{
+			iListBoxItems->Reset();
+			iListBox->HandleItemRemovalL();
+			iListBox->DrawNow();
+			}
+		}
 	}
 
 // -----------------------------------------------------------------------------

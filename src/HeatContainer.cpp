@@ -60,12 +60,10 @@ void CHeatContainer::UpdateListBoxL()
 	if (data->iConnectionStatus == EStatusPaused)
 		return;
 
-	// Remove all items
-	iListBoxItems->Reset();
-
 	if (data->iConnectionStatus == EStatusConnected)
 		{
-		// Create items again
+		// Create/update items
+		TBool isItemAddition = (iListBoxItems->Count() == 0);
 		TBuf<64> itemText;
 		HBufC* itemTitle;
 		TBuf<32> itemValue;
@@ -84,7 +82,7 @@ void CHeatContainer::UpdateListBoxL()
 			itemValue.Format(KTempFormat, data->iTemp);
 			}
 		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
-		iListBoxItems->AppendL(itemText);
+		UpdateListBoxItemL(0, itemText);
 		CleanupStack::PopAndDestroy(itemTitle);
 
 		// State
@@ -102,7 +100,7 @@ void CHeatContainer::UpdateListBoxL()
 				break;
 			}
 		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
-		iListBoxItems->AppendL(itemText);
+		UpdateListBoxItemL(1, itemText);
 		CleanupStack::PopAndDestroy(itemTitle);
 
 		// Mode
@@ -120,26 +118,38 @@ void CHeatContainer::UpdateListBoxL()
 				break;
 			}
 		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
-		iListBoxItems->AppendL(itemText);
+		UpdateListBoxItemL(2, itemText);
 		CleanupStack::PopAndDestroy(itemTitle);
 
 		// Minimum temperature
 		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_HEAT_LO);
 		itemValue.Format(KTempFormat, data->iHeatLow);
 		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
-		iListBoxItems->AppendL(itemText);
+		UpdateListBoxItemL(3, itemText);
 		CleanupStack::PopAndDestroy(itemTitle);
 
 		// Maximum temperature
 		itemTitle = iEikonEnv->AllocReadResourceLC(R_LISTBOX_ITEM_HEAT_HI);
 		itemValue.Format(KTempFormat, data->iHeatHigh);
 		itemText.Format(KListBoxItemFormat, itemTitle, &itemValue);
-		iListBoxItems->AppendL(itemText);
+		UpdateListBoxItemL(4, itemText);
 		CleanupStack::PopAndDestroy(itemTitle);
 
+		if (isItemAddition)
+			iListBox->HandleItemAdditionL();
+		else
+			iListBox->DrawDeferred();
 		}
-
-	iListBox->HandleItemAdditionL();
+	else
+		{
+		// Remove all items
+		if (iListBoxItems->Count() > 0)
+			{
+			iListBoxItems->Reset();
+			iListBox->HandleItemRemovalL();
+			iListBox->DrawNow();
+			}
+		}
 	}
 
 // -----------------------------------------------------------------------------

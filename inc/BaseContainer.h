@@ -117,6 +117,12 @@ protected:
 	 */
 	void HandleListBoxEventL(CEikListBox* aListBox, TListBoxEvent aEventType);
 
+	/**
+	 * If the listbox is empty append a new item with a given value
+	 * otherwise replace old item with new one.
+	 */
+	void UpdateListBoxItemL(TInt aIndex, const TDesC& aValue);
+
 protected: // Data
 
 	/**
