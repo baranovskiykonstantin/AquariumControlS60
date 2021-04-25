@@ -1,0 +1,33 @@
+/*
+============================================================================
+ Name        : AquariumControl.l83
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for AquariumControl (SPA)
+============================================================================
+*/
+
+//  LOCALISATION STRINGS
+
+// Caption string for app.
+#define qtn_caption_string "Control de Acuario"
+
+// Menu
+#define qtn_connect "Conectar"
+#define qtn_disconnect "Desconectar"
+#define qtn_about "Versión"
+#define qtn_exit "Salir"
+
+// Common strings
+#define qtn_disconnected "(desconectado)"
+#define qtn_listbox_item_state "Estado"
+#define qtn_state_off "Apagadas"
+#define qtn_state_on "Encendidas"
+#define qtn_listbox_item_mode "Modo"
+#define qtn_mode_auto "Automático"
+#define qtn_mode_manual "Manual"
+#define qtn_no_answer "El acuario no responde.\nDesconectando..."
+
+#define qtn_loc_resource_file_1 "\\resource\\apps\\AquariumControl_0xa291b5a5"
+
+// End of File
