@@ -1,0 +1,26 @@
+/*
+============================================================================
+ Name        : HeatView.l83
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for HeatView (SPA)
+============================================================================
+*/
+
+//  LOCALISATION STRINGS
+
+// Tab
+#define qtn_heat_tab_name "Calentador"
+
+// Listbox items
+#define qtn_listbox_item_heat_temp "Temperatura del agua"
+#define qtn_listbox_item_heat_temp_unknown "desconocida"
+#define qtn_listbox_item_heat_lo "Temp. mínima"
+#define qtn_listbox_item_heat_hi "Temp. máxima"
+
+// Toolbar
+#define qtn_heat_toolbar_on "Encendido"
+#define qtn_heat_toolbar_off "Apagado"
+#define qtn_heat_toolbar_auto "Automático"
+
+// End of File
