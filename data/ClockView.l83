@@ -1,0 +1,22 @@
+/*
+============================================================================
+ Name        : ClockView.l83
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for ClockView (SPA)
+============================================================================
+*/
+
+//  LOCALISATION STRINGS
+
+// Tab
+#define qtn_clock_tab_name "Reloj"
+
+// Listbox items
+#define qtn_listbox_item_time "Tiempo"
+#define qtn_listbox_item_timecor "Corrección de tiempo"
+#define qtn_listbox_item_timecorunits "segundos por día"
+#define qtn_listbox_item_date "Fecha"
+#define qtn_listbox_item_dayofweek "Día de la semana"
+
+// End of File
