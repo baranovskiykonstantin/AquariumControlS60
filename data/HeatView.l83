@@ -19,8 +19,8 @@
 #define qtn_listbox_item_heat_hi "Temp. máxima"
 
 // Toolbar
-#define qtn_heat_toolbar_on "Encendido"
-#define qtn_heat_toolbar_off "Apagado"
-#define qtn_heat_toolbar_auto "Automático"
+#define qtn_heat_toolbar_on "Encender"
+#define qtn_heat_toolbar_off "Apagar"
+#define qtn_heat_toolbar_auto "Auto"
 
 // End of File
