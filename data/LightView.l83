@@ -1,0 +1,27 @@
+/*
+============================================================================
+ Name        : LightView.l83
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for LightView (SPA)
+============================================================================
+*/
+
+//  LOCALISATION STRINGS
+
+// Tab
+#define qtn_light_tab_name "Luces"
+
+// Listbox items
+#define qtn_listbox_item_light_on_time "Encender a las"
+#define qtn_listbox_item_light_off_time "Apagar a las"
+#define qtn_listbox_item_light_level "Luminosidad"
+#define qtn_listbox_item_light_rise "Tiempo de iluminación"
+#define qtn_listbox_item_light_rise_units "minutos"
+
+// Toolbar
+#define qtn_light_toolbar_on "Encender"
+#define qtn_light_toolbar_off "Apagar"
+#define qtn_light_toolbar_auto "Auto"
+
+// End of File
