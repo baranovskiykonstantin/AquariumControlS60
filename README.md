@@ -5,5 +5,6 @@ This application was designed specially to setup the [aquarium controller](https
 
 # Available translations
 * English
+* Spanish
 * Russian
 * Ukrainian

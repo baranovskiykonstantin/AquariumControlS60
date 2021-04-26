@@ -11,10 +11,10 @@
 
 #ifdef LANGUAGE_01
 #include "HeatView.l01"
+#elif LANGUAGE_04
+#include "HeatView.l04"
 #elif LANGUAGE_16
 #include "HeatView.l16"
-#elif LANGUAGE_83
-#include "HeatView.l83"
 #elif LANGUAGE_93
 #include "HeatView.l93"
 #else
