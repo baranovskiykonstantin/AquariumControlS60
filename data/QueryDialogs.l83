@@ -1,0 +1,42 @@
+/*
+============================================================================
+ Name        : QueryDialogs.l83
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for query dialogs (SPA)
+============================================================================
+*/
+
+//  LOCALISATION STRINGS
+
+// About dialog
+#define qtn_about_dialog_title "Acerca de"
+#define qtn_about_dialog_text "Control de Acuario 1.0\nEsta aplicación está diseñada para contrlar el acuario descrito aquí https://github.com/baranovskiykonstantin/aquarium\n\nAutor: Konstantin. Baranovskiy\nSoporte: baranovskiykonstantin@gmail.com\n(c)GPLv3"
+
+// SetTimeVariants
+#define qtn_settimevariangs_dialog_title "Hora"
+#define qtn_settimevariangs_dialog_variant1 "Desde hoy"
+#define qtn_settimevariangs_dialog_variant2 "Elegir..."
+
+// SetTimeVariants
+#define qtn_setdatevariangs_dialog_title "Fecha"
+#define qtn_setdatevariangs_dialog_variant1 "Desde hoy"
+#define qtn_setdatevariangs_dialog_variant2 "Elegir..."
+
+// SetTime
+#define qtn_settime_dialog_title "Fijar hora"
+
+// SetDate
+#define qtn_setdate_dialog_title "Fijar fecha"
+
+// SetDayOfWeek
+#define qtn_setdayofweek_dialog_title "Día de la semana"
+#define qtn_setdayofweek_dialog_day1 "Lunes"
+#define qtn_setdayofweek_dialog_day2 "Martes"
+#define qtn_setdayofweek_dialog_day3 "Miércoles"
+#define qtn_setdayofweek_dialog_day4 "Jueves"
+#define qtn_setdayofweek_dialog_day5 "Viernes"
+#define qtn_setdayofweek_dialog_day6 "Sábado"
+#define qtn_setdayofweek_dialog_day7 "Domingo"
+
+// End of File

@@ -13,6 +13,8 @@
 #include "LightView.l01"
 #elif LANGUAGE_16
 #include "LightView.l16"
+#elif LANGUAGE_83
+#include "LightView.l83"
 #elif LANGUAGE_93
 #include "LightView.l93"
 #else

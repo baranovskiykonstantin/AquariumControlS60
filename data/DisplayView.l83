@@ -1,0 +1,20 @@
+/*
+============================================================================
+ Name        : DisplayView.l83
+ Author      : Konstantin Baranovskiy
+ Copyright   : GPLv3
+ Description : This is a localisation file for DisplayView (SPA)
+============================================================================
+*/
+
+//  LOCALISATION STRINGS
+
+// Tab
+#define qtn_display_tab_name "Monitor"
+
+// Listbox items
+#define qtn_listbox_item_display "Mostrar"
+#define qtn_listbox_item_display_time "Tiempo transcurrido"
+#define qtn_listbox_item_display_temp "Temperatura del agua"
+
+// End of File
